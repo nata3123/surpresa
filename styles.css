@@ -608,20 +608,6 @@ h1 { margin: 20px 0 14px; font-size: clamp(2.6rem, 8vw, 5.8rem); line-height: .9
 .letter-card-body p { margin:20px 0; white-space:pre-line; color:var(--ink); font-family:Georgia,serif; font-size:1.02rem; line-height:1.85; }
 .letter-card-body span { color:var(--wine); font-family:Georgia,serif; font-style:italic; }
 
-.memory-live-posts { width:min(1080px,100%); margin:82px auto 0; }
-.memory-live-heading { max-width:760px; margin:0 auto 42px; text-align:center; }
-.memory-live-heading h3 { margin:10px 0 0; font-family:Georgia,serif; font-size:clamp(1.9rem,4vw,3.2rem); line-height:1.12; color:var(--wine-dark); }
-.memory-live-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:clamp(28px,5vw,54px); align-items:start; }
-.memory-live-card { position:relative; padding:14px 14px 32px; border:1px solid rgba(111,23,49,.09); border-radius:7px; background:#fffdfa; box-shadow:0 24px 62px rgba(61,14,29,.18); transform:rotate(-1.2deg); }
-.memory-live-card:nth-child(even) { transform:rotate(1.2deg) translateY(20px); }
-.memory-live-card figure { position:relative; margin:0; overflow:visible; background:#eee0e4; }
-.memory-live-card figure img { width:100%; height:min(54vw,520px); object-fit:cover; }
-.memory-live-tape { position:absolute; z-index:2; top:-24px; left:50%; width:96px; height:28px; transform:translateX(-50%) rotate(-3deg); background:rgba(226,196,156,.72); box-shadow:0 2px 4px rgba(71,38,22,.08); }
-.memory-live-card:nth-child(even) .memory-live-tape { transform:translateX(-50%) rotate(3deg); }
-.memory-live-copy { padding:24px 14px 4px; text-align:center; }
-.memory-live-copy time { display:block; color:var(--gold); font-size:.68rem; font-weight:800; letter-spacing:.10em; text-transform:uppercase; }
-.memory-live-copy h4 { margin:10px 0 12px; font-family:Georgia,serif; font-size:clamp(1.6rem,3vw,2.25rem); line-height:1.08; color:var(--wine-dark); }
-.memory-live-copy p { margin:0; white-space:pre-line; color:var(--muted); line-height:1.75; }
 .timeline-item.user-added .timeline-card { border-color:rgba(201,154,74,.34); box-shadow:0 20px 60px rgba(111,23,49,.13); }
 .timeline-item.user-added .timeline-copy::before { content:"Novo capítulo"; display:inline-block; margin-bottom:8px; color:var(--gold); font-size:.66rem; font-weight:900; letter-spacing:.12em; text-transform:uppercase; }
 .timeline-item.user-added .timeline-dot { background:var(--gold); }
@@ -704,7 +690,6 @@ h1 { margin: 20px 0 14px; font-size: clamp(2.6rem, 8vw, 5.8rem); line-height: .9
 .content-manager-status[data-state="success"] { color:#7a2440; font-weight:800; }
 .content-manager-status[data-state="error"] { color:#b3263d; font-weight:800; }
 .timeline-card > .content-manager { margin:0 22px 24px; }
-.memory-live-card > .content-manager { margin-inline:10px; }
 .publication-reply > .content-manager, .complaint-interpretations .content-manager { margin-top:12px; padding-top:10px; }
 .publication-reply .content-manager-form, .complaint-interpretations .content-manager-form { grid-template-columns:1fr; padding:12px; }
 .publication-reply .content-manager-field, .complaint-interpretations .content-manager-field, .publication-reply .content-manager-actions, .complaint-interpretations .content-manager-actions, .publication-reply .content-manager-status, .complaint-interpretations .content-manager-status { grid-column:1; }
@@ -798,7 +783,6 @@ footer span:last-child { color:#f1a8ba; }
   .daily-entries-list, .letters-list { max-height:none; }
   .complaint-card { grid-template-columns:1fr; }
   .complaint-card figure, .complaint-card figure img { min-height:0; height:min(105vw,600px); }
-  .memory-live-grid { grid-template-columns:1fr; }
   .creator-form { grid-template-columns:1fr; }
   .creator-field-wide { grid-column:auto; }
   .guestbook-card { padding:34px 22px; }
@@ -851,9 +835,6 @@ footer span:last-child { color:#f1a8ba; }
   .complaint-upload-card { padding:25px 18px; }
   .complaint-copy { padding:24px 18px; }
   .complaint-interpretation-composer button { width:100%; }
-  .memory-live-posts { margin-top:62px; }
-  .memory-live-card, .memory-live-card:nth-child(even) { transform:none; }
-  .memory-live-card figure img { height:min(118vw,500px); }
   .publication-replies { margin-inline:2px; padding-inline:8px; }
   .timeline-card > .publication-replies { margin-inline:18px; }
   .publication-reply-form { padding:14px 12px; }

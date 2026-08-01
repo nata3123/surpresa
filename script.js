@@ -220,7 +220,12 @@ function updateHeroMemories(photos) {
 
 function renderGallery(photos = []) {
   const activePhotoId = originalAlbumPhotos[currentPhoto]?.id;
-  originalAlbumPhotos = [...photos].sort((left, right) => (left.ordem || 0) - (right.ordem || 0));
+  originalAlbumPhotos = [...photos].sort((left, right) => {
+    const leftOrder = left.ordem ?? Number.MAX_SAFE_INTEGER;
+    const rightOrder = right.ordem ?? Number.MAX_SAFE_INTEGER;
+    if (leftOrder !== rightOrder) return leftOrder - rightOrder;
+    return new Date(left.criado_em) - new Date(right.criado_em);
+  });
   const thumbnails = $("#thumbnails");
   thumbnails.replaceChildren();
   updateHeroMemories(originalAlbumPhotos);
@@ -275,6 +280,8 @@ function showPhoto(index, animate = true) {
     image.style.objectPosition = photo.posicao || "center";
     $("#galleryCaption").textContent = photo.titulo;
     $("#galleryText").textContent = photo.texto;
+    $("#galleryPhotoDate").textContent = photo.rotulo_data
+      || (photo.origem === "original" ? "21 · 05 · 2026" : formatPublicationDate(photo.criado_em));
     $("#galleryIndex").textContent = `${currentPhoto + 1} de ${originalAlbumPhotos.length}`;
     $("#galleryIndexPadded").textContent = String(currentPhoto + 1).padStart(2, "0");
     $$(".thumbnail").forEach((thumb, i) => thumb.classList.toggle("active", i === currentPhoto));
@@ -288,10 +295,15 @@ function renderTimeline(items = [], repliesByPublication = latestRepliesByPublic
   timeline.replaceChildren();
 
   items
-    .sort((left, right) => (left.ordem || 0) - (right.ordem || 0))
+    .sort((left, right) => {
+      const leftOrder = left.ordem ?? Number.MAX_SAFE_INTEGER;
+      const rightOrder = right.ordem ?? Number.MAX_SAFE_INTEGER;
+      if (leftOrder !== rightOrder) return leftOrder - rightOrder;
+      return new Date(left.criado_em) - new Date(right.criado_em);
+    })
     .forEach((item) => {
     const article = document.createElement("article");
-    article.className = "timeline-item cloud-original reveal";
+    article.className = `timeline-item ${item.origem === "original" ? "cloud-original" : "user-added"} reveal`;
     if (document.body.classList.contains("surprise-open")) article.classList.add("visible");
     const dot = document.createElement("span");
     dot.className = "timeline-dot";
@@ -321,7 +333,7 @@ function renderTimeline(items = [], repliesByPublication = latestRepliesByPublic
         repliesByPublication.get(String(item.id)) || []
       ),
       createPublicationManager(item, {
-        deletePrompt: "Excluir esta foto da nuvem e da linha do tempo?"
+        deletePrompt: "Excluir esta foto da nuvem, da linha do tempo e todas as respostas escritas nela?"
       })
     );
     article.append(dot, card);
@@ -1602,137 +1614,18 @@ function createPublicationManager(publication, options = {}) {
   });
 }
 
-function createMemoryPublicationCard(publication, replies) {
-  const article = document.createElement("article");
-  article.className = "memory-live-card";
-
-  const figure = document.createElement("figure");
-  const tape = document.createElement("span");
-  tape.className = "memory-live-tape";
-  tape.setAttribute("aria-hidden", "true");
-  const image = document.createElement("img");
-  image.src = publication.imagem_url;
-  image.alt = publication.titulo;
-  image.loading = "lazy";
-  image.decoding = "async";
-  figure.append(tape, image);
-
-  const copy = document.createElement("div");
-  copy.className = "memory-live-copy";
-
-  const date = document.createElement("time");
-  date.dateTime = publication.criado_em;
-  date.textContent = formatPublicationDate(publication.criado_em);
-
-  const title = document.createElement("h4");
-  title.textContent = publication.titulo;
-
-  const text = document.createElement("p");
-  text.textContent = publication.texto;
-
-  copy.append(date, title, text);
-  article.append(
-    figure,
-    copy,
-    createPublicationReplyArea({ publicationId: publication.id, defaultAuthor: "Natã" }, replies),
-    createPublicationManager(publication)
-  );
-  return article;
-}
-
-function createTimelinePublicationItem(publication, replies) {
-  const article = document.createElement("article");
-  article.className = "timeline-item user-added visible";
-
-  const dot = document.createElement("span");
-  dot.className = "timeline-dot";
-  dot.setAttribute("aria-hidden", "true");
-
-  const card = document.createElement("div");
-  card.className = "timeline-card";
-
-  const image = document.createElement("img");
-  image.src = publication.imagem_url;
-  image.alt = publication.titulo;
-  image.loading = "lazy";
-  image.decoding = "async";
-
-  const copy = document.createElement("div");
-  copy.className = "timeline-copy";
-
-  const date = document.createElement("time");
-  date.dateTime = publication.criado_em;
-  date.textContent = formatPublicationDate(publication.criado_em);
-
-  const title = document.createElement("h3");
-  title.textContent = publication.titulo;
-
-  const text = document.createElement("p");
-  text.textContent = publication.texto;
-
-  copy.append(date, title, text);
-  card.append(
-    image,
-    copy,
-    createPublicationReplyArea({ publicationId: publication.id, defaultAuthor: "Natã" }, replies),
-    createPublicationManager(publication)
-  );
-  article.append(dot, card);
-  return article;
-}
-
 function renderPublications(publications, replies) {
   latestPublicationReplies = replies;
   const { byPublication: repliesByPublication } = groupPublicationReplies(replies);
   latestRepliesByPublication = repliesByPublication;
 
-  const originalAlbum = publications.filter(
-    (post) => post.origem === "original" && post.secao === "fotos"
-  );
-  const originalTimeline = publications.filter(
-    (post) => post.origem === "original" && post.secao === "historia"
-  );
-  const addedPublications = publications.filter((post) => post.origem !== "original");
+  const albumMemories = publications.filter((post) => post.secao === "fotos");
+  const timelineMemories = publications.filter((post) => post.secao === "historia");
 
-  renderGallery(originalAlbum);
-  renderTimeline(originalTimeline, repliesByPublication);
+  renderGallery(albumMemories);
+  renderTimeline(timelineMemories, repliesByPublication);
   const albumCount = $("#albumMemoryCount");
-  if (albumCount) albumCount.textContent = `${originalAlbum.length} ${originalAlbum.length === 1 ? "memória" : "memórias"}`;
-
-  const memoryFeed = $('[data-live-section="fotos"]');
-  const memoryPosts = addedPublications.filter((post) => post.secao === "fotos");
-
-  if (memoryPosts.length) {
-    const heading = document.createElement("div");
-    heading.className = "memory-live-heading";
-
-    const eyebrow = document.createElement("span");
-    eyebrow.className = "eyebrow";
-    eyebrow.textContent = "Álbum que continua crescendo";
-
-    const title = document.createElement("h3");
-    title.textContent = "Novas memórias que agora também moram aqui";
-    heading.append(eyebrow, title);
-
-    const grid = document.createElement("div");
-    grid.className = "memory-live-grid";
-    memoryPosts.forEach((post) => {
-      grid.append(createMemoryPublicationCard(post, repliesByPublication.get(String(post.id)) || []));
-    });
-
-    memoryFeed.replaceChildren(heading, grid);
-    memoryFeed.hidden = false;
-  } else {
-    memoryFeed.replaceChildren();
-    memoryFeed.hidden = true;
-  }
-
-  const addedTimeline = addedPublications.filter((post) => post.secao === "historia");
-  if (addedTimeline.length) $("#timeline .timeline-empty")?.remove();
-  addedTimeline
-    .forEach((post) => {
-      $("#timeline").append(createTimelinePublicationItem(post, repliesByPublication.get(String(post.id)) || []));
-    });
+  if (albumCount) albumCount.textContent = `${albumMemories.length} ${albumMemories.length === 1 ? "memória" : "memórias"}`;
 }
 
 async function loadPublications() {
@@ -2222,10 +2115,17 @@ $("#publicationForm").addEventListener("submit", async (event) => {
     setPublicationStatus("Lembrança publicada! Ela já está aparecendo na seção escolhida ♥", "success");
     await loadPublications();
 
+    if (section === "fotos") {
+      const publishedIndex = originalAlbumPhotos.findIndex(
+        (photo) => String(photo.id) === String(result.publicacao?.id)
+      );
+      if (publishedIndex >= 0) showPhoto(publishedIndex, false);
+    }
+
     const destination = section === "historia"
       ? $("#timeline .timeline-item.user-added:last-child")
-      : $('[data-live-section="fotos"]');
-    if (destination && !destination.hidden) {
+      : $("#fotos .memory-album");
+    if (destination) {
       setTimeout(() => destination.scrollIntoView({ behavior: "smooth", block: "center" }), 250);
     }
   } catch (error) {

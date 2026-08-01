@@ -41,7 +41,7 @@ O site usa apenas uma chave pública própria para páginas abertas. A chave sec
 
 ## Novas lembranças em tempo real
 
-A seção **“Acrescente um novo capítulo”** permite que Bianca ou Natã publiquem somente em **“Memórias que moram em mim”** ou **“Momentos que fizeram de nós, nós”**. No álbum, a publicação ganha o visual de uma nova fotografia revelada; na história, ela entra como uma nova etapa da linha do tempo. A publicação é guardada no Supabase e aparece imediatamente para todos que estiverem com a página aberta.
+A seção **“Acrescente um novo capítulo”** permite que Bianca ou Natã publiquem somente em **“Memórias que moram em mim”** ou **“Momentos que fizeram de nós, nós”**. No álbum, a publicação entra diretamente na galeria principal e pode ser acessada pelas setas e miniaturas; na história, ela entra como uma nova etapa da linha do tempo. Não existe uma terceira área separada. A publicação é guardada no Supabase e aparece imediatamente para todos que estiverem com a página aberta.
 
 Todas as memórias — tanto as criadas originalmente por Natã quanto as publicadas depois pela Bianca — têm uma área **“Nosso diário”**. Bianca e Natã podem escolher quem está escrevendo e continuar a conversa diretamente embaixo da lembrança usando o mesmo código reservado. As respostas ficam ligadas à memória correta, são guardadas no Supabase e aparecem em tempo real em todos os aparelhos.
 
@@ -49,7 +49,7 @@ O envio exige o código reservado combinado pelo casal. O código não está esc
 
 Antes do envio, o navegador testa versões WEBP de alta qualidade, sem reduzir as dimensões da fotografia. Uma versão otimizada só é utilizada quando fica pelo menos 10% menor e passa por uma comparação visual conservadora; caso contrário, o arquivo original é enviado. Assim, a economia de espaço nunca tem prioridade sobre a qualidade da lembrança.
 
-Todas as fotografias do álbum e da linha do tempo — inclusive as sete lembranças originais — ficam no Supabase e possuem a opção **“Editar ou excluir”**. É possível corrigir o título e o texto ou substituir a fotografia; ao substituir ou excluir uma foto, o arquivo antigo também é retirado do armazenamento. Essas operações sempre pedem o código reservado.
+As sete lembranças originais ficam apenas em **“Memórias que moram em mim”**, sem cópias repetidas na linha do tempo. Todas as fotografias existentes e futuras ficam no Supabase e possuem a opção **“Editar ou excluir”**. É possível corrigir o título e o texto ou substituir a fotografia; ao substituir ou excluir uma foto, o arquivo antigo também é retirado do armazenamento. Essas operações sempre pedem o código reservado.
 
 ## Coisas que ainda vamos viver
 
