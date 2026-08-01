@@ -121,7 +121,7 @@ h1 { margin: 20px 0 14px; font-size: clamp(2.6rem, 8vw, 5.8rem); line-height: .9
 .secondary-button { min-height: 52px; padding: 0 22px; border-radius: 999px; background: rgba(111,23,49,.08); color: var(--wine); font-weight: 800; }
 
 .surprise-content { position: relative; }
-.section { position: relative; padding: 110px 20px; }
+.section { position:relative; padding:110px 20px; content-visibility:auto; contain-intrinsic-size:auto 900px; }
 .section-heading { max-width: 780px; margin: 0 auto 46px; text-align: center; }
 .section-heading h2, .ending-card h2, .guestbook-card h2 { margin: 12px 0; font-size: clamp(2.1rem, 5vw, 4rem); line-height: 1.06; letter-spacing: -.035em; color: var(--wine-dark); }
 .section-heading p { margin: 0; color: var(--muted); line-height: 1.7; }
@@ -480,16 +480,32 @@ h1 { margin: 20px 0 14px; font-size: clamp(2.6rem, 8vw, 5.8rem); line-height: .9
   radial-gradient(circle at 100% 50%,var(--paper) 0 13px,transparent 14px),
   linear-gradient(145deg,#fff8e9,#fffdf7); }
 .date-idea-ticket::before { content:"ENCONTRO DE HOJE"; position:absolute; top:21px; left:24px; color:rgba(111,23,49,.28); font-size:.62rem; font-weight:900; letter-spacing:.18em; }
-.date-idea-ticket > span:first-child { color:var(--gold); font-size:.7rem; font-weight:900; letter-spacing:.12em; text-transform:uppercase; }
+.date-idea-origin { position:absolute; top:15px; right:18px; display:flex; align-items:center; gap:6px; padding:7px 10px; border:1px solid rgba(201,154,74,.22); border-radius:999px; color:var(--wine); background:rgba(255,255,255,.68); font-size:.62rem; font-weight:900; letter-spacing:.06em; }
+.date-idea-origin span { color:var(--gold); }
+.date-idea-ticket > span { color:var(--gold); font-size:.7rem; font-weight:900; letter-spacing:.12em; text-transform:uppercase; }
 .date-idea-ticket h3 { max-width:720px; margin:15px 0 12px; color:var(--wine-dark); font-family:Georgia,serif; font-size:clamp(2rem,5vw,3.7rem); line-height:1.03; letter-spacing:-.03em; }
 .date-idea-ticket > p { max-width:700px; margin:0; color:var(--muted); line-height:1.75; }
+.date-idea-extra { display:flex; align-items:flex-start; gap:11px; max-width:680px; margin-top:22px; padding:14px 17px; border:1px solid rgba(201,154,74,.22); border-radius:18px; color:var(--wine); text-align:left; background:rgba(255,255,255,.58); }
+.date-idea-extra[hidden] { display:none; }
+.date-idea-extra > span { display:grid; place-items:center; width:30px; height:30px; flex:none; border-radius:50%; color:#fff; background:var(--wine); }
+.date-idea-extra p { display:grid; gap:3px; margin:0; line-height:1.5; }
+.date-idea-extra strong { font-size:.72rem; letter-spacing:.06em; text-transform:uppercase; }
+.date-idea-extra p span { color:var(--muted); font-size:.86rem; }
 .date-idea-details { display:flex; justify-content:center; flex-wrap:wrap; gap:9px; margin-top:24px; }
 .date-idea-details span { border-radius:999px; padding:8px 12px; color:var(--wine); background:rgba(111,23,49,.07); font-size:.7rem; font-weight:800; }
-.date-idea-controls { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)) auto; align-items:end; gap:14px; margin-top:24px; }
+.date-idea-controls { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); align-items:end; gap:14px; margin-top:24px; }
 .date-idea-controls > div { display:grid; gap:7px; }
 .date-idea-controls label, .date-save-composer label { color:var(--wine); font-size:.72rem; font-weight:900; }
 .date-idea-controls select, .date-save-composer select, .date-save-composer input { width:100%; border:1px solid rgba(111,23,49,.14); border-radius:14px; padding:12px 13px; color:var(--ink); background:#fff; outline:none; }
-.date-idea-controls .secondary-button { white-space:nowrap; box-shadow:none; }
+.date-idea-controls select:focus { border-color:rgba(111,23,49,.4); box-shadow:0 0 0 3px rgba(233,167,184,.2); }
+.date-random-action { display:grid; grid-template-columns:minmax(220px,1fr) auto; align-items:center; gap:16px; margin-top:18px; padding:18px; border:1px solid rgba(111,23,49,.08); border-radius:22px; background:linear-gradient(145deg,rgba(111,23,49,.04),rgba(233,167,184,.08)); }
+.date-random-action p { display:grid; gap:5px; margin:0; }
+.date-random-action strong { color:var(--wine); font-size:.78rem; }
+.date-random-action span { color:var(--muted); font-size:.72rem; line-height:1.45; }
+.date-random-button { min-height:48px; white-space:nowrap; box-shadow:none; }
+.date-idea-status { display:block; min-height:1.4em; margin-top:10px; color:var(--muted); text-align:center; line-height:1.45; }
+.date-idea-status[data-state="success"] { color:#7a2440; font-weight:800; }
+.date-idea-status[data-state="error"] { color:#b3263d; font-weight:800; }
 .date-save-composer { margin-top:24px; padding-top:22px; border-top:1px dashed rgba(111,23,49,.18); }
 .date-save-composer > summary { display:flex; align-items:center; justify-content:center; gap:9px; width:fit-content; margin:auto; cursor:pointer; color:var(--wine); font-weight:900; list-style:none; }
 .date-save-composer > summary::-webkit-details-marker { display:none; }
@@ -513,6 +529,7 @@ h1 { margin: 20px 0 14px; font-size: clamp(2.6rem, 8vw, 5.8rem); line-height: .9
 #dailyStatus, #letterStatus, #complaintStatus, #dateSaveStatus { min-height:1.3em; color:var(--muted); line-height:1.45; }
 #dailyStatus[data-state="success"], #letterStatus[data-state="success"], #complaintStatus[data-state="success"], #dateSaveStatus[data-state="success"] { color:#7a2440; font-weight:800; }
 #dailyStatus[data-state="error"], #letterStatus[data-state="error"], #complaintStatus[data-state="error"], #dateSaveStatus[data-state="error"] { color:#b3263d; font-weight:800; }
+
 .daily-archive, .letters-archive { min-width:0; }
 .daily-entries-list, .letters-list { display:grid; gap:16px; max-height:850px; overflow:auto; padding:3px 10px 20px 2px; scrollbar-color:rgba(111,23,49,.25) transparent; }
 .daily-entry-card { padding:22px; border:1px solid rgba(111,23,49,.09); border-radius:7px 24px 24px 24px; background:#fff; box-shadow:0 15px 36px rgba(74,13,32,.07); }
@@ -735,6 +752,7 @@ footer span:last-child { color:#f1a8ba; }
   .future-plan-form { grid-template-columns:1fr; }
   .future-plan-field-wide { grid-column:auto; }
   .date-idea-controls { grid-template-columns:1fr 1fr; }
+  .date-random-action { grid-template-columns:1fr; }
   .date-save-composer form { grid-template-columns:1fr; }
   .date-save-composer form label, .date-save-composer form select, .date-save-composer form input, .date-save-composer form button { grid-row:auto; }
   .daily-layout, .letters-layout { grid-template-columns:1fr; }
@@ -778,8 +796,10 @@ footer span:last-child { color:#f1a8ba; }
   .future-plan-actions .primary-button { width:100%; }
   .date-idea-card { padding:24px 16px; border-radius:30px 8px 30px 8px; }
   .date-idea-ticket { padding:55px 20px 34px; }
+  .date-idea-origin { position:static; margin:0 0 20px; }
   .date-idea-controls { grid-template-columns:1fr; }
-  .date-idea-controls .secondary-button { width:100%; }
+  .date-random-action { padding:16px 12px; }
+  .date-random-button { width:100%; white-space:normal; }
   .date-save-composer form { padding:16px 12px; }
   .date-save-composer form .primary-button { width:100%; }
   .daily-form, .letters-form { padding:25px 18px; }

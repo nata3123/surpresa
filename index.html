@@ -27,10 +27,10 @@
       <div class="hero-glow hero-glow-two"></div>
 
       <div class="hero-memories" aria-hidden="true">
-        <figure class="hero-memory memory-one"><img src="assets/foto-2.webp" alt="" /></figure>
-        <figure class="hero-memory memory-two"><img src="assets/foto-3.webp" alt="" /></figure>
-        <figure class="hero-memory memory-three"><img src="assets/foto-4.webp" alt="" /></figure>
-        <figure class="hero-memory memory-four"><img src="assets/foto-5.webp" alt="" /></figure>
+        <figure class="hero-memory memory-one"><img src="assets/foto-2.webp" alt="" width="1200" height="1600" decoding="async" /></figure>
+        <figure class="hero-memory memory-two"><img src="assets/foto-3.webp" alt="" width="972" height="1296" decoding="async" /></figure>
+        <figure class="hero-memory memory-three"><img src="assets/foto-4.webp" alt="" width="1200" height="1600" decoding="async" /></figure>
+        <figure class="hero-memory memory-four"><img src="assets/foto-5.webp" alt="" width="1600" height="900" decoding="async" /></figure>
       </div>
 
       <div class="hero-content reveal">
@@ -137,7 +137,7 @@
             <span class="photo-tape photo-tape-left" aria-hidden="true"></span>
             <span class="photo-tape photo-tape-right" aria-hidden="true"></span>
             <div class="gallery-photo-frame">
-              <img id="galleryImage" src="assets/foto-1.webp" alt="Natã e Bianca se beijando" />
+              <img id="galleryImage" src="assets/foto-1.webp" alt="Natã e Bianca se beijando" width="1200" height="1600" loading="lazy" decoding="async" />
               <span class="photo-date">21 · 05 · 2026</span>
             </div>
           </div>
@@ -265,9 +265,14 @@
 
         <div class="date-idea-card reveal">
           <div class="date-idea-ticket">
+            <div class="date-idea-origin" id="dateIdeaOrigin"><span aria-hidden="true">✦</span> Sugestão do dia</div>
             <span id="dateIdeaTag">Em casa · econômico</span>
             <h3 id="dateIdeaTitle">Preparar uma noite de cinema diferente</h3>
             <p id="dateIdeaDescription">Escolham um filme que nenhum dos dois viu, preparem alguma coisa gostosa e deixem os celulares de lado.</p>
+            <div class="date-idea-extra" id="dateIdeaExtra" hidden>
+              <span aria-hidden="true">♡</span>
+              <p><strong>Um toque especial</strong><span id="dateIdeaSpecialTouch"></span></p>
+            </div>
             <div class="date-idea-details" aria-label="Detalhes da sugestão">
               <span id="dateIdeaPlace">⌂ Em casa</span>
               <span id="dateIdeaBudget">◌ Econômico</span>
@@ -302,8 +307,16 @@
                 <option value="longo">Um dia inteiro</option>
               </select>
             </div>
-            <button class="secondary-button" id="newDateIdea" type="button">Sortear outra ideia</button>
           </div>
+
+          <div class="date-random-action">
+            <p>
+              <strong>Feito no próprio site</strong>
+              <span>Escolham as opções e sorteiem quantas vezes quiserem, sem cadastro e sem custo.</span>
+            </p>
+            <button class="secondary-button date-random-button" id="newDateIdea" type="button"><span aria-hidden="true">✦</span> Sortear outro encontro</button>
+          </div>
+          <small id="dateIdeaStatus" class="date-idea-status" role="status" aria-live="polite"></small>
 
           <details class="date-save-composer" id="dateSaveComposer">
             <summary>Guardar em “Coisas que ainda vamos viver” <span aria-hidden="true">＋</span></summary>
@@ -543,7 +556,6 @@
     </div>
   </main>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.111.0/dist/umd/supabase.min.js" crossorigin="anonymous"></script>
-  <script src="script.js"></script>
+  <script src="script.js" defer></script>
 </body>
 </html>

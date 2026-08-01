@@ -155,24 +155,24 @@ const DATE_IDEA_LABELS = Object.freeze({
 });
 
 const DATE_IDEAS = Object.freeze([
-  { title: "Cinema com cardápio escolhido pelos dois", description: "Escolham um filme que nenhum dos dois viu, preparem uma comida simples e deixem os celulares longe até os créditos.", place: "casa", budget: "baixo", duration: "medio" },
-  { title: "Passeio para ver o pôr do sol", description: "Escolham um lugar bonito, levem alguma coisa para beber e conversem enquanto o céu muda de cor.", place: "sair", budget: "gratis", duration: "medio" },
-  { title: "Cozinhar uma receita que nunca fizeram", description: "Cada um escolhe uma parte da receita e os dois descobrem juntos se a experiência virou jantar ou história engraçada.", place: "casa", budget: "baixo", duration: "medio" },
-  { title: "Caminhada sem celular", description: "Saiam para caminhar sem destino definido. Cada um faz três perguntas que nunca fez ao outro.", place: "sair", budget: "gratis", duration: "rapido" },
-  { title: "Piquenique de café da manhã", description: "Preparem frutas, café e alguma coisa gostosa para começar o dia em um lugar diferente.", place: "sair", budget: "baixo", duration: "medio" },
-  { title: "Noite de spa improvisado", description: "Separem música calma, máscaras, massagem e qualquer cuidado simples que deixe a noite mais leve.", place: "casa", budget: "baixo", duration: "medio" },
-  { title: "Caça às melhores fotos do bairro", description: "Passeiem procurando cinco lugares bonitos ou engraçados e tirem uma foto em cada um.", place: "sair", budget: "gratis", duration: "medio" },
-  { title: "Escolher um presente em uma livraria", description: "Cada um escolhe um livro para o outro e explica por que aquela história combina com ele.", place: "sair", budget: "especial", duration: "medio" },
-  { title: "Sobremesa em um lugar novo", description: "Procurem uma sobremesa que nunca provaram e dividam a escolha.", place: "sair", budget: "baixo", duration: "rapido" },
-  { title: "Recriar uma parte do primeiro encontro", description: "Voltem a um lugar, comida, música ou detalhe do começo e contem o que cada um lembra daquele dia.", place: "sair", budget: "especial", duration: "medio" },
-  { title: "Playlist da nossa história", description: "Cada um escolhe cinco músicas que lembram fases do relacionamento e conta o motivo de cada escolha.", place: "casa", budget: "gratis", duration: "rapido" },
-  { title: "Jantar com tema sorteado", description: "Sorteiem um país, uma cor ou uma década e montem juntos uma noite inspirada no tema.", place: "casa", budget: "especial", duration: "medio" },
-  { title: "Turistas na própria cidade", description: "Escolham um lugar conhecido que nunca visitaram e passem algumas horas olhando a cidade como se fosse a primeira vez.", place: "sair", budget: "baixo", duration: "longo" },
-  { title: "Desafio do lanche surpresa", description: "Cada um compra ou prepara uma bebida, um salgado e um doce para o outro sem contar o que escolheu.", place: "casa", budget: "baixo", duration: "rapido" },
-  { title: "Dia de conhecer um lugar especial", description: "Escolham um museu, parque, feira ou atração nova e reservem o dia para explorar sem pressa.", place: "sair", budget: "especial", duration: "longo" },
-  { title: "Cartas para abrir no futuro", description: "Escrevam como imaginam vocês dois daqui a um ano e guardem as cartas com uma data para abrir.", place: "casa", budget: "gratis", duration: "rapido" },
-  { title: "Observar as estrelas", description: "Escolham um lugar mais tranquilo, levem uma manta e fiquem um tempo olhando o céu e conversando.", place: "sair", budget: "gratis", duration: "medio" },
-  { title: "Um dia inteiro escolhido por vocês", description: "Cada um escolhe uma parte do dia: uma comida, um passeio e algo para fazer à noite.", place: "sair", budget: "especial", duration: "longo" }
+  { title: "Perguntas que aquecem o coração", description: "Sentem juntos por alguns minutos e cada um faz três perguntas que sempre teve vontade de fazer ao outro.", specialTouch: "Terminem contando qual resposta gostariam de guardar para sempre.", place: "casa", budget: "gratis", duration: "rapido" },
+  { title: "Sessão de fotos do nosso jeitinho", description: "Escolham cantinhos da casa, improvisem poses e façam uma pequena sessão usando apenas o celular e o que já têm.", specialTouch: "Escolham a foto mais espontânea para entrar em Memórias que moram em mim.", place: "casa", budget: "gratis", duration: "medio" },
+  { title: "Um dia inteiro sem pressa", description: "Montem juntos um dia em casa com café demorado, música, jogos, comida feita pelos dois e uma noite de filme.", specialTouch: "Cada um escolhe uma parte do dia sem contar antes para o outro.", place: "casa", budget: "gratis", duration: "longo" },
+  { title: "Lanche surpresa em dupla", description: "Cada um prepara ou compra uma bebida, um salgado e um doce para o outro sem revelar as escolhas.", specialTouch: "Façam uma nota divertida para cada escolha e guardem o resultado.", place: "casa", budget: "baixo", duration: "rapido" },
+  { title: "Cinema com cardápio escolhido pelos dois", description: "Escolham um filme que nenhum dos dois viu, preparem uma comida simples e deixem os celulares longe até os créditos.", specialTouch: "Antes do filme, cada um escreve uma previsão sobre a história para comparar no final.", place: "casa", budget: "baixo", duration: "medio" },
+  { title: "Festival particular de filmes e sabores", description: "Escolham dois filmes, preparem lanches para momentos diferentes e transformem a sala no cinema particular de vocês.", specialTouch: "Façam ingressos de papel com a data e o nome do festival.", place: "casa", budget: "baixo", duration: "longo" },
+  { title: "Brinde com sobremesa especial", description: "Escolham uma sobremesa bonita, arrumem a mesa e façam um pequeno brinde a alguma conquista de vocês.", specialTouch: "Cada um completa a frase: hoje eu celebraria em você...", place: "casa", budget: "especial", duration: "rapido" },
+  { title: "Jantar com tema sorteado", description: "Sorteiem um país, uma cor ou uma década e montem juntos um jantar inspirado no tema escolhido.", specialTouch: "Escolham uma música que combine com o tema para abrir a noite.", place: "casa", budget: "especial", duration: "medio" },
+  { title: "Hotel romântico dentro de casa", description: "Preparem café especial, roupas confortáveis, jantar caprichado e uma programação inteira sem tarefas ou pressa.", specialTouch: "Deixem uma cartinha de boas-vindas no travesseiro um do outro.", place: "casa", budget: "especial", duration: "longo" },
+  { title: "Caminhada sem celular", description: "Saiam para caminhar sem destino definido e conversem com calma, prestando atenção ao caminho e um ao outro.", specialTouch: "Cada um faz uma pergunta que nunca fez antes.", place: "sair", budget: "gratis", duration: "rapido" },
+  { title: "Passeio para ver o pôr do sol", description: "Escolham um lugar bonito, levem água e fiquem juntos enquanto o céu muda de cor.", specialTouch: "Tirem uma única foto do momento e contem o que mais gostaram no dia.", place: "sair", budget: "gratis", duration: "medio" },
+  { title: "Turistas a pé na própria cidade", description: "Montem um roteiro por praças, ruas e lugares gratuitos que vocês ainda não conhecem e explorem sem pressa.", specialTouch: "Criem um nome divertido para o passeio e registrem três descobertas.", place: "sair", budget: "gratis", duration: "longo" },
+  { title: "Uma sobremesa em um lugar novo", description: "Procurem uma sobremesa que nunca provaram, dividam a escolha e aproveitem uma saída curta da rotina.", specialTouch: "Cada um escolhe uma colherada perfeita para oferecer ao outro.", place: "sair", budget: "baixo", duration: "rapido" },
+  { title: "Piquenique simples para dois", description: "Levem frutas, café ou lanches fáceis para um lugar tranquilo e passem algumas horas conversando.", specialTouch: "Cada um leva escondido uma coisinha que sabe que o outro gosta.", place: "sair", budget: "baixo", duration: "medio" },
+  { title: "Roteiro econômico pela cidade", description: "Escolham três paradas baratas, como uma praça, um café e um lugar bonito para fotos, e façam um passeio completo.", specialTouch: "Guardem um papel ou uma foto de cada parada para lembrar do roteiro.", place: "sair", budget: "baixo", duration: "longo" },
+  { title: "Um brinde fora da rotina", description: "Escolham um lugar agradável para dividir uma bebida ou petisco e fazer uma pausa especial no dia.", specialTouch: "Brindem a uma coisa pequena que melhorou desde que vocês se conheceram.", place: "sair", budget: "especial", duration: "rapido" },
+  { title: "Recriar uma parte do primeiro encontro", description: "Voltem a um lugar, comida, música ou detalhe do começo e contem o que cada um lembra daquele dia.", specialTouch: "No fim, digam o que fariam igual e o que tornou a história ainda melhor.", place: "sair", budget: "especial", duration: "medio" },
+  { title: "Um dia inteiro escolhido pelos dois", description: "Cada um escolhe em segredo uma parte do dia, como uma comida, um passeio e algo para fazer à noite.", specialTouch: "Só revelem a próxima escolha quando chegar a hora de vivê-la.", place: "sair", budget: "especial", duration: "longo" }
 ]);
 
 const $ = (selector) => document.querySelector(selector);
@@ -193,8 +193,10 @@ let publicationImageSelection = 0;
 let latestPublicationReplies = [];
 let latestFuturePlans = [];
 let currentDateIdea = null;
-let currentDateIdeaIndex = -1;
 let complaintPreviewUrl = "";
+let sharedContentActivated = false;
+let counterTimer;
+let realtimeClientPromise;
 
 function hydrateContent() {
   document.title = CONFIG.pageTitle;
@@ -217,11 +219,35 @@ function hydrateContent() {
 
   renderGallery();
   renderTimeline();
+  setupDateIdea();
+}
+
+function activateSharedContent() {
+  if (sharedContentActivated) return;
+  sharedContentActivated = true;
   void renderNotes();
   void loadPublications();
   void loadFuturePlans();
-  setupDateIdea();
   void loadCoupleCorner();
+  void loadRealtimeClient()
+    .then(subscribeToPublications)
+    .catch(startPublicationsFallback);
+}
+
+function loadRealtimeClient() {
+  if (window.supabase?.createClient) return Promise.resolve();
+  if (realtimeClientPromise) return realtimeClientPromise;
+
+  realtimeClientPromise = new Promise((resolve, reject) => {
+    const script = document.createElement("script");
+    script.src = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.111.0/dist/umd/supabase.min.js";
+    script.crossOrigin = "anonymous";
+    script.onload = resolve;
+    script.onerror = () => reject(new Error("Não foi possível ativar as atualizações em tempo real."));
+    document.head.append(script);
+  });
+
+  return realtimeClientPromise;
 }
 
 function preciseDateDiff(start, end) {
@@ -275,7 +301,7 @@ function renderGallery() {
     button.className = `thumbnail${index === 0 ? " active" : ""}`;
     button.type = "button";
     button.setAttribute("aria-label", `Ver memória ${index + 1}: ${photo.caption}`);
-    button.innerHTML = `<img src="${photo.src}" alt="" loading="lazy" />`;
+    button.innerHTML = `<img src="${photo.src}" alt="" loading="lazy" decoding="async" />`;
     button.addEventListener("click", () => showPhoto(index));
     thumbnails.append(button);
   });
@@ -316,7 +342,7 @@ function renderTimeline(repliesByMemory = groupPublicationReplies(latestPublicat
     article.innerHTML = `
       <span class="timeline-dot" aria-hidden="true"></span>
       <div class="timeline-card">
-        <img src="${item.image}" alt="${item.title}" style="object-position:${item.position || "center"}" />
+        <img src="${item.image}" alt="${item.title}" style="object-position:${item.position || "center"}" loading="lazy" decoding="async" />
         <div class="timeline-copy">
           <time>${item.date}</time>
           <h3>${item.title}</h3>
@@ -364,9 +390,12 @@ function createFloatingHeart() {
 function openExperience() {
   document.body.classList.add("surprise-open");
   surpriseContent.hidden = false;
+  activateSharedContent();
   openSurprise.closest(".hero-content").classList.add("visible");
   clearInterval(heartTimer);
-  heartTimer = setInterval(createFloatingHeart, 700);
+  if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    heartTimer = setInterval(createFloatingHeart, 1000);
+  }
 
   const previewTarget = new URLSearchParams(location.search).has("preview") && location.hash
     ? document.getElementById(location.hash.slice(1))
@@ -706,10 +735,16 @@ function setupDateIdea() {
   chooseDateIdea(true);
 }
 
+function getDateIdeaFilters() {
+  return {
+    place: $("#datePlaceFilter").value,
+    budget: $("#dateBudgetFilter").value,
+    duration: $("#dateDurationFilter").value
+  };
+}
+
 function getFilteredDateIdeas() {
-  const place = $("#datePlaceFilter").value;
-  const budget = $("#dateBudgetFilter").value;
-  const duration = $("#dateDurationFilter").value;
+  const { place, budget, duration } = getDateIdeaFilters();
   const filtered = DATE_IDEAS.filter((idea) => (
     (place === "todos" || idea.place === place)
     && (budget === "todos" || idea.budget === budget)
@@ -728,8 +763,12 @@ function renderDateIdea(idea) {
   }[idea.budget];
 
   $("#dateIdeaTag").textContent = `${placeLabel} · ${budgetLabel}`;
+  $("#dateIdeaOrigin").innerHTML = '<span aria-hidden="true">✦</span> Sugestão sorteada';
   $("#dateIdeaTitle").textContent = idea.title;
   $("#dateIdeaDescription").textContent = idea.description;
+  const specialTouch = String(idea.specialTouch || "").trim();
+  $("#dateIdeaExtra").hidden = !specialTouch;
+  $("#dateIdeaSpecialTouch").textContent = specialTouch;
   $("#dateIdeaPlace").textContent = DATE_IDEA_LABELS.place[idea.place];
   $("#dateIdeaBudget").textContent = DATE_IDEA_LABELS.budget[idea.budget];
   $("#dateIdeaDuration").textContent = DATE_IDEA_LABELS.duration[idea.duration];
@@ -749,8 +788,18 @@ function chooseDateIdea(deterministic = false) {
     if (ideas.length > 1 && ideas[index] === currentDateIdea) index = (index + 1) % ideas.length;
   }
 
-  currentDateIdeaIndex = DATE_IDEAS.indexOf(ideas[index]);
   renderDateIdea(ideas[index]);
+}
+
+function setDateIdeaStatus(message, state = "") {
+  const status = $("#dateIdeaStatus");
+  status.textContent = message;
+  status.dataset.state = state;
+}
+
+function createDateIdea() {
+  chooseDateIdea(false);
+  setDateIdeaStatus("Pronto! A ideia respeita as escolhas de vocês e não custa nada para gerar ♥", "success");
 }
 
 async function requestCoupleCorner(payload, editorCode) {
@@ -921,6 +970,7 @@ function createComplaintCard(complaint, interpretations) {
   image.src = complaint.imagem_url;
   image.alt = `Reclamação misteriosa enviada por ${complaint.autor}`;
   image.loading = "lazy";
+  image.decoding = "async";
   const tape = document.createElement("span");
   tape.className = "complaint-tape";
   tape.setAttribute("aria-hidden", "true");
@@ -1261,6 +1311,7 @@ function createMemoryPublicationCard(publication, replies) {
   image.src = publication.imagem_url;
   image.alt = publication.titulo;
   image.loading = "lazy";
+  image.decoding = "async";
   figure.append(tape, image);
 
   const copy = document.createElement("div");
@@ -1300,6 +1351,7 @@ function createTimelinePublicationItem(publication, replies) {
   image.src = publication.imagem_url;
   image.alt = publication.titulo;
   image.loading = "lazy";
+  image.decoding = "async";
 
   const copy = document.createElement("div");
   copy.className = "timeline-copy";
@@ -1688,14 +1740,13 @@ $(".memory-album").addEventListener("keydown", (event) => {
   if (event.key === "ArrowRight") showPhoto(currentPhoto + 1);
 });
 
-window.addEventListener("load", () => {
+document.addEventListener("DOMContentLoaded", () => {
   hydrateContent();
-  subscribeToPublications();
   updatePublicationDesign();
   updateCounter();
-  setInterval(updateCounter, 1000);
-  setTimeout(() => loadingScreen.classList.add("hidden"), 900);
-  setTimeout(() => $(".hero .reveal").classList.add("visible"), 1150);
+  counterTimer = setInterval(updateCounter, 1000);
+  setTimeout(() => loadingScreen.classList.add("hidden"), 450);
+  setTimeout(() => $(".hero .reveal").classList.add("visible"), 650);
 
   if (new URLSearchParams(location.search).has("preview")) {
     setTimeout(() => {
@@ -1705,6 +1756,19 @@ window.addEventListener("load", () => {
         if (section) section.scrollIntoView({ behavior: "auto", block: "start" });
       }, 900);
     }, 1500);
+  }
+});
+
+document.addEventListener("visibilitychange", () => {
+  clearInterval(counterTimer);
+  clearInterval(heartTimer);
+  if (document.hidden) return;
+
+  updateCounter();
+  counterTimer = setInterval(updateCounter, 1000);
+  if (document.body.classList.contains("surprise-open")
+      && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    heartTimer = setInterval(createFloatingHeart, 1000);
   }
 });
 
@@ -1895,10 +1959,13 @@ $("#futurePlanForm").addEventListener("submit", async (event) => {
 });
 
 ["#datePlaceFilter", "#dateBudgetFilter", "#dateDurationFilter"].forEach((selector) => {
-  $(selector).addEventListener("change", () => chooseDateIdea(true));
+  $(selector).addEventListener("change", () => {
+    chooseDateIdea(true);
+    setDateIdeaStatus("Escolhas atualizadas. Toquem no botão para sortear outra ideia.");
+  });
 });
 
-$("#newDateIdea").addEventListener("click", () => chooseDateIdea(false));
+$("#newDateIdea").addEventListener("click", createDateIdea);
 
 $("#dateSaveForm").addEventListener("submit", async (event) => {
   event.preventDefault();
@@ -1921,7 +1988,9 @@ $("#dateSaveForm").addEventListener("submit", async (event) => {
       autor: author,
       categoria: "encontro",
       titulo: currentDateIdea.title,
-      detalhes: currentDateIdea.description
+      detalhes: currentDateIdea.specialTouch
+        ? `${currentDateIdea.description} Toque especial: ${currentDateIdea.specialTouch}`
+        : currentDateIdea.description
     }, editorCode);
     $("#dateSaveCode").value = "";
     setCornerStatus("#dateSaveStatus", "Encontro guardado em “Coisas que ainda vamos viver” ♥", "success");

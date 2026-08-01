@@ -9,7 +9,7 @@ Esta página foi personalizada com:
 - as sete fotos e lembranças do casal
 - um álbum interativo na seção **“Memórias que moram em mim”**, com textos, miniaturas, botões, teclado e gesto de deslizar
 - uma lista compartilhada **“Coisas que ainda vamos viver”**, para guardar sonhos e transformar os que foram realizados em novas memórias
-- um **criador de encontros** com filtros e opção de guardar a sugestão na lista de planos
+- um **criador gratuito de encontros**, que combina lugar, orçamento e duração e permite guardar a sugestão na lista de planos
 - a área diária **“Três coisas de hoje”**, incluindo carinho, coisas boas do dia e gratidão
 - o jogo **“Decifra essa reclamação”**, no qual a reclamação é publicada somente por foto
 - a área **“Cartas entre nós”**, reservada para textos maiores
@@ -57,7 +57,7 @@ Quando um plano acontecer, basta escolher **“Marcar como vivido”**. Ele pass
 
 ## Nosso cantinho
 
-O **“Encontro para hoje”** mostra uma sugestão baseada na data e permite filtrar por lugar, orçamento e duração. A sugestão escolhida pode ser enviada diretamente para **“Coisas que ainda vamos viver”**.
+O **“Encontro para hoje”** permite escolher lugar, orçamento e duração e sortear quantas sugestões quiserem. Tudo funciona dentro da própria página, sem cadastro, inteligência artificial ou serviço pago. A coleção tem uma ideia compatível para cada combinação possível e inclui um detalhe especial para o casal. A sugestão escolhida pode ser enviada diretamente para **“Coisas que ainda vamos viver”**.
 
 Em **“Três coisas de hoje”**, cada pessoa pode guardar uma lista diária de três coisas que gosta no outro, três coisas boas do dia ou três motivos de gratidão. Cada pessoa pode preencher uma vez por dia cada uma dessas modalidades.
 
