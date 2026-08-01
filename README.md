@@ -38,6 +38,8 @@ O site usa apenas uma chave pública própria para páginas abertas. A chave sec
 
 A seção **“Acrescente um novo capítulo”** permite que Bianca publique somente em **“Memórias que moram em mim”** ou **“Momentos que fizeram de nós, nós”**. No álbum, a publicação ganha o visual de uma nova fotografia revelada; na história, ela entra como uma nova etapa da linha do tempo. A publicação é guardada no Supabase e aparece imediatamente para todos que estiverem com a página aberta.
 
+Todas as memórias — tanto as criadas originalmente por Natã quanto as publicadas depois pela Bianca — têm uma área **“Nosso diário”**. Bianca e Natã podem escolher quem está escrevendo e continuar a conversa diretamente embaixo da lembrança usando o mesmo código reservado. As respostas ficam ligadas à memória correta, são guardadas no Supabase e aparecem em tempo real em todos os aparelhos.
+
 O envio exige o código reservado combinado pelo casal. O código não está escrito no HTML: ele é conferido por uma função protegida no Supabase. O site limita tentativas incorretas e aceita somente imagens JPG, PNG ou WEBP com até 8 MB.
 
 Antes do envio, o navegador testa versões WEBP de alta qualidade, sem reduzir as dimensões da fotografia. Uma versão otimizada só é utilizada quando fica pelo menos 10% menor e passa por uma comparação visual conservadora; caso contrário, o arquivo original é enviado. Assim, a economia de espaço nunca tem prioridade sobre a qualidade da lembrança.

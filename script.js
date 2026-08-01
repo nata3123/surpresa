@@ -119,7 +119,8 @@ photos: [
 const SUPABASE = Object.freeze({
   url: "https://mijtdivqfjrkwchqdqvr.supabase.co",
   publishableKey: "sb_publishable_ukedGcRlxvIYSyF8rSONig_koPKNEVh",
-  publishFunction: "publicar-lembranca"
+  publishFunction: "publicar-lembranca",
+  replyFunction: "responder-publicacao"
 });
 
 const IMAGE_UPLOAD = Object.freeze({
@@ -146,6 +147,7 @@ let publicationsFallbackTimer;
 let preparedPublicationImage = null;
 let publicationImagePromise = null;
 let publicationImageSelection = 0;
+let latestPublicationReplies = [];
 
 function hydrateContent() {
   document.title = CONFIG.pageTitle;
@@ -247,17 +249,20 @@ function showPhoto(index, animate = true) {
     $("#galleryIndex").textContent = `${currentPhoto + 1} de ${CONFIG.photos.length}`;
     $("#galleryIndexPadded").textContent = String(currentPhoto + 1).padStart(2, "0");
     $$(".thumbnail").forEach((thumb, i) => thumb.classList.toggle("active", i === currentPhoto));
+    renderGalleryDiary();
     image.classList.remove("changing");
   }, animate ? 160 : 0);
 }
 
-function renderTimeline() {
+function renderTimeline(repliesByMemory = groupPublicationReplies(latestPublicationReplies).byMemory) {
   const timeline = $("#timeline");
   timeline.innerHTML = "";
 
-  CONFIG.timeline.forEach((item) => {
+  CONFIG.timeline.forEach((item, index) => {
+    const memoryKey = `linha-do-tempo-${index + 1}`;
     const article = document.createElement("article");
     article.className = "timeline-item reveal";
+    if (document.body.classList.contains("surprise-open")) article.classList.add("visible");
     article.innerHTML = `
       <span class="timeline-dot" aria-hidden="true"></span>
       <div class="timeline-card">
@@ -268,6 +273,12 @@ function renderTimeline() {
           <p>${item.text}</p>
         </div>
       </div>`;
+    article.querySelector(".timeline-card").append(
+      createPublicationReplyArea(
+        { memoryKey, defaultAuthor: "Bianca" },
+        repliesByMemory.get(memoryKey) || []
+      )
+    );
     timeline.append(article);
   });
 }
@@ -392,7 +403,206 @@ function formatPublicationDate(value) {
   }).format(date);
 }
 
-function createMemoryPublicationCard(publication) {
+function createReplyCard(reply) {
+  const article = document.createElement("article");
+  article.className = "publication-reply";
+
+  const header = document.createElement("div");
+  const author = document.createElement("strong");
+  author.textContent = reply.autor;
+  const date = document.createElement("time");
+  date.dateTime = reply.criado_em;
+  date.textContent = formatPublicationDate(reply.criado_em);
+  header.append(author, date);
+
+  const message = document.createElement("p");
+  message.textContent = reply.mensagem;
+  article.append(header, message);
+  return article;
+}
+
+function groupPublicationReplies(replies = []) {
+  const byPublication = new Map();
+  const byMemory = new Map();
+
+  replies.forEach((reply) => {
+    const map = reply.publicacao_id != null ? byPublication : byMemory;
+    const key = reply.publicacao_id != null ? String(reply.publicacao_id) : String(reply.memoria_chave || "");
+    if (!key) return;
+    if (!map.has(key)) map.set(key, []);
+    map.get(key).push(reply);
+  });
+
+  return { byPublication, byMemory };
+}
+
+function renderGalleryDiary(repliesByMemory = groupPublicationReplies(latestPublicationReplies).byMemory) {
+  const container = $("#galleryDiary");
+  if (!container) return;
+
+  const memoryKey = `album-foto-${currentPhoto + 1}`;
+  container.replaceChildren(
+    createPublicationReplyArea(
+      { memoryKey, defaultAuthor: "Bianca" },
+      repliesByMemory.get(memoryKey) || []
+    )
+  );
+}
+
+async function submitPublicationReply(event) {
+  event.preventDefault();
+
+  const form = event.currentTarget;
+  const publicationId = form.dataset.publicationId;
+  const memoryKey = form.dataset.memoryKey;
+  const replyTarget = form.dataset.replyTarget;
+  const authorField = form.elements.namedItem("autor");
+  const messageField = form.elements.namedItem("mensagem");
+  const codeField = form.elements.namedItem("codigo");
+  const status = form.querySelector(".publication-reply-status");
+  const submitButton = form.querySelector('button[type="submit"]');
+  const author = authorField.value;
+  const message = messageField.value.trim();
+  const editorCode = codeField.value;
+
+  if ((!publicationId && !memoryKey) || !author || !message || !editorCode) return;
+
+  const originalLabel = submitButton.textContent;
+  submitButton.disabled = true;
+  submitButton.textContent = "Guardando…";
+  status.textContent = "Guardando sua resposta no nosso diário…";
+  status.dataset.state = "";
+
+  try {
+    const response = await fetch(`${SUPABASE.url}/functions/v1/${SUPABASE.replyFunction}`, {
+      method: "POST",
+      headers: {
+        apikey: SUPABASE.publishableKey,
+        "Content-Type": "application/json",
+        "x-editor-code": editorCode
+      },
+      body: JSON.stringify({
+        publicacao_id: publicationId || null,
+        memoria_chave: memoryKey || null,
+        autor: author,
+        mensagem: message
+      })
+    });
+
+    const result = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(result.error || "Não foi possível guardar a resposta agora.");
+
+    form.reset();
+    await loadPublications();
+    const replyArea = document.querySelector(`[data-reply-target="${replyTarget}"]`);
+    if (replyArea) {
+      replyArea.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  } catch (error) {
+    status.textContent = error.message || "Não foi possível guardar a resposta agora.";
+    status.dataset.state = "error";
+  } finally {
+    submitButton.disabled = false;
+    submitButton.textContent = originalLabel;
+  }
+}
+
+function createPublicationReplyArea(target, replies) {
+  const publicationId = target.publicationId != null ? String(target.publicationId) : "";
+  const memoryKey = target.memoryKey || "";
+  const replyTarget = publicationId ? `publicacao-${publicationId}` : memoryKey;
+  const section = document.createElement("section");
+  section.className = "publication-replies";
+  section.dataset.replyTarget = replyTarget;
+
+  const heading = document.createElement("div");
+  heading.className = "publication-replies-heading";
+  const eyebrow = document.createElement("span");
+  eyebrow.textContent = "Nosso diário";
+  const title = document.createElement("h5");
+  title.textContent = replies.length ? "O que essa memória despertou em nós" : "Uma resposta esperando para nascer";
+  heading.append(eyebrow, title);
+  section.append(heading);
+
+  if (replies.length) {
+    const list = document.createElement("div");
+    list.className = "publication-replies-list";
+    replies.forEach((reply) => list.append(createReplyCard(reply)));
+    section.append(list);
+  } else {
+    const empty = document.createElement("p");
+    empty.className = "publication-replies-empty";
+    empty.textContent = "Esta lembrança ainda pode ganhar palavras novas de vocês dois.";
+    section.append(empty);
+  }
+
+  const composer = document.createElement("details");
+  composer.className = "publication-reply-composer";
+  const summary = document.createElement("summary");
+  summary.textContent = replies.length ? "Continuar esta conversa ♥" : "Escrever uma resposta ♥";
+
+  const form = document.createElement("form");
+  form.className = "publication-reply-form";
+  form.dataset.publicationId = publicationId;
+  form.dataset.memoryKey = memoryKey;
+  form.dataset.replyTarget = replyTarget;
+
+  const authorLabel = document.createElement("label");
+  authorLabel.htmlFor = `reply-author-${replyTarget}`;
+  authorLabel.textContent = "Quem está escrevendo?";
+  const author = document.createElement("select");
+  author.id = authorLabel.htmlFor;
+  author.name = "autor";
+  author.required = true;
+  ["Bianca", "Natã"].forEach((name) => {
+    const option = document.createElement("option");
+    option.value = name;
+    option.textContent = name;
+    option.selected = name === target.defaultAuthor;
+    author.append(option);
+  });
+
+  const messageLabel = document.createElement("label");
+  messageLabel.htmlFor = `reply-message-${replyTarget}`;
+  messageLabel.textContent = "Sua resposta";
+  const textarea = document.createElement("textarea");
+  textarea.id = messageLabel.htmlFor;
+  textarea.name = "mensagem";
+  textarea.maxLength = 1000;
+  textarea.rows = 4;
+  textarea.placeholder = "Escreva o que essa lembrança fez você sentir…";
+  textarea.required = true;
+
+  const codeLabel = document.createElement("label");
+  codeLabel.htmlFor = `reply-code-${replyTarget}`;
+  codeLabel.textContent = "Código reservado";
+  const code = document.createElement("input");
+  code.id = codeLabel.htmlFor;
+  code.name = "codigo";
+  code.type = "password";
+  code.autocomplete = "off";
+  code.placeholder = "Digite o código para responder";
+  code.required = true;
+
+  const actions = document.createElement("div");
+  actions.className = "publication-reply-actions";
+  const button = document.createElement("button");
+  button.type = "submit";
+  button.textContent = "Guardar resposta ♥";
+  const status = document.createElement("small");
+  status.className = "publication-reply-status";
+  status.setAttribute("role", "status");
+  status.setAttribute("aria-live", "polite");
+  actions.append(button, status);
+
+  form.append(authorLabel, author, messageLabel, textarea, codeLabel, code, actions);
+  form.addEventListener("submit", submitPublicationReply);
+  composer.append(summary, form);
+  section.append(composer);
+  return section;
+}
+
+function createMemoryPublicationCard(publication, replies) {
   const article = document.createElement("article");
   article.className = "memory-live-card";
 
@@ -420,11 +630,15 @@ function createMemoryPublicationCard(publication) {
   text.textContent = publication.texto;
 
   copy.append(date, title, text);
-  article.append(figure, copy);
+  article.append(
+    figure,
+    copy,
+    createPublicationReplyArea({ publicationId: publication.id, defaultAuthor: "Natã" }, replies)
+  );
   return article;
 }
 
-function createTimelinePublicationItem(publication) {
+function createTimelinePublicationItem(publication, replies) {
   const article = document.createElement("article");
   article.className = "timeline-item user-added visible";
 
@@ -454,12 +668,21 @@ function createTimelinePublicationItem(publication) {
   text.textContent = publication.texto;
 
   copy.append(date, title, text);
-  card.append(image, copy);
+  card.append(
+    image,
+    copy,
+    createPublicationReplyArea({ publicationId: publication.id, defaultAuthor: "Natã" }, replies)
+  );
   article.append(dot, card);
   return article;
 }
 
-function renderPublications(publications) {
+function renderPublications(publications, replies) {
+  latestPublicationReplies = replies;
+  const { byPublication: repliesByPublication, byMemory: repliesByMemory } = groupPublicationReplies(replies);
+  renderTimeline(repliesByMemory);
+  renderGalleryDiary(repliesByMemory);
+
   const memoryFeed = $('[data-live-section="fotos"]');
   const memoryPosts = publications.filter((post) => post.secao === "fotos");
 
@@ -477,7 +700,9 @@ function renderPublications(publications) {
 
     const grid = document.createElement("div");
     grid.className = "memory-live-grid";
-    memoryPosts.forEach((post) => grid.append(createMemoryPublicationCard(post)));
+    memoryPosts.forEach((post) => {
+      grid.append(createMemoryPublicationCard(post, repliesByPublication.get(String(post.id)) || []));
+    });
 
     memoryFeed.replaceChildren(heading, grid);
     memoryFeed.hidden = false;
@@ -490,18 +715,32 @@ function renderPublications(publications) {
   timeline.querySelectorAll(".timeline-item.user-added").forEach((item) => item.remove());
   publications
     .filter((post) => post.secao === "historia")
-    .forEach((post) => timeline.append(createTimelinePublicationItem(post)));
+    .forEach((post) => {
+      timeline.append(createTimelinePublicationItem(post, repliesByPublication.get(String(post.id)) || []));
+    });
 }
 
 async function loadPublications() {
   try {
-    const response = await fetch(
-      `${SUPABASE.url}/rest/v1/publicacoes?select=id,secao,titulo,texto,imagem_url,criado_em&order=criado_em.asc`,
-      { headers: { apikey: SUPABASE.publishableKey } }
-    );
+    const [publicationsResponse, repliesResponse] = await Promise.all([
+      fetch(
+        `${SUPABASE.url}/rest/v1/publicacoes?select=id,secao,titulo,texto,imagem_url,criado_em&order=criado_em.asc`,
+        { headers: { apikey: SUPABASE.publishableKey } }
+      ),
+      fetch(
+        `${SUPABASE.url}/rest/v1/respostas_publicacoes?select=id,publicacao_id,memoria_chave,autor,mensagem,criado_em&order=criado_em.asc`,
+        { headers: { apikey: SUPABASE.publishableKey } }
+      )
+    ]);
 
-    if (!response.ok) throw new Error(`Não foi possível carregar as publicações (${response.status}).`);
-    renderPublications(await response.json());
+    if (!publicationsResponse.ok) {
+      throw new Error(`Não foi possível carregar as publicações (${publicationsResponse.status}).`);
+    }
+    if (!repliesResponse.ok) {
+      throw new Error(`Não foi possível carregar as respostas (${repliesResponse.status}).`);
+    }
+
+    renderPublications(await publicationsResponse.json(), await repliesResponse.json());
   } catch (error) {
     console.error(error);
   }
@@ -527,6 +766,11 @@ function subscribeToPublications() {
     .on(
       "postgres_changes",
       { event: "INSERT", schema: "public", table: "publicacoes" },
+      () => void loadPublications()
+    )
+    .on(
+      "postgres_changes",
+      { event: "INSERT", schema: "public", table: "respostas_publicacoes" },
       () => void loadPublications()
     )
     .subscribe((status) => {
