@@ -4,7 +4,7 @@
 */
 const CONFIG = {
   pageTitle: "surpresaparabianca",
-  introTitle: "Bianca, fiz isso pensando em você.",
+  introTitle: "Bianca & Natã, a nossa história mora aqui.",
   introText: "Uma pequena lembrança de tudo o que vivemos desde 21 de maio de 2026.",
   startDate: "2026-05-21T00:00:00-03:00",
   songTitle: "Partilhar",
@@ -121,7 +121,8 @@ const SUPABASE = Object.freeze({
   publishableKey: "sb_publishable_ukedGcRlxvIYSyF8rSONig_koPKNEVh",
   publishFunction: "publicar-lembranca",
   replyFunction: "responder-publicacao",
-  plansFunction: "gerenciar-planos"
+  plansFunction: "gerenciar-planos",
+  cornerFunction: "gerenciar-cantinho"
 });
 
 const IMAGE_UPLOAD = Object.freeze({
@@ -141,6 +142,39 @@ const FUTURE_PLAN_CATEGORIES = Object.freeze({
   outro: { label: "Nosso plano", symbol: "♥" }
 });
 
+const DAILY_ENTRY_TYPES = Object.freeze({
+  gosto_em_voce: { label: "Três coisas que gosto em você", symbol: "♡" },
+  coisas_boas: { label: "Três coisas boas do dia", symbol: "☼" },
+  gratidao: { label: "Três motivos de gratidão", symbol: "✦" }
+});
+
+const DATE_IDEA_LABELS = Object.freeze({
+  place: { casa: "⌂ Em casa", sair: "⌁ Fora de casa" },
+  budget: { gratis: "◌ Sem gastar", baixo: "◌ Econômico", especial: "✦ Algo especial" },
+  duration: { rapido: "◷ Até 1 hora", medio: "◷ Algumas horas", longo: "☼ Um dia inteiro" }
+});
+
+const DATE_IDEAS = Object.freeze([
+  { title: "Cinema com cardápio escolhido pelos dois", description: "Escolham um filme que nenhum dos dois viu, preparem uma comida simples e deixem os celulares longe até os créditos.", place: "casa", budget: "baixo", duration: "medio" },
+  { title: "Passeio para ver o pôr do sol", description: "Escolham um lugar bonito, levem alguma coisa para beber e conversem enquanto o céu muda de cor.", place: "sair", budget: "gratis", duration: "medio" },
+  { title: "Cozinhar uma receita que nunca fizeram", description: "Cada um escolhe uma parte da receita e os dois descobrem juntos se a experiência virou jantar ou história engraçada.", place: "casa", budget: "baixo", duration: "medio" },
+  { title: "Caminhada sem celular", description: "Saiam para caminhar sem destino definido. Cada um faz três perguntas que nunca fez ao outro.", place: "sair", budget: "gratis", duration: "rapido" },
+  { title: "Piquenique de café da manhã", description: "Preparem frutas, café e alguma coisa gostosa para começar o dia em um lugar diferente.", place: "sair", budget: "baixo", duration: "medio" },
+  { title: "Noite de spa improvisado", description: "Separem música calma, máscaras, massagem e qualquer cuidado simples que deixe a noite mais leve.", place: "casa", budget: "baixo", duration: "medio" },
+  { title: "Caça às melhores fotos do bairro", description: "Passeiem procurando cinco lugares bonitos ou engraçados e tirem uma foto em cada um.", place: "sair", budget: "gratis", duration: "medio" },
+  { title: "Escolher um presente em uma livraria", description: "Cada um escolhe um livro para o outro e explica por que aquela história combina com ele.", place: "sair", budget: "especial", duration: "medio" },
+  { title: "Sobremesa em um lugar novo", description: "Procurem uma sobremesa que nunca provaram e dividam a escolha.", place: "sair", budget: "baixo", duration: "rapido" },
+  { title: "Recriar uma parte do primeiro encontro", description: "Voltem a um lugar, comida, música ou detalhe do começo e contem o que cada um lembra daquele dia.", place: "sair", budget: "especial", duration: "medio" },
+  { title: "Playlist da nossa história", description: "Cada um escolhe cinco músicas que lembram fases do relacionamento e conta o motivo de cada escolha.", place: "casa", budget: "gratis", duration: "rapido" },
+  { title: "Jantar com tema sorteado", description: "Sorteiem um país, uma cor ou uma década e montem juntos uma noite inspirada no tema.", place: "casa", budget: "especial", duration: "medio" },
+  { title: "Turistas na própria cidade", description: "Escolham um lugar conhecido que nunca visitaram e passem algumas horas olhando a cidade como se fosse a primeira vez.", place: "sair", budget: "baixo", duration: "longo" },
+  { title: "Desafio do lanche surpresa", description: "Cada um compra ou prepara uma bebida, um salgado e um doce para o outro sem contar o que escolheu.", place: "casa", budget: "baixo", duration: "rapido" },
+  { title: "Dia de conhecer um lugar especial", description: "Escolham um museu, parque, feira ou atração nova e reservem o dia para explorar sem pressa.", place: "sair", budget: "especial", duration: "longo" },
+  { title: "Cartas para abrir no futuro", description: "Escrevam como imaginam vocês dois daqui a um ano e guardem as cartas com uma data para abrir.", place: "casa", budget: "gratis", duration: "rapido" },
+  { title: "Observar as estrelas", description: "Escolham um lugar mais tranquilo, levem uma manta e fiquem um tempo olhando o céu e conversando.", place: "sair", budget: "gratis", duration: "medio" },
+  { title: "Um dia inteiro escolhido por vocês", description: "Cada um escolhe uma parte do dia: uma comida, um passeio e algo para fazer à noite.", place: "sair", budget: "especial", duration: "longo" }
+]);
+
 const $ = (selector) => document.querySelector(selector);
 const $$ = (selector) => [...document.querySelectorAll(selector)];
 
@@ -158,10 +192,13 @@ let publicationImagePromise = null;
 let publicationImageSelection = 0;
 let latestPublicationReplies = [];
 let latestFuturePlans = [];
+let currentDateIdea = null;
+let currentDateIdeaIndex = -1;
+let complaintPreviewUrl = "";
 
 function hydrateContent() {
   document.title = CONFIG.pageTitle;
-  $("#pageTitle").textContent = "Bianca, o amor da minha vida";
+  $("#pageTitle").textContent = "Bianca & Natã — nossa história";
   $("#introTitle").textContent = CONFIG.introTitle;
   $("#introText").textContent = CONFIG.introText;
   $("#songTitle").textContent = CONFIG.songTitle;
@@ -183,6 +220,8 @@ function hydrateContent() {
   void renderNotes();
   void loadPublications();
   void loadFuturePlans();
+  setupDateIdea();
+  void loadCoupleCorner();
 }
 
 function preciseDateDiff(start, end) {
@@ -636,6 +675,381 @@ async function loadFuturePlans() {
   }
 }
 
+function formatCornerDate(value, withTime = false) {
+  const date = /^\d{4}-\d{2}-\d{2}$/.test(String(value))
+    ? new Date(`${value}T12:00:00`)
+    : new Date(value);
+  if (Number.isNaN(date.getTime())) return "Uma data para guardar";
+
+  return new Intl.DateTimeFormat("pt-BR", withTime
+    ? { dateStyle: "long", timeStyle: "short" }
+    : { dateStyle: "long" }).format(date);
+}
+
+function setCornerStatus(selector, message, state = "") {
+  const status = $(selector);
+  status.textContent = message;
+  status.dataset.state = state;
+}
+
+function setupDateIdea() {
+  const today = new Date();
+  const longDate = new Intl.DateTimeFormat("pt-BR", {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+    year: "numeric"
+  }).format(today);
+  const naturalDate = longDate.charAt(0).toUpperCase() + longDate.slice(1);
+  $("#dateTodayLabel").textContent = `Hoje é ${naturalDate}. Que tal transformar o dia em uma lembrança nova?`;
+  $("#dailyFormDate").textContent = naturalDate;
+  chooseDateIdea(true);
+}
+
+function getFilteredDateIdeas() {
+  const place = $("#datePlaceFilter").value;
+  const budget = $("#dateBudgetFilter").value;
+  const duration = $("#dateDurationFilter").value;
+  const filtered = DATE_IDEAS.filter((idea) => (
+    (place === "todos" || idea.place === place)
+    && (budget === "todos" || idea.budget === budget)
+    && (duration === "todos" || idea.duration === duration)
+  ));
+  return filtered.length ? filtered : DATE_IDEAS;
+}
+
+function renderDateIdea(idea) {
+  currentDateIdea = idea;
+  const placeLabel = idea.place === "casa" ? "Em casa" : "Fora de casa";
+  const budgetLabel = {
+    gratis: "sem gastar",
+    baixo: "econômico",
+    especial: "algo especial"
+  }[idea.budget];
+
+  $("#dateIdeaTag").textContent = `${placeLabel} · ${budgetLabel}`;
+  $("#dateIdeaTitle").textContent = idea.title;
+  $("#dateIdeaDescription").textContent = idea.description;
+  $("#dateIdeaPlace").textContent = DATE_IDEA_LABELS.place[idea.place];
+  $("#dateIdeaBudget").textContent = DATE_IDEA_LABELS.budget[idea.budget];
+  $("#dateIdeaDuration").textContent = DATE_IDEA_LABELS.duration[idea.duration];
+  setCornerStatus("#dateSaveStatus", "");
+}
+
+function chooseDateIdea(deterministic = false) {
+  const ideas = getFilteredDateIdeas();
+  let index;
+
+  if (deterministic) {
+    const now = new Date();
+    const seed = Number(`${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, "0")}${String(now.getDate()).padStart(2, "0")}`);
+    index = seed % ideas.length;
+  } else {
+    index = Math.floor(Math.random() * ideas.length);
+    if (ideas.length > 1 && ideas[index] === currentDateIdea) index = (index + 1) % ideas.length;
+  }
+
+  currentDateIdeaIndex = DATE_IDEAS.indexOf(ideas[index]);
+  renderDateIdea(ideas[index]);
+}
+
+async function requestCoupleCorner(payload, editorCode) {
+  const isFormData = payload instanceof FormData;
+  const headers = {
+    apikey: SUPABASE.publishableKey,
+    "x-editor-code": editorCode
+  };
+  if (!isFormData) headers["Content-Type"] = "application/json";
+
+  const response = await fetch(`${SUPABASE.url}/functions/v1/${SUPABASE.cornerFunction}`, {
+    method: "POST",
+    headers,
+    body: isFormData ? payload : JSON.stringify(payload)
+  });
+
+  const result = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(result.error || "Não foi possível guardar isso agora.");
+  return result;
+}
+
+function createCornerEmpty(message) {
+  const empty = document.createElement("p");
+  empty.className = "corner-empty";
+  empty.textContent = message;
+  return empty;
+}
+
+function renderDailyEntries(entries) {
+  const list = $("#dailyEntriesList");
+  list.replaceChildren();
+  if (!entries.length) {
+    list.append(createCornerEmpty("O primeiro registro de vocês ainda está esperando para ser escrito ♥"));
+    return;
+  }
+
+  entries.forEach((entry) => {
+    const type = DAILY_ENTRY_TYPES[entry.tipo] || DAILY_ENTRY_TYPES.coisas_boas;
+    const card = document.createElement("article");
+    card.className = "daily-entry-card";
+
+    const header = document.createElement("div");
+    const badge = document.createElement("span");
+    badge.className = "daily-entry-badge";
+    badge.textContent = `${type.symbol} ${type.label}`;
+    const date = document.createElement("time");
+    date.dateTime = entry.data;
+    date.textContent = formatCornerDate(entry.data);
+    header.append(badge, date);
+
+    const author = document.createElement("h4");
+    author.textContent = `Escrito por ${entry.autor}`;
+    const items = document.createElement("ol");
+    [entry.item_1, entry.item_2, entry.item_3].forEach((item) => {
+      const row = document.createElement("li");
+      row.textContent = item;
+      items.append(row);
+    });
+
+    card.append(header, author, items);
+    list.append(card);
+  });
+}
+
+async function loadDailyEntries() {
+  try {
+    const response = await fetch(
+      `${SUPABASE.url}/rest/v1/registros_diarios?select=id,data,autor,tipo,item_1,item_2,item_3,criado_em&order=data.desc,criado_em.desc&limit=60`,
+      { headers: { apikey: SUPABASE.publishableKey } }
+    );
+    if (!response.ok) throw new Error(`Não foi possível carregar os registros (${response.status}).`);
+    renderDailyEntries(await response.json());
+  } catch (error) {
+    console.error(error);
+    $("#dailyEntriesList").replaceChildren(createCornerEmpty("Não foi possível carregar os registros agora."));
+  }
+}
+
+function renderLetters(letters) {
+  const list = $("#lettersList");
+  list.replaceChildren();
+  if (!letters.length) {
+    list.append(createCornerEmpty("Ainda não chegou nenhuma carta. A primeira pode ser escrita hoje ♥"));
+    return;
+  }
+
+  letters.forEach((letter, index) => {
+    const card = document.createElement("details");
+    card.className = "letter-card";
+    if (index === 0) card.open = true;
+
+    const summary = document.createElement("summary");
+    const stamp = document.createElement("span");
+    stamp.textContent = letter.autor === "Bianca" ? "B" : "N";
+    const summaryCopy = document.createElement("div");
+    const title = document.createElement("strong");
+    title.textContent = letter.titulo;
+    const meta = document.createElement("small");
+    const recipient = letter.autor === "Bianca" ? "Natã" : "Bianca";
+    meta.textContent = `De ${letter.autor} para ${recipient} · ${formatCornerDate(letter.criado_em)}`;
+    summaryCopy.append(title, meta);
+    summary.append(stamp, summaryCopy);
+
+    const body = document.createElement("div");
+    body.className = "letter-card-body";
+    const text = document.createElement("p");
+    text.textContent = letter.texto;
+    const signature = document.createElement("span");
+    signature.textContent = `Com carinho, ${letter.autor} ♥`;
+    body.append(text, signature);
+    card.append(summary, body);
+    list.append(card);
+  });
+}
+
+async function loadLetters() {
+  try {
+    const response = await fetch(
+      `${SUPABASE.url}/rest/v1/cartas?select=id,autor,titulo,texto,criado_em&order=criado_em.desc&limit=50`,
+      { headers: { apikey: SUPABASE.publishableKey } }
+    );
+    if (!response.ok) throw new Error(`Não foi possível carregar as cartas (${response.status}).`);
+    renderLetters(await response.json());
+  } catch (error) {
+    console.error(error);
+    $("#lettersList").replaceChildren(createCornerEmpty("Não foi possível carregar as cartas agora."));
+  }
+}
+
+async function submitComplaintInterpretation(event, complaint) {
+  event.preventDefault();
+  const form = event.currentTarget;
+  const author = form.elements.namedItem("autor").value;
+  const message = form.elements.namedItem("mensagem").value.trim();
+  const editorCode = form.elements.namedItem("codigo").value;
+  const button = form.querySelector('button[type="submit"]');
+  const status = form.querySelector(".complaint-interpretation-status");
+  if (!author || !message || !editorCode) return;
+
+  const originalLabel = button.textContent;
+  button.disabled = true;
+  button.textContent = "Guardando…";
+  status.textContent = "Guardando sua interpretação…";
+  status.dataset.state = "";
+
+  try {
+    await requestCoupleCorner({
+      acao: "interpretacao",
+      reclamacao_id: complaint.id,
+      autor: author,
+      mensagem: message
+    }, editorCode);
+    await loadComplaints();
+  } catch (error) {
+    status.textContent = error.message || "Não foi possível guardar a interpretação.";
+    status.dataset.state = "error";
+    button.disabled = false;
+    button.textContent = originalLabel;
+  }
+}
+
+function createComplaintCard(complaint, interpretations) {
+  const card = document.createElement("article");
+  card.className = "complaint-card";
+
+  const figure = document.createElement("figure");
+  const image = document.createElement("img");
+  image.src = complaint.imagem_url;
+  image.alt = `Reclamação misteriosa enviada por ${complaint.autor}`;
+  image.loading = "lazy";
+  const tape = document.createElement("span");
+  tape.className = "complaint-tape";
+  tape.setAttribute("aria-hidden", "true");
+  figure.append(tape, image);
+
+  const copy = document.createElement("div");
+  copy.className = "complaint-copy";
+  const meta = document.createElement("span");
+  meta.textContent = `Reclamação de ${complaint.autor} · ${formatCornerDate(complaint.criado_em)}`;
+  const title = document.createElement("h3");
+  title.textContent = "O que essa foto quer dizer?";
+  copy.append(meta, title);
+
+  const replies = document.createElement("div");
+  replies.className = "complaint-interpretations";
+  if (interpretations.length) {
+    interpretations.forEach((interpretation) => {
+      const reply = document.createElement("div");
+      const author = document.createElement("strong");
+      author.textContent = interpretation.autor;
+      const text = document.createElement("p");
+      text.textContent = interpretation.mensagem;
+      const date = document.createElement("small");
+      date.textContent = formatCornerDate(interpretation.criado_em, true);
+      reply.append(author, text, date);
+      replies.append(reply);
+    });
+  } else {
+    replies.append(createCornerEmpty("Ninguém decifrou esta reclamação ainda."));
+  }
+
+  const composer = document.createElement("details");
+  composer.className = "complaint-interpretation-composer";
+  const summary = document.createElement("summary");
+  summary.textContent = "Tentar interpretar 💃🏻";
+  const form = document.createElement("form");
+  const authorLabel = document.createElement("label");
+  authorLabel.htmlFor = `complaint-author-${complaint.id}`;
+  authorLabel.textContent = "Quem está interpretando?";
+  const author = document.createElement("select");
+  author.id = authorLabel.htmlFor;
+  author.name = "autor";
+  ["Bianca", "Natã"].forEach((name) => {
+    const option = document.createElement("option");
+    option.value = name;
+    option.textContent = name;
+    option.selected = name !== complaint.autor;
+    author.append(option);
+  });
+  const messageLabel = document.createElement("label");
+  messageLabel.htmlFor = `complaint-message-${complaint.id}`;
+  messageLabel.textContent = "Minha interpretação";
+  const message = document.createElement("textarea");
+  message.id = messageLabel.htmlFor;
+  message.name = "mensagem";
+  message.maxLength = 1000;
+  message.placeholder = "Eu acho que essa foto está reclamando que…";
+  message.required = true;
+  const codeLabel = document.createElement("label");
+  codeLabel.htmlFor = `complaint-code-${complaint.id}`;
+  codeLabel.textContent = "Código reservado";
+  const code = document.createElement("input");
+  code.id = codeLabel.htmlFor;
+  code.name = "codigo";
+  code.type = "password";
+  code.autocomplete = "off";
+  code.placeholder = "Digite o código";
+  code.required = true;
+  const button = document.createElement("button");
+  button.type = "submit";
+  button.textContent = "Guardar interpretação";
+  const status = document.createElement("small");
+  status.className = "complaint-interpretation-status";
+  status.setAttribute("role", "status");
+  status.setAttribute("aria-live", "polite");
+  form.append(authorLabel, author, messageLabel, message, codeLabel, code, button, status);
+  form.addEventListener("submit", (event) => submitComplaintInterpretation(event, complaint));
+  composer.append(summary, form);
+
+  copy.append(replies, composer);
+  card.append(figure, copy);
+  return card;
+}
+
+function renderComplaints(complaints, interpretations) {
+  const list = $("#complaintsList");
+  list.replaceChildren();
+  if (!complaints.length) {
+    list.append(createCornerEmpty("Nenhuma reclamação misteriosa ainda. Isso parece suspeito…"));
+    return;
+  }
+
+  const grouped = new Map();
+  interpretations.forEach((interpretation) => {
+    const key = String(interpretation.reclamacao_id);
+    if (!grouped.has(key)) grouped.set(key, []);
+    grouped.get(key).push(interpretation);
+  });
+  complaints.forEach((complaint) => {
+    list.append(createComplaintCard(complaint, grouped.get(String(complaint.id)) || []));
+  });
+}
+
+async function loadComplaints() {
+  try {
+    const [complaintsResponse, interpretationsResponse] = await Promise.all([
+      fetch(
+        `${SUPABASE.url}/rest/v1/reclamacoes?select=id,autor,imagem_url,criado_em&order=criado_em.desc&limit=40`,
+        { headers: { apikey: SUPABASE.publishableKey } }
+      ),
+      fetch(
+        `${SUPABASE.url}/rest/v1/interpretacoes_reclamacao?select=id,reclamacao_id,autor,mensagem,criado_em&order=criado_em.asc&limit=200`,
+        { headers: { apikey: SUPABASE.publishableKey } }
+      )
+    ]);
+    if (!complaintsResponse.ok || !interpretationsResponse.ok) {
+      throw new Error("Não foi possível carregar as reclamações.");
+    }
+    renderComplaints(await complaintsResponse.json(), await interpretationsResponse.json());
+  } catch (error) {
+    console.error(error);
+    $("#complaintsList").replaceChildren(createCornerEmpty("Não foi possível carregar as reclamações agora."));
+  }
+}
+
+async function loadCoupleCorner() {
+  await Promise.all([loadDailyEntries(), loadLetters(), loadComplaints()]);
+}
+
 function createReplyCard(reply) {
   const article = document.createElement("article");
   article.className = "publication-reply";
@@ -984,6 +1398,7 @@ function startPublicationsFallback() {
   publicationsFallbackTimer = setInterval(() => {
     void loadPublications();
     void loadFuturePlans();
+    void loadCoupleCorner();
   }, 15000);
 }
 
@@ -1013,6 +1428,26 @@ function subscribeToPublications() {
       "postgres_changes",
       { event: "*", schema: "public", table: "planos_futuros" },
       () => void loadFuturePlans()
+    )
+    .on(
+      "postgres_changes",
+      { event: "INSERT", schema: "public", table: "registros_diarios" },
+      () => void loadDailyEntries()
+    )
+    .on(
+      "postgres_changes",
+      { event: "INSERT", schema: "public", table: "cartas" },
+      () => void loadLetters()
+    )
+    .on(
+      "postgres_changes",
+      { event: "INSERT", schema: "public", table: "reclamacoes" },
+      () => void loadComplaints()
+    )
+    .on(
+      "postgres_changes",
+      { event: "INSERT", schema: "public", table: "interpretacoes_reclamacao" },
+      () => void loadComplaints()
     )
     .subscribe((status) => {
       if (status === "CHANNEL_ERROR" || status === "TIMED_OUT") startPublicationsFallback();
@@ -1456,6 +1891,177 @@ $("#futurePlanForm").addEventListener("submit", async (event) => {
   } finally {
     submitButton.disabled = false;
     submitButton.textContent = originalLabel;
+  }
+});
+
+["#datePlaceFilter", "#dateBudgetFilter", "#dateDurationFilter"].forEach((selector) => {
+  $(selector).addEventListener("change", () => chooseDateIdea(true));
+});
+
+$("#newDateIdea").addEventListener("click", () => chooseDateIdea(false));
+
+$("#dateSaveForm").addEventListener("submit", async (event) => {
+  event.preventDefault();
+  if (!currentDateIdea) return;
+
+  const form = event.currentTarget;
+  const button = form.querySelector('button[type="submit"]');
+  const author = $("#dateSaveAuthor").value;
+  const editorCode = $("#dateSaveCode").value;
+  if (!author || !editorCode) return;
+
+  const originalLabel = button.textContent;
+  button.disabled = true;
+  button.textContent = "Guardando…";
+  setCornerStatus("#dateSaveStatus", "Guardando este encontro nos próximos capítulos…");
+
+  try {
+    await requestFuturePlan({
+      acao: "criar",
+      autor: author,
+      categoria: "encontro",
+      titulo: currentDateIdea.title,
+      detalhes: currentDateIdea.description
+    }, editorCode);
+    $("#dateSaveCode").value = "";
+    setCornerStatus("#dateSaveStatus", "Encontro guardado em “Coisas que ainda vamos viver” ♥", "success");
+    await loadFuturePlans();
+  } catch (error) {
+    setCornerStatus("#dateSaveStatus", error.message || "Não foi possível guardar este encontro.", "error");
+  } finally {
+    button.disabled = false;
+    button.textContent = originalLabel;
+  }
+});
+
+$("#dailyEntryForm").addEventListener("submit", async (event) => {
+  event.preventDefault();
+  const form = event.currentTarget;
+  const button = form.querySelector('button[type="submit"]');
+  const author = $("#dailyAuthor").value;
+  const type = $("#dailyType").value;
+  const items = [
+    $("#dailyItem1").value.trim(),
+    $("#dailyItem2").value.trim(),
+    $("#dailyItem3").value.trim()
+  ];
+  const editorCode = $("#dailyCode").value;
+  if (!author || !type || items.some((item) => !item) || !editorCode) return;
+
+  const originalLabel = button.textContent;
+  button.disabled = true;
+  button.textContent = "Guardando…";
+  setCornerStatus("#dailyStatus", "Guardando as três coisas de hoje…");
+
+  try {
+    await requestCoupleCorner({
+      acao: "registro_diario",
+      autor: author,
+      tipo: type,
+      itens: items
+    }, editorCode);
+    form.reset();
+    setCornerStatus("#dailyStatus", "As três coisas de hoje foram guardadas ♥", "success");
+    await loadDailyEntries();
+  } catch (error) {
+    setCornerStatus("#dailyStatus", error.message || "Não foi possível guardar o registro.", "error");
+  } finally {
+    button.disabled = false;
+    button.textContent = originalLabel;
+  }
+});
+
+$("#letterForm").addEventListener("submit", async (event) => {
+  event.preventDefault();
+  const form = event.currentTarget;
+  const button = form.querySelector('button[type="submit"]');
+  const author = $("#letterAuthor").value;
+  const title = $("#letterTitle").value.trim();
+  const text = $("#letterText").value.trim();
+  const editorCode = $("#letterCode").value;
+  if (!author || !title || !text || !editorCode) return;
+
+  const originalLabel = button.textContent;
+  button.disabled = true;
+  button.textContent = "Guardando…";
+  setCornerStatus("#letterStatus", "Guardando a carta com carinho…");
+
+  try {
+    await requestCoupleCorner({
+      acao: "carta",
+      autor: author,
+      titulo: title,
+      texto: text
+    }, editorCode);
+    form.reset();
+    setCornerStatus("#letterStatus", "Carta guardada e entregue no cantinho de vocês ♥", "success");
+    await loadLetters();
+  } catch (error) {
+    setCornerStatus("#letterStatus", error.message || "Não foi possível guardar a carta.", "error");
+  } finally {
+    button.disabled = false;
+    button.textContent = originalLabel;
+  }
+});
+
+function clearComplaintPreview() {
+  if (complaintPreviewUrl) URL.revokeObjectURL(complaintPreviewUrl);
+  complaintPreviewUrl = "";
+  $("#complaintPreviewImage").removeAttribute("src");
+  $("#complaintPreview").hidden = true;
+}
+
+$("#complaintImage").addEventListener("change", (event) => {
+  clearComplaintPreview();
+  const [file] = event.currentTarget.files;
+  if (!file) return;
+
+  if (file.size > IMAGE_UPLOAD.maxBytes) {
+    event.currentTarget.value = "";
+    setCornerStatus("#complaintStatus", "A foto deve ter no máximo 8 MB.", "error");
+    return;
+  }
+
+  complaintPreviewUrl = URL.createObjectURL(file);
+  $("#complaintPreviewImage").src = complaintPreviewUrl;
+  $("#complaintPreview").hidden = false;
+  setCornerStatus("#complaintStatus", "Foto escolhida. Agora não vale explicar nada.");
+});
+
+$("#complaintForm").addEventListener("submit", async (event) => {
+  event.preventDefault();
+  const form = event.currentTarget;
+  const button = form.querySelector('button[type="submit"]');
+  const author = $("#complaintAuthor").value;
+  const [selectedImage] = $("#complaintImage").files;
+  const editorCode = $("#complaintCode").value;
+  if (!author || !selectedImage || !editorCode) return;
+
+  const originalLabel = button.textContent;
+  button.disabled = true;
+  button.textContent = "Publicando…";
+  setCornerStatus("#complaintStatus", "Preparando a foto sem perder a qualidade…");
+
+  try {
+    const optimized = await optimizePublicationImage(selectedImage)
+      .catch(() => ({ file: selectedImage, optimized: false }));
+    const image = optimized.file || selectedImage;
+    const payload = new FormData();
+    payload.append("acao", "reclamacao");
+    payload.append("autor", author);
+    payload.append("imagem", image, image.name);
+
+    setCornerStatus("#complaintStatus", "Enviando a reclamação misteriosa…");
+    await requestCoupleCorner(payload, editorCode);
+    form.reset();
+    clearComplaintPreview();
+    setCornerStatus("#complaintStatus", "Reclamação publicada. Agora alguém precisa decifrar 💃🏻", "success");
+    await loadComplaints();
+  } catch (error) {
+    setCornerStatus("#complaintStatus", error.message || "Não foi possível publicar a reclamação.", "error");
+  } finally {
+    button.disabled = false;
+    button.textContent = originalLabel;
   }
 });
 

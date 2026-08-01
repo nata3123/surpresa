@@ -4,9 +4,9 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="theme-color" content="#6f1731" />
-  <meta name="description" content="Uma surpresa de Natã para Bianca, feita com amor." />
-  <meta property="og:title" content="surpresaparabianca" />
-  <meta property="og:description" content="Uma surpresa feita com carinho por Natã." />
+  <meta name="description" content="A história de Bianca e Natã, feita de memórias, cartas e planos." />
+  <meta property="og:title" content="Bianca &amp; Natã — nossa história" />
+  <meta property="og:description" content="Um cantinho feito para guardar a história de Bianca e Natã." />
   <meta property="og:image" content="assets/foto-1.webp" />
   <link rel="icon" href="assets/foto-1.webp" />
   <title>surpresaparabianca</title>
@@ -15,8 +15,8 @@
 <body>
   <div class="loading-screen" id="loadingScreen" aria-live="polite">
     <div class="loading-heart" aria-hidden="true">♥</div>
-    <p>Preparando uma surpresa para Bianca…</p>
-    <small>Feita com muito carinho por Natã</small>
+    <p>Preparando o nosso cantinho…</p>
+    <small>Bianca &amp; Natã</small>
   </div>
 
   <div class="ambient-hearts" id="ambientHearts" aria-hidden="true"></div>
@@ -34,7 +34,7 @@
       </div>
 
       <div class="hero-content reveal">
-        <span class="eyebrow">Uma surpresa só para Bianca</span>
+        <span class="eyebrow">Uma história de Bianca &amp; Natã</span>
         <div class="envelope-wrap" aria-hidden="true">
           <div class="envelope">
             <div class="envelope-back"></div>
@@ -43,7 +43,7 @@
             <div class="envelope-flap"></div>
           </div>
         </div>
-        <h1 id="introTitle">Bianca, fiz isso pensando em você.</h1>
+        <h1 id="introTitle">Bianca &amp; Natã, a nossa história mora aqui.</h1>
         <p id="introText">Uma pequena lembrança de tudo o que vivemos desde 21 de maio de 2026.</p>
         <button class="primary-button pulse" id="openSurprise" type="button">
           <span>Abrir minha surpresa</span>
@@ -60,13 +60,14 @@
         <a href="#fotos" title="Fotos">▣</a>
         <a href="#historia" title="Nossa história">⌛</a>
         <a href="#planos" title="Coisas que ainda vamos viver">✦</a>
+        <a href="#encontro" title="Nosso cantinho">☼</a>
         <a href="#adicionar" title="Adicionar lembrança">＋</a>
       </nav>
 
       <section class="section counter-section" id="contador">
         <div class="section-heading reveal">
           <span class="eyebrow">Desde que começamos a namorar</span>
-          <h2 id="pageTitle">Bianca, o amor da minha vida</h2>
+          <h2 id="pageTitle">Bianca &amp; Natã — nossa história</h2>
           <p>Juntos desde <strong id="startDateLabel"></strong></p>
         </div>
 
@@ -185,7 +186,7 @@
         <div class="section-heading future-heading reveal">
           <span class="eyebrow">Nosso próximo capítulo</span>
           <h2>Coisas que ainda vamos viver</h2>
-          <p>Uma lista de sonhos, lugares e pequenos planos que queremos transformar em lembranças — juntos.</p>
+          <p>Uma lista de sonhos, lugares e pequenos planos que queremos transformar em lembranças.</p>
         </div>
 
         <div class="future-board reveal">
@@ -252,10 +253,209 @@
         </div>
       </section>
 
+      <section class="section date-idea-section" id="encontro">
+        <div class="date-orbit date-orbit-one" aria-hidden="true">♡</div>
+        <div class="date-orbit date-orbit-two" aria-hidden="true">✦</div>
+
+        <div class="section-heading reveal">
+          <span class="eyebrow">Criador de encontros</span>
+          <h2>Um encontro para hoje</h2>
+          <p id="dateTodayLabel">Hoje pode virar uma lembrança nova.</p>
+        </div>
+
+        <div class="date-idea-card reveal">
+          <div class="date-idea-ticket">
+            <span id="dateIdeaTag">Em casa · econômico</span>
+            <h3 id="dateIdeaTitle">Preparar uma noite de cinema diferente</h3>
+            <p id="dateIdeaDescription">Escolham um filme que nenhum dos dois viu, preparem alguma coisa gostosa e deixem os celulares de lado.</p>
+            <div class="date-idea-details" aria-label="Detalhes da sugestão">
+              <span id="dateIdeaPlace">⌂ Em casa</span>
+              <span id="dateIdeaBudget">◌ Econômico</span>
+              <span id="dateIdeaDuration">◷ Uma noite</span>
+            </div>
+          </div>
+
+          <div class="date-idea-controls">
+            <div>
+              <label for="datePlaceFilter">Onde?</label>
+              <select id="datePlaceFilter">
+                <option value="todos">Tanto faz</option>
+                <option value="casa">Em casa</option>
+                <option value="sair">Quero sair</option>
+              </select>
+            </div>
+            <div>
+              <label for="dateBudgetFilter">Quanto gastar?</label>
+              <select id="dateBudgetFilter">
+                <option value="todos">Tanto faz</option>
+                <option value="gratis">Sem gastar</option>
+                <option value="baixo">Pouco</option>
+                <option value="especial">Algo especial</option>
+              </select>
+            </div>
+            <div>
+              <label for="dateDurationFilter">Quanto tempo?</label>
+              <select id="dateDurationFilter">
+                <option value="todos">Tanto faz</option>
+                <option value="rapido">Até 1 hora</option>
+                <option value="medio">Algumas horas</option>
+                <option value="longo">Um dia inteiro</option>
+              </select>
+            </div>
+            <button class="secondary-button" id="newDateIdea" type="button">Sortear outra ideia</button>
+          </div>
+
+          <details class="date-save-composer" id="dateSaveComposer">
+            <summary>Guardar em “Coisas que ainda vamos viver” <span aria-hidden="true">＋</span></summary>
+            <form id="dateSaveForm">
+              <label for="dateSaveAuthor">Quem está guardando?</label>
+              <select id="dateSaveAuthor" required>
+                <option value="Bianca">Bianca</option>
+                <option value="Natã">Natã</option>
+              </select>
+              <label for="dateSaveCode">Código reservado</label>
+              <input id="dateSaveCode" type="password" autocomplete="off" placeholder="Digite o código" required />
+              <button class="primary-button" type="submit">Guardar este encontro ♥</button>
+              <small id="dateSaveStatus" role="status" aria-live="polite"></small>
+            </form>
+          </details>
+        </div>
+      </section>
+
+      <section class="section daily-section" id="tres-coisas">
+        <div class="section-heading reveal">
+          <span class="eyebrow">Um ritual para todos os dias</span>
+          <h2>Três coisas de hoje</h2>
+          <p>Três motivos para olhar com carinho para o outro ou para o dia que acabou de passar.</p>
+        </div>
+
+        <div class="daily-layout">
+          <form class="daily-form reveal" id="dailyEntryForm">
+            <div class="corner-form-heading">
+              <span aria-hidden="true">03</span>
+              <div>
+                <strong>O registro de hoje</strong>
+                <small id="dailyFormDate"></small>
+              </div>
+            </div>
+
+            <label for="dailyAuthor">Quem está escrevendo?</label>
+            <select id="dailyAuthor" required>
+              <option value="Bianca">Bianca</option>
+              <option value="Natã">Natã</option>
+            </select>
+
+            <label for="dailyType">O que você quer registrar?</label>
+            <select id="dailyType" required>
+              <option value="gosto_em_voce">Três coisas que gosto em você</option>
+              <option value="coisas_boas">Três coisas boas do dia</option>
+              <option value="gratidao">Três motivos de gratidão</option>
+            </select>
+
+            <label for="dailyItem1">Primeira coisa</label>
+            <input id="dailyItem1" maxlength="240" placeholder="Escreva a primeira…" required />
+            <label for="dailyItem2">Segunda coisa</label>
+            <input id="dailyItem2" maxlength="240" placeholder="Agora a segunda…" required />
+            <label for="dailyItem3">Terceira coisa</label>
+            <input id="dailyItem3" maxlength="240" placeholder="E mais uma para guardar…" required />
+
+            <label for="dailyCode">Código reservado</label>
+            <input id="dailyCode" type="password" autocomplete="off" placeholder="Digite o código" required />
+            <button class="primary-button" type="submit">Guardar as três ♥</button>
+            <small id="dailyStatus" role="status" aria-live="polite"></small>
+          </form>
+
+          <div class="daily-archive reveal">
+            <div class="corner-list-heading">
+              <span>Nosso arquivo</span>
+              <h3>Pequenas coisas que merecem ficar</h3>
+            </div>
+            <div class="daily-entries-list" id="dailyEntriesList" aria-live="polite">
+              <p class="corner-empty">Carregando os registros de vocês…</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section complaints-section" id="reclamacoes">
+        <div class="section-heading complaints-heading reveal">
+          <span class="eyebrow">Um jogo só de vocês</span>
+          <h2>Decifra essa reclamação</h2>
+          <p>Quem reclama publica apenas uma foto. A outra pessoa precisa descobrir o que ela quer dizer.</p>
+        </div>
+
+        <div class="complaint-upload-card reveal">
+          <form id="complaintForm">
+            <div class="complaint-form-copy">
+              <span class="complaint-number" aria-hidden="true">?</span>
+              <div>
+                <strong>Envie sua pista</strong>
+                <small>Nada de explicar: aqui a reclamação só pode ser uma foto.</small>
+              </div>
+            </div>
+            <label for="complaintAuthor">Quem está reclamando?</label>
+            <select id="complaintAuthor" required>
+              <option value="Bianca">Bianca</option>
+              <option value="Natã">Natã</option>
+            </select>
+            <label for="complaintImage">A foto da reclamação</label>
+            <input id="complaintImage" type="file" accept="image/jpeg,image/png,image/webp" required />
+            <div class="complaint-preview" id="complaintPreview" hidden>
+              <img id="complaintPreviewImage" alt="Prévia da reclamação misteriosa" />
+            </div>
+            <label for="complaintCode">Código reservado</label>
+            <input id="complaintCode" type="password" autocomplete="off" placeholder="Digite o código" required />
+            <button class="primary-button" type="submit">Publicar sem explicar 💃🏻</button>
+            <small id="complaintStatus" role="status" aria-live="polite"></small>
+          </form>
+        </div>
+
+        <div class="complaints-list reveal" id="complaintsList" aria-live="polite">
+          <p class="corner-empty">Carregando as reclamações misteriosas…</p>
+        </div>
+      </section>
+
+      <section class="section letters-section" id="cartas">
+        <div class="section-heading reveal">
+          <span class="eyebrow">Palavras que merecem tempo</span>
+          <h2>Cartas entre nós</h2>
+          <p>Um espaço somente para escrever o que nem sempre cabe em uma mensagem rápida.</p>
+        </div>
+
+        <div class="letters-layout">
+          <form class="letters-form reveal" id="letterForm">
+            <span class="letter-form-mark" aria-hidden="true">“</span>
+            <label for="letterAuthor">Quem está escrevendo?</label>
+            <select id="letterAuthor" required>
+              <option value="Bianca">Bianca</option>
+              <option value="Natã">Natã</option>
+            </select>
+            <label for="letterTitle">Título da carta</label>
+            <input id="letterTitle" maxlength="100" placeholder="O que você quer dizer hoje?" required />
+            <label for="letterText">Sua carta</label>
+            <textarea id="letterText" maxlength="5000" placeholder="Escreva sem pressa…" required></textarea>
+            <label for="letterCode">Código reservado</label>
+            <input id="letterCode" type="password" autocomplete="off" placeholder="Digite o código" required />
+            <button class="primary-button" type="submit">Guardar esta carta ♥</button>
+            <small id="letterStatus" role="status" aria-live="polite"></small>
+          </form>
+
+          <div class="letters-archive reveal">
+            <div class="corner-list-heading">
+              <span>Correspondência de Bianca &amp; Natã</span>
+              <h3>Cartas que já chegaram</h3>
+            </div>
+            <div class="letters-list" id="lettersList" aria-live="polite">
+              <p class="corner-empty">Carregando as cartas de vocês…</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section class="section creator-section" id="adicionar">
         <div class="creator-card reveal">
           <div class="creator-intro">
-            <span class="eyebrow">Um espaço para a Bianca</span>
+            <span class="eyebrow">Um espaço para nós dois</span>
             <h2>Acrescente um novo capítulo</h2>
             <p>Escolha entre o álbum de memórias e a linha do tempo. A foto e o texto vão aparecer com o mesmo visual da área escolhida, em tempo real para todos.</p>
           </div>

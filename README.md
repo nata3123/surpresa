@@ -1,4 +1,4 @@
-# Surpresa para Bianca
+# Bianca & Natã — nossa história
 
 Esta página foi personalizada com:
 
@@ -9,6 +9,10 @@ Esta página foi personalizada com:
 - as sete fotos e lembranças do casal
 - um álbum interativo na seção **“Memórias que moram em mim”**, com textos, miniaturas, botões, teclado e gesto de deslizar
 - uma lista compartilhada **“Coisas que ainda vamos viver”**, para guardar sonhos e transformar os que foram realizados em novas memórias
+- um **criador de encontros** com filtros e opção de guardar a sugestão na lista de planos
+- a área diária **“Três coisas de hoje”**, incluindo carinho, coisas boas do dia e gratidão
+- o jogo **“Decifra essa reclamação”**, no qual a reclamação é publicada somente por foto
+- a área **“Cartas entre nós”**, reservada para textos maiores
 - a música completa **Partilhar**, de Rubel e ANAVITÓRIA, incorporada diretamente na página
 
 ## Como abrir
@@ -37,7 +41,7 @@ O site usa apenas uma chave pública própria para páginas abertas. A chave sec
 
 ## Novas lembranças em tempo real
 
-A seção **“Acrescente um novo capítulo”** permite que Bianca publique somente em **“Memórias que moram em mim”** ou **“Momentos que fizeram de nós, nós”**. No álbum, a publicação ganha o visual de uma nova fotografia revelada; na história, ela entra como uma nova etapa da linha do tempo. A publicação é guardada no Supabase e aparece imediatamente para todos que estiverem com a página aberta.
+A seção **“Acrescente um novo capítulo”** permite que Bianca ou Natã publiquem somente em **“Memórias que moram em mim”** ou **“Momentos que fizeram de nós, nós”**. No álbum, a publicação ganha o visual de uma nova fotografia revelada; na história, ela entra como uma nova etapa da linha do tempo. A publicação é guardada no Supabase e aparece imediatamente para todos que estiverem com a página aberta.
 
 Todas as memórias — tanto as criadas originalmente por Natã quanto as publicadas depois pela Bianca — têm uma área **“Nosso diário”**. Bianca e Natã podem escolher quem está escrevendo e continuar a conversa diretamente embaixo da lembrança usando o mesmo código reservado. As respostas ficam ligadas à memória correta, são guardadas no Supabase e aparecem em tempo real em todos os aparelhos.
 
@@ -50,6 +54,16 @@ Antes do envio, o navegador testa versões WEBP de alta qualidade, sem reduzir a
 Bianca e Natã podem adicionar viagens, encontros, sonhos, aventuras e outros planos usando o mesmo código reservado. A lista fica guardada no Supabase e é atualizada em tempo real para todos os aparelhos com o site aberto.
 
 Quando um plano acontecer, basta escolher **“Marcar como vivido”**. Ele passa para a parte **“Sonhos que já viraram história”** e pode ser transformado em uma nova memória: o site preenche o título e o texto na área de publicação, faltando apenas escolher a foto daquele dia.
+
+## Nosso cantinho
+
+O **“Encontro para hoje”** mostra uma sugestão baseada na data e permite filtrar por lugar, orçamento e duração. A sugestão escolhida pode ser enviada diretamente para **“Coisas que ainda vamos viver”**.
+
+Em **“Três coisas de hoje”**, cada pessoa pode guardar uma lista diária de três coisas que gosta no outro, três coisas boas do dia ou três motivos de gratidão. Cada pessoa pode preencher uma vez por dia cada uma dessas modalidades.
+
+Em **“Decifra essa reclamação”**, a publicação aceita somente a autoria e uma foto. As interpretações são escritas depois, embaixo da fotografia, mantendo o formato de brincadeira sugerido por Bianca.
+
+Em **“Cartas entre nós”**, Bianca e Natã podem escrever textos maiores com título, autor e data. Todas essas áreas usam o código reservado, ficam salvas no Supabase e são atualizadas em tempo real em todos os aparelhos.
 
 ## Ajustar o horário inicial
 
