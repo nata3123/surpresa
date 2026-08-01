@@ -40,6 +40,8 @@ A seção **“Acrescente um novo capítulo”** permite que Bianca publique som
 
 O envio exige o código reservado combinado pelo casal. O código não está escrito no HTML: ele é conferido por uma função protegida no Supabase. O site limita tentativas incorretas e aceita somente imagens JPG, PNG ou WEBP com até 8 MB.
 
+Antes do envio, o navegador testa versões WEBP de alta qualidade, sem reduzir as dimensões da fotografia. Uma versão otimizada só é utilizada quando fica pelo menos 10% menor e passa por uma comparação visual conservadora; caso contrário, o arquivo original é enviado. Assim, a economia de espaço nunca tem prioridade sobre a qualidade da lembrança.
+
 ## Ajustar o horário inicial
 
 Como foi informada apenas a data, o contador começa à meia-noite de 21 de maio de 2026, no fuso `-03:00`.

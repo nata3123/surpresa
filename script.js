@@ -122,6 +122,15 @@ const SUPABASE = Object.freeze({
   publishFunction: "publicar-lembranca"
 });
 
+const IMAGE_UPLOAD = Object.freeze({
+  maxBytes: 8 * 1024 * 1024,
+  outputType: "image/webp",
+  qualityLevels: [0.99, 0.98, 0.97],
+  minimumSaving: 0.1,
+  minimumPsnr: 46,
+  comparisonLongEdge: 640
+});
+
 const $ = (selector) => document.querySelector(selector);
 const $$ = (selector) => [...document.querySelectorAll(selector)];
 
@@ -134,6 +143,9 @@ let currentPhoto = 0;
 let heartTimer;
 let publicationPreviewUrl = "";
 let publicationsFallbackTimer;
+let preparedPublicationImage = null;
+let publicationImagePromise = null;
+let publicationImageSelection = 0;
 
 function hydrateContent() {
   document.title = CONFIG.pageTitle;
@@ -525,8 +537,105 @@ function subscribeToPublications() {
 function clearPublicationPreview() {
   if (publicationPreviewUrl) URL.revokeObjectURL(publicationPreviewUrl);
   publicationPreviewUrl = "";
+  preparedPublicationImage = null;
+  publicationImagePromise = null;
+  publicationImageSelection += 1;
   $("#publicationPreviewImage").removeAttribute("src");
   $("#publicationPreview").hidden = true;
+  $("#publicationImageHint").textContent = "JPG, PNG ou WEBP, com até 8 MB. A foto será otimizada sem reduzir suas dimensões; se a qualidade não puder ser preservada, o arquivo original será usado.";
+}
+
+function formatImageSize(bytes) {
+  if (bytes < 1024 * 1024) return `${Math.max(1, Math.round(bytes / 1024))} KB`;
+  return `${(bytes / (1024 * 1024)).toLocaleString("pt-BR", { maximumFractionDigits: 1 })} MB`;
+}
+
+function canvasToBlob(canvas, type, quality) {
+  return new Promise((resolve, reject) => {
+    canvas.toBlob(
+      (blob) => blob ? resolve(blob) : reject(new Error("O navegador não conseguiu preparar a imagem.")),
+      type,
+      quality
+    );
+  });
+}
+
+function drawForComparison(source) {
+  const scale = Math.min(1, IMAGE_UPLOAD.comparisonLongEdge / Math.max(source.width, source.height));
+  const canvas = document.createElement("canvas");
+  canvas.width = Math.max(1, Math.round(source.width * scale));
+  canvas.height = Math.max(1, Math.round(source.height * scale));
+  const context = canvas.getContext("2d", { willReadFrequently: true });
+  context.drawImage(source, 0, 0, canvas.width, canvas.height);
+  return context.getImageData(0, 0, canvas.width, canvas.height).data;
+}
+
+function calculatePsnr(reference, candidate) {
+  if (reference.length !== candidate.length) return 0;
+
+  let squaredError = 0;
+  for (let index = 0; index < reference.length; index += 1) {
+    const difference = reference[index] - candidate[index];
+    squaredError += difference * difference;
+  }
+
+  if (squaredError === 0) return Number.POSITIVE_INFINITY;
+  const meanSquaredError = squaredError / reference.length;
+  return 10 * Math.log10((255 * 255) / meanSquaredError);
+}
+
+async function optimizePublicationImage(file) {
+  if (!("createImageBitmap" in window) || !HTMLCanvasElement.prototype.toBlob) {
+    return { file, optimized: false };
+  }
+
+  const originalBitmap = await createImageBitmap(file, { imageOrientation: "from-image" });
+  const canvas = document.createElement("canvas");
+  canvas.width = originalBitmap.width;
+  canvas.height = originalBitmap.height;
+  const context = canvas.getContext("2d");
+
+  if (!context || !canvas.width || !canvas.height) {
+    originalBitmap.close?.();
+    return { file, optimized: false };
+  }
+
+  context.drawImage(originalBitmap, 0, 0);
+  const referencePixels = drawForComparison(originalBitmap);
+  let bestCandidate = null;
+
+  try {
+    for (const quality of IMAGE_UPLOAD.qualityLevels) {
+      const blob = await canvasToBlob(canvas, IMAGE_UPLOAD.outputType, quality);
+      const saving = 1 - blob.size / file.size;
+      if (saving < IMAGE_UPLOAD.minimumSaving) continue;
+
+      const candidateBitmap = await createImageBitmap(blob);
+      const psnr = calculatePsnr(referencePixels, drawForComparison(candidateBitmap));
+      candidateBitmap.close?.();
+
+      if (psnr >= IMAGE_UPLOAD.minimumPsnr && (!bestCandidate || blob.size < bestCandidate.blob.size)) {
+        bestCandidate = { blob, psnr, saving };
+      }
+    }
+  } finally {
+    originalBitmap.close?.();
+  }
+
+  if (!bestCandidate) return { file, optimized: false };
+
+  const baseName = file.name.replace(/\.[^.]+$/, "") || "lembranca";
+  const optimizedFile = new File([bestCandidate.blob], `${baseName}.webp`, {
+    type: IMAGE_UPLOAD.outputType,
+    lastModified: file.lastModified
+  });
+
+  return {
+    file: optimizedFile,
+    optimized: true,
+    originalBytes: file.size,
+    optimizedBytes: optimizedFile.size
+  };
 }
 
 function setPublicationStatus(message, state = "") {
@@ -727,16 +836,36 @@ $("#publicationImage").addEventListener("change", (event) => {
   const [file] = event.currentTarget.files;
   if (!file) return;
 
-  if (file.size > 8 * 1024 * 1024) {
+  if (file.size > IMAGE_UPLOAD.maxBytes) {
     event.currentTarget.value = "";
     setPublicationStatus("A foto deve ter no máximo 8 MB.", "error");
     return;
   }
 
-  publicationPreviewUrl = URL.createObjectURL(file);
-  $("#publicationPreviewImage").src = publicationPreviewUrl;
-  $("#publicationPreview").hidden = false;
-  setPublicationStatus("");
+  const selection = ++publicationImageSelection;
+  preparedPublicationImage = file;
+  $("#publicationImageHint").textContent = "Analisando a foto e preservando a melhor qualidade…";
+  setPublicationStatus("Preparando a foto…");
+
+  publicationImagePromise = optimizePublicationImage(file)
+    .catch(() => ({ file, optimized: false }))
+    .then((result) => {
+      if (selection !== publicationImageSelection) return null;
+
+      preparedPublicationImage = result.file;
+      publicationPreviewUrl = URL.createObjectURL(result.file);
+      $("#publicationPreviewImage").src = publicationPreviewUrl;
+      $("#publicationPreview").hidden = false;
+
+      if (result.optimized) {
+        $("#publicationImageHint").textContent = `Foto otimizada de ${formatImageSize(result.originalBytes)} para ${formatImageSize(result.optimizedBytes)}, mantendo as dimensões e a qualidade visual.`;
+      } else {
+        $("#publicationImageHint").textContent = `Qualidade priorizada: o arquivo original de ${formatImageSize(file.size)} será usado.`;
+      }
+
+      setPublicationStatus("");
+      return result.file;
+    });
 });
 
 $("#publicationSection").addEventListener("change", updatePublicationDesign);
@@ -746,26 +875,29 @@ $("#publicationForm").addEventListener("submit", async (event) => {
 
   const form = event.currentTarget;
   const submitButton = form.querySelector('button[type="submit"]');
-  const [image] = $("#publicationImage").files;
+  const [selectedImage] = $("#publicationImage").files;
   const section = $("#publicationSection").value;
   const title = $("#publicationTitle").value.trim();
   const publicationText = $("#publicationText").value.trim();
   const editorCode = $("#publicationCode").value;
 
-  if (!image || !title || !publicationText || !editorCode) return;
-
-  const payload = new FormData();
-  payload.append("secao", section);
-  payload.append("titulo", title);
-  payload.append("texto", publicationText);
-  payload.append("imagem", image, image.name);
+  if (!selectedImage || !title || !publicationText || !editorCode) return;
 
   const originalLabel = submitButton.textContent;
   submitButton.disabled = true;
   submitButton.textContent = "Publicando…";
-  setPublicationStatus("Enviando a foto e preparando a nova lembrança…");
+  setPublicationStatus("Finalizando a foto com a melhor qualidade…");
 
   try {
+    if (publicationImagePromise) await publicationImagePromise;
+    const image = preparedPublicationImage || selectedImage;
+    const payload = new FormData();
+    payload.append("secao", section);
+    payload.append("titulo", title);
+    payload.append("texto", publicationText);
+    payload.append("imagem", image, image.name);
+
+    setPublicationStatus("Enviando a foto e preparando a nova lembrança…");
     const response = await fetch(`${SUPABASE.url}/functions/v1/${SUPABASE.publishFunction}`, {
       method: "POST",
       headers: {
