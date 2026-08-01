@@ -19,7 +19,7 @@ Esta página foi personalizada com:
 
 Abra o arquivo `index.html` em um navegador. A página funciona no celular e no computador.
 
-Também há uma versão em arquivo único chamada `surpresa-bianca.html`, que é mais simples de enviar diretamente. Como as fotos ficam incorporadas nele, o arquivo pode ser maior.
+Também há uma versão em arquivo único chamada `surpresa-bianca.html`, que é mais simples de enviar diretamente. As fotografias são carregadas do Supabase, por isso essa versão continua leve e precisa de internet para exibir o álbum.
 
 ## Música completa
 
@@ -49,7 +49,7 @@ O envio exige o código reservado combinado pelo casal. O código não está esc
 
 Antes do envio, o navegador testa versões WEBP de alta qualidade, sem reduzir as dimensões da fotografia. Uma versão otimizada só é utilizada quando fica pelo menos 10% menor e passa por uma comparação visual conservadora; caso contrário, o arquivo original é enviado. Assim, a economia de espaço nunca tem prioridade sobre a qualidade da lembrança.
 
-As lembranças publicadas pelo casal também possuem a opção **“Editar ou excluir”**. É possível corrigir o título e o texto ou substituir a fotografia; ao substituir ou excluir uma foto, o arquivo antigo também é retirado do armazenamento. Essas operações sempre pedem o código reservado. As sete lembranças originais do site permanecem protegidas e não exibem controles para alteração ou exclusão.
+Todas as fotografias do álbum e da linha do tempo — inclusive as sete lembranças originais — ficam no Supabase e possuem a opção **“Editar ou excluir”**. É possível corrigir o título e o texto ou substituir a fotografia; ao substituir ou excluir uma foto, o arquivo antigo também é retirado do armazenamento. Essas operações sempre pedem o código reservado.
 
 ## Coisas que ainda vamos viver
 

@@ -628,6 +628,7 @@ h1 { margin: 20px 0 14px; font-size: clamp(2.6rem, 8vw, 5.8rem); line-height: .9
 
 .gallery-diary-shell { width:min(900px,100%); margin:30px auto 0; }
 .gallery-diary-shell > .publication-replies { margin:0; padding:26px clamp(20px,4vw,36px); border:1px solid rgba(111,23,49,.10); border-radius:22px 7px 22px 7px; background:rgba(255,253,249,.92); box-shadow:0 18px 48px rgba(111,23,49,.09); }
+.gallery-diary-shell > .content-manager { margin-top:14px; padding:16px clamp(20px,4vw,36px); border:1px solid rgba(111,23,49,.10); border-radius:7px 22px 7px 22px; background:rgba(255,253,249,.92); box-shadow:0 14px 38px rgba(111,23,49,.07); }
 .publication-replies { margin:24px 10px 0; padding:24px 16px 4px; border-top:1px solid rgba(111,23,49,.12); text-align:left; }
 .timeline-card > .publication-replies { margin:0 22px 24px; padding:22px 0 0; }
 .publication-replies-heading span { display:block; color:var(--gold); font-size:.66rem; font-weight:900; letter-spacing:.13em; text-transform:uppercase; }

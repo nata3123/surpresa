@@ -7,8 +7,8 @@
   <meta name="description" content="A história de Bianca e Natã, feita de memórias, cartas e planos." />
   <meta property="og:title" content="Bianca &amp; Natã — nossa história" />
   <meta property="og:description" content="Um cantinho feito para guardar a história de Bianca e Natã." />
-  <meta property="og:image" content="assets/foto-1.webp" />
-  <link rel="icon" href="assets/foto-1.webp" />
+  <meta property="og:image" content="https://mijtdivqfjrkwchqdqvr.supabase.co/storage/v1/object/public/memorias-bianca/fotos/1785611043711-69dd7a4d-0037-4625-9b33-be8a887e086f.webp" />
+  <link rel="icon" href="https://mijtdivqfjrkwchqdqvr.supabase.co/storage/v1/object/public/memorias-bianca/fotos/1785611043711-69dd7a4d-0037-4625-9b33-be8a887e086f.webp" />
   <title>surpresaparabianca</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
@@ -27,10 +27,10 @@
       <div class="hero-glow hero-glow-two"></div>
 
       <div class="hero-memories" aria-hidden="true">
-        <figure class="hero-memory memory-one"><img src="assets/foto-2.webp" alt="" /></figure>
-        <figure class="hero-memory memory-two"><img src="assets/foto-3.webp" alt="" /></figure>
-        <figure class="hero-memory memory-three"><img src="assets/foto-4.webp" alt="" /></figure>
-        <figure class="hero-memory memory-four"><img src="assets/foto-5.webp" alt="" /></figure>
+        <figure class="hero-memory memory-one" hidden><img alt="" /></figure>
+        <figure class="hero-memory memory-two" hidden><img alt="" /></figure>
+        <figure class="hero-memory memory-three" hidden><img alt="" /></figure>
+        <figure class="hero-memory memory-four" hidden><img alt="" /></figure>
       </div>
 
       <div class="hero-content reveal">
@@ -128,7 +128,7 @@
           <div class="album-meta" aria-label="Álbum com sete memórias">
             <span>Bianca + Natã</span>
             <span aria-hidden="true">•</span>
-            <span>7 memórias</span>
+            <span id="albumMemoryCount">Carregando memórias…</span>
           </div>
         </div>
 
@@ -137,16 +137,16 @@
             <span class="photo-tape photo-tape-left" aria-hidden="true"></span>
             <span class="photo-tape photo-tape-right" aria-hidden="true"></span>
             <div class="gallery-photo-frame">
-              <img id="galleryImage" src="assets/foto-1.webp" alt="Natã e Bianca se beijando" />
+              <img id="galleryImage" alt="" />
               <span class="photo-date">21 · 05 · 2026</span>
             </div>
           </div>
 
           <div class="memory-story" aria-live="polite">
             <span class="memory-kicker">Capítulo <span id="galleryIndexPadded">01</span></span>
-            <strong id="galleryCaption">Um beijo para guardar para sempre</strong>
+            <strong id="galleryCaption">Carregando as memórias…</strong>
             <span class="memory-divider" aria-hidden="true"></span>
-            <p id="galleryText">Entre tantos momentos, esse ficou guardado de um jeito especial em mim. Foi mais do que um beijo, foi a certeza de que ao seu lado tudo ganha mais sentido.</p>
+            <p id="galleryText">As fotos estão chegando da nuvem.</p>
 
             <div class="gallery-controls">
               <button class="gallery-arrow gallery-prev" id="galleryPrev" type="button" aria-label="Foto anterior">‹</button>

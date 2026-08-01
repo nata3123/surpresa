@@ -17,103 +17,7 @@ Obrigado por me fazer o homem mais sortudo do mundo, meu amor. Fiz esta página 
 Eu te amo, hoje e sempre. ❤️`,
   signature: "Com todo o meu amor, Natã.",
   endingTitle: "Bianca, eu quero partilhar a vida boa com você.",
-  endingText: "Desde 21 de maio de 2026, cada dia ao seu lado ganhou um lugar especial na minha história.",
-
-photos: [
-  {
-    src: "assets/foto-1.webp",
-    alt: "Natã e Bianca se beijando",
-    caption: "Um beijo para guardar para sempre",
-    text: "Entre tantos momentos, esse ficou guardado de um jeito especial em mim. Foi mais do que um beijo, foi a certeza de que ao seu lado tudo ganha mais sentido.",
-    position: "50% 45%"
-  },
-  {
-    src: "assets/foto-2.webp",
-    alt: "Natã e Bianca fazendo caretas ao ar livre",
-    caption: "A felicidade mora nas coisas simples",
-    text: "Eu amo como até os momentos mais simples com você se tornam inesquecíveis. Um olhar, uma brincadeira, um instante qualquer… e de repente vira uma das minhas lembranças favoritas.",
-    position: "60% 45%"
-  },
-  {
-    src: "assets/foto-3.webp",
-    alt: "Natã e Bianca viajando juntos",
-    caption: "Até o caminho fica melhor com você",
-    text: "Não importa o destino, porque quando estou com você, até o caminho se transforma em memória boa. Ao seu lado, tudo fica mais leve, mais bonito e mais especial.",
-    position: "50% 50%"
-  },
-  {
-    src: "assets/foto-4.webp",
-    alt: "Natã e Bianca diante do espelho",
-    caption: "Meu reflexo favorito",
-    text: "Gosto de olhar para nós e perceber como a vida ficou mais bonita depois que você chegou. Essa foto não mostra só a nossa imagem, mostra também o quanto eu amo estar com você.",
-    position: "50% 45%"
-  },
-  {
-    src: "assets/foto-5.webp",
-    alt: "Natã e Bianca deitados juntos",
-    caption: "Nós, do nosso jeitinho",
-    text: "Sem precisar de perfeição, sem roteiro e sem esforço. Apenas nós dois, do nosso jeitinho, vivendo um carinho que faz o meu coração se sentir em casa.",
-    position: "50% 50%"
-  },
-  {
-    src: "assets/foto-6.jpg",
-    alt: "Natã e Bianca diante do espelho em casa",
-    caption: "Nosso cantinho",
-    text: "Tem uma beleza que só existe nos nossos momentos mais simples: quando não há roteiro, só a paz de dividir o mesmo espaço com você. É assim, no nosso cantinho e do nosso jeito, que meu coração se sente em casa.",
-    position: "50% 42%"
-  },
-  {
-    src: "assets/foto-7.jpg",
-    alt: "Buquê de girassóis sobre a mesa da primeira janta preparada por Natã",
-    caption: "A primeira janta que fiz para você",
-    text: "Naquele dia, eu quis transformar uma refeição em carinho. Preparei nossa primeira janta e comprei girassóis, porque sei que são as suas flores favoritas. Mais do que comida e flores, eu queria te mostrar o quanto amo cuidar de você.",
-    position: "50% 52%"
-  }
-],
-  timeline: [
-    {
-      date: "21 de maio de 2026",
-      title: "O começo do nosso namoro",
-      text: "O dia em que deixamos de ser apenas duas histórias e começamos a escrever a nossa.",
-      image: "assets/foto-1.webp",
-      position: "50% 45%"
-    },
-    {
-      date: "Nos momentos leves",
-      title: "Nossas risadas",
-      text: "Com você, até as brincadeiras mais simples viram lembranças que eu quero guardar.",
-      image: "assets/foto-2.webp",
-      position: "62% 42%"
-    },
-    {
-      date: "Em cada caminho",
-      title: "Nossas aventuras",
-      text: "Não importa o destino: viajar, esperar ou simplesmente estar junto já vale a pena.",
-      image: "assets/foto-3.webp",
-      position: "50% 48%"
-    },
-    {
-      date: "Nos dias comuns",
-      title: "Nosso cantinho",
-      text: "Porque os momentos mais simples se tornam especiais quando estou ao seu lado.",
-      image: "assets/foto-6.jpg",
-      position: "50% 42%"
-    },
-    {
-      date: "Na primeira janta que preparei",
-      title: "Girassóis para você",
-      text: "Preparei tudo com carinho e escolhi girassóis porque são as suas flores favoritas. Foi uma noite simples, mas cheia de amor.",
-      image: "assets/foto-7.jpg",
-      position: "50% 52%"
-    },
-    {
-      date: "Hoje e sempre",
-      title: "Ainda é só o começo",
-      text: "Quero continuar vivendo, aprendendo, rindo e construindo a vida boa com você.",
-      image: "assets/foto-5.webp",
-      position: "50% 48%"
-    }
-  ]
+  endingText: "Desde 21 de maio de 2026, cada dia ao seu lado ganhou um lugar especial na minha história."
 };
 
 const SUPABASE = Object.freeze({
@@ -198,6 +102,8 @@ let complaintPreviewUrl = "";
 let sharedContentActivated = false;
 let counterTimer;
 let realtimeClientPromise;
+let originalAlbumPhotos = [];
+let latestRepliesByPublication = new Map();
 
 function hydrateContent() {
   document.title = CONFIG.pageTitle;
@@ -218,8 +124,7 @@ function hydrateContent() {
     year: "numeric"
   }).format(start);
 
-  renderGallery();
-  renderTimeline();
+  void loadPublications();
   setupDateIdea();
 }
 
@@ -293,37 +198,84 @@ function updateCounter() {
   $("#totalDays").textContent = diff.totalDays.toLocaleString("pt-BR");
 }
 
-function renderGallery() {
-  const thumbnails = $("#thumbnails");
-  thumbnails.innerHTML = "";
+function updateHeroMemories(photos) {
+  const preferredPhotos = [1, 2, 3, 4]
+    .map((index) => photos[index])
+    .filter(Boolean);
+  const candidates = preferredPhotos.length ? preferredPhotos : photos.slice(0, 4);
 
-  CONFIG.photos.forEach((photo, index) => {
+  $$(".hero-memory").forEach((figure, index) => {
+    const photo = candidates[index];
+    const image = figure.querySelector("img");
+    figure.hidden = !photo;
+    if (!photo) {
+      image.removeAttribute("src");
+      return;
+    }
+    image.src = photo.imagem_url;
+    image.alt = "";
+    image.style.objectPosition = photo.posicao || "center";
+  });
+}
+
+function renderGallery(photos = []) {
+  const activePhotoId = originalAlbumPhotos[currentPhoto]?.id;
+  originalAlbumPhotos = [...photos].sort((left, right) => (left.ordem || 0) - (right.ordem || 0));
+  const thumbnails = $("#thumbnails");
+  thumbnails.replaceChildren();
+  updateHeroMemories(originalAlbumPhotos);
+
+  originalAlbumPhotos.forEach((photo, index) => {
     const button = document.createElement("button");
     button.className = `thumbnail${index === 0 ? " active" : ""}`;
     button.type = "button";
-    button.setAttribute("aria-label", `Ver memória ${index + 1}: ${photo.caption}`);
-    button.innerHTML = `<img src="${photo.src}" alt="" loading="lazy" decoding="async" />`;
+    button.setAttribute("aria-label", `Ver memória ${index + 1}: ${photo.titulo}`);
+    const image = document.createElement("img");
+    image.src = photo.imagem_url;
+    image.alt = "";
+    image.loading = "lazy";
+    image.decoding = "async";
+    button.append(image);
     button.addEventListener("click", () => showPhoto(index));
     thumbnails.append(button);
   });
 
-  showPhoto(0, false);
+  if (!originalAlbumPhotos.length) {
+    currentPhoto = 0;
+    $("#galleryImage").removeAttribute("src");
+    $("#galleryImage").alt = "";
+    $("#galleryCaption").textContent = "O álbum está esperando uma nova memória";
+    $("#galleryText").textContent = "Quando vocês publicarem uma foto nesta seção, ela aparecerá aqui.";
+    $("#galleryIndex").textContent = "0 de 0";
+    $("#galleryIndexPadded").textContent = "00";
+    $("#galleryPrev").disabled = true;
+    $("#galleryNext").disabled = true;
+    $("#galleryDiary").replaceChildren();
+    return;
+  }
+
+  $("#galleryPrev").disabled = false;
+  $("#galleryNext").disabled = false;
+  const preservedIndex = originalAlbumPhotos.findIndex((photo) => photo.id === activePhotoId);
+  currentPhoto = preservedIndex >= 0 ? preservedIndex : Math.min(currentPhoto, originalAlbumPhotos.length - 1);
+  showPhoto(currentPhoto, false);
 }
 
 function showPhoto(index, animate = true) {
-  currentPhoto = (index + CONFIG.photos.length) % CONFIG.photos.length;
-  const photo = CONFIG.photos[currentPhoto];
+  if (!originalAlbumPhotos.length) return;
+  currentPhoto = (index + originalAlbumPhotos.length) % originalAlbumPhotos.length;
+  const photo = originalAlbumPhotos[currentPhoto];
   const image = $("#galleryImage");
 
   if (animate) image.classList.add("changing");
 
   setTimeout(() => {
-    image.src = photo.src;
-    image.alt = photo.alt;
-    image.style.objectPosition = photo.position || "center";
-    $("#galleryCaption").textContent = photo.caption;
-    $("#galleryText").textContent = photo.text;
-    $("#galleryIndex").textContent = `${currentPhoto + 1} de ${CONFIG.photos.length}`;
+    image.src = photo.imagem_url;
+    image.alt = photo.alt_texto || photo.titulo;
+    image.style.objectPosition = photo.posicao || "center";
+    $("#galleryCaption").textContent = photo.titulo;
+    $("#galleryText").textContent = photo.texto;
+    $("#galleryIndex").textContent = `${currentPhoto + 1} de ${originalAlbumPhotos.length}`;
     $("#galleryIndexPadded").textContent = String(currentPhoto + 1).padStart(2, "0");
     $$(".thumbnail").forEach((thumb, i) => thumb.classList.toggle("active", i === currentPhoto));
     renderGalleryDiary();
@@ -331,33 +283,57 @@ function showPhoto(index, animate = true) {
   }, animate ? 160 : 0);
 }
 
-function renderTimeline(repliesByMemory = groupPublicationReplies(latestPublicationReplies).byMemory) {
+function renderTimeline(items = [], repliesByPublication = latestRepliesByPublication) {
   const timeline = $("#timeline");
-  timeline.innerHTML = "";
+  timeline.replaceChildren();
 
-  CONFIG.timeline.forEach((item, index) => {
-    const memoryKey = `linha-do-tempo-${index + 1}`;
+  items
+    .sort((left, right) => (left.ordem || 0) - (right.ordem || 0))
+    .forEach((item) => {
     const article = document.createElement("article");
-    article.className = "timeline-item reveal";
+    article.className = "timeline-item cloud-original reveal";
     if (document.body.classList.contains("surprise-open")) article.classList.add("visible");
-    article.innerHTML = `
-      <span class="timeline-dot" aria-hidden="true"></span>
-      <div class="timeline-card">
-        <img src="${item.image}" alt="${item.title}" style="object-position:${item.position || "center"}" loading="lazy" decoding="async" />
-        <div class="timeline-copy">
-          <time>${item.date}</time>
-          <h3>${item.title}</h3>
-          <p>${item.text}</p>
-        </div>
-      </div>`;
-    article.querySelector(".timeline-card").append(
+    const dot = document.createElement("span");
+    dot.className = "timeline-dot";
+    dot.setAttribute("aria-hidden", "true");
+    const card = document.createElement("div");
+    card.className = "timeline-card";
+    const image = document.createElement("img");
+    image.src = item.imagem_url;
+    image.alt = item.alt_texto || item.titulo;
+    image.loading = "lazy";
+    image.decoding = "async";
+    image.style.objectPosition = item.posicao || "center";
+    const copy = document.createElement("div");
+    copy.className = "timeline-copy";
+    const date = document.createElement("time");
+    date.textContent = item.rotulo_data || formatPublicationDate(item.criado_em);
+    const title = document.createElement("h3");
+    title.textContent = item.titulo;
+    const text = document.createElement("p");
+    text.textContent = item.texto;
+    copy.append(date, title, text);
+    card.append(
+      image,
+      copy,
       createPublicationReplyArea(
-        { memoryKey, defaultAuthor: "Bianca" },
-        repliesByMemory.get(memoryKey) || []
-      )
+        { publicationId: item.id, defaultAuthor: "Bianca" },
+        repliesByPublication.get(String(item.id)) || []
+      ),
+      createPublicationManager(item, {
+        deletePrompt: "Excluir esta foto da nuvem e da linha do tempo?"
+      })
     );
+    article.append(dot, card);
     timeline.append(article);
   });
+
+  if (!items.length) {
+    const empty = document.createElement("p");
+    empty.className = "corner-empty timeline-empty";
+    empty.textContent = "A linha do tempo está esperando um novo capítulo ♥";
+    timeline.append(empty);
+  }
 }
 
 /* A música completa é reproduzida dentro da página pelo player oficial incorporado. */
@@ -1439,16 +1415,23 @@ function groupPublicationReplies(replies = []) {
   return { byPublication, byMemory };
 }
 
-function renderGalleryDiary(repliesByMemory = groupPublicationReplies(latestPublicationReplies).byMemory) {
+function renderGalleryDiary() {
   const container = $("#galleryDiary");
   if (!container) return;
+  const publication = originalAlbumPhotos[currentPhoto];
+  if (!publication) {
+    container.replaceChildren();
+    return;
+  }
 
-  const memoryKey = `album-foto-${currentPhoto + 1}`;
   container.replaceChildren(
     createPublicationReplyArea(
-      { memoryKey, defaultAuthor: "Bianca" },
-      repliesByMemory.get(memoryKey) || []
-    )
+      { publicationId: publication.id, defaultAuthor: "Bianca" },
+      latestRepliesByPublication.get(String(publication.id)) || []
+    ),
+    createPublicationManager(publication, {
+      deletePrompt: "Excluir esta foto da nuvem, do álbum e todas as respostas escritas nela?"
+    })
   );
 }
 
@@ -1605,7 +1588,7 @@ function createPublicationReplyArea(target, replies) {
   return section;
 }
 
-function createPublicationManager(publication) {
+function createPublicationManager(publication, options = {}) {
   return createContentManager({
     type: "publicacao",
     item: publication,
@@ -1615,7 +1598,7 @@ function createPublicationManager(publication) {
     ],
     allowImage: true,
     reload: loadPublications,
-    deletePrompt: "Excluir esta memória, a foto e as respostas escritas nela?"
+    deletePrompt: options.deletePrompt || "Excluir esta memória, a foto e as respostas escritas nela?"
   });
 }
 
@@ -1700,12 +1683,24 @@ function createTimelinePublicationItem(publication, replies) {
 
 function renderPublications(publications, replies) {
   latestPublicationReplies = replies;
-  const { byPublication: repliesByPublication, byMemory: repliesByMemory } = groupPublicationReplies(replies);
-  renderTimeline(repliesByMemory);
-  renderGalleryDiary(repliesByMemory);
+  const { byPublication: repliesByPublication } = groupPublicationReplies(replies);
+  latestRepliesByPublication = repliesByPublication;
+
+  const originalAlbum = publications.filter(
+    (post) => post.origem === "original" && post.secao === "fotos"
+  );
+  const originalTimeline = publications.filter(
+    (post) => post.origem === "original" && post.secao === "historia"
+  );
+  const addedPublications = publications.filter((post) => post.origem !== "original");
+
+  renderGallery(originalAlbum);
+  renderTimeline(originalTimeline, repliesByPublication);
+  const albumCount = $("#albumMemoryCount");
+  if (albumCount) albumCount.textContent = `${originalAlbum.length} ${originalAlbum.length === 1 ? "memória" : "memórias"}`;
 
   const memoryFeed = $('[data-live-section="fotos"]');
-  const memoryPosts = publications.filter((post) => post.secao === "fotos");
+  const memoryPosts = addedPublications.filter((post) => post.secao === "fotos");
 
   if (memoryPosts.length) {
     const heading = document.createElement("div");
@@ -1732,12 +1727,11 @@ function renderPublications(publications, replies) {
     memoryFeed.hidden = true;
   }
 
-  const timeline = $("#timeline");
-  timeline.querySelectorAll(".timeline-item.user-added").forEach((item) => item.remove());
-  publications
-    .filter((post) => post.secao === "historia")
+  const addedTimeline = addedPublications.filter((post) => post.secao === "historia");
+  if (addedTimeline.length) $("#timeline .timeline-empty")?.remove();
+  addedTimeline
     .forEach((post) => {
-      timeline.append(createTimelinePublicationItem(post, repliesByPublication.get(String(post.id)) || []));
+      $("#timeline").append(createTimelinePublicationItem(post, repliesByPublication.get(String(post.id)) || []));
     });
 }
 
@@ -1745,7 +1739,7 @@ async function loadPublications() {
   try {
     const [publicationsResponse, repliesResponse] = await Promise.all([
       fetch(
-        `${SUPABASE.url}/rest/v1/publicacoes?select=id,secao,titulo,texto,imagem_url,criado_em&order=criado_em.asc`,
+        `${SUPABASE.url}/rest/v1/publicacoes?select=id,secao,titulo,texto,imagem_url,origem,ordem,alt_texto,rotulo_data,posicao,criado_em&order=origem.asc,ordem.asc.nullslast,criado_em.asc`,
         { headers: { apikey: SUPABASE.publishableKey } }
       ),
       fetch(

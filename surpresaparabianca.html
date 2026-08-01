@@ -1,0 +1,3898 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#6f1731" />
+  <meta name="description" content="A história de Bianca e Natã, feita de memórias, cartas e planos." />
+  <meta property="og:title" content="Bianca &amp; Natã — nossa história" />
+  <meta property="og:description" content="Um cantinho feito para guardar a história de Bianca e Natã." />
+  <meta property="og:image" content="https://mijtdivqfjrkwchqdqvr.supabase.co/storage/v1/object/public/memorias-bianca/fotos/1785611043711-69dd7a4d-0037-4625-9b33-be8a887e086f.webp" />
+  <link rel="icon" href="https://mijtdivqfjrkwchqdqvr.supabase.co/storage/v1/object/public/memorias-bianca/fotos/1785611043711-69dd7a4d-0037-4625-9b33-be8a887e086f.webp" />
+  <title>surpresaparabianca</title>
+  <style>
+:root {
+  --wine: #6f1731;
+  --wine-dark: #330815;
+  --rose: #e9a7b8;
+  --rose-light: #ffe8ee;
+  --cream: #fff8f2;
+  --paper: #fffdf9;
+  --ink: #321b22;
+  --muted: #826d73;
+  --gold: #c99a4a;
+  --shadow: 0 24px 70px rgba(79, 14, 35, .16);
+  --radius: 28px;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  min-width: 320px;
+  background: var(--cream);
+  color: var(--ink);
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  overflow-x: hidden;
+}
+body.surprise-open { background: linear-gradient(180deg, #fff7f5, #fffdf9 45%, #fff7f5); }
+button, input, textarea, select { font: inherit; }
+button { cursor: pointer; }
+img { max-width: 100%; display: block; }
+
+.loading-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 8px;
+  background: radial-gradient(circle at 50% 40%, #9e3556, var(--wine-dark) 65%);
+  color: white;
+  transition: opacity .65s ease, visibility .65s ease;
+}
+.loading-screen.hidden { opacity: 0; visibility: hidden; }
+.loading-screen p { margin: 0; font-weight: 700; letter-spacing: .02em; }
+.loading-screen small { opacity: .78; }
+.loading-heart { font-size: 46px; animation: heartbeat 1.15s infinite; }
+
+.hero {
+  min-height: 100svh;
+  position: relative;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  isolation: isolate;
+  padding: 72px 20px;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(255,255,255,.12), transparent 26%),
+    radial-gradient(circle at 80% 70%, rgba(233,167,184,.16), transparent 30%),
+    linear-gradient(145deg, #290713, #6b1630 52%, #8e2b4a);
+  color: white;
+}
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: .16;
+  background-image: radial-gradient(#fff 1px, transparent 1px);
+  background-size: 24px 24px;
+  mask-image: linear-gradient(to bottom, black, transparent 80%);
+  z-index: -2;
+}
+.hero-glow { position: absolute; border-radius: 999px; filter: blur(10px); opacity: .35; z-index: -1; }
+.hero-glow-one { width: 300px; height: 300px; background: #ffb6c9; top: -120px; right: -80px; }
+.hero-glow-two { width: 240px; height: 240px; background: #ffdf9d; bottom: -100px; left: -80px; }
+
+.hero-memories { position:absolute; inset:0; z-index:-1; pointer-events:none; }
+.hero-memory { position:absolute; width:clamp(145px, 17vw, 245px); margin:0; padding:9px 9px 34px; border-radius:8px; background:#fff8f3; box-shadow:0 24px 70px rgba(0,0,0,.34); opacity:.76; }
+.hero-memory img { width:100%; aspect-ratio:4/5; object-fit:cover; border-radius:4px; }
+.memory-one { left:4vw; top:10vh; transform:rotate(-9deg); }
+.memory-two { right:5vw; top:8vh; transform:rotate(8deg); }
+.memory-three { left:7vw; bottom:7vh; transform:rotate(7deg); }
+.memory-four { right:7vw; bottom:7vh; transform:rotate(-7deg); }
+.hero-content { max-width: 780px; text-align: center; position:relative; z-index:2; padding:34px 40px 40px; border-radius:36px; background:rgba(47,7,20,.26); border:1px solid rgba(255,255,255,.08); backdrop-filter:blur(8px); box-shadow:0 30px 90px rgba(0,0,0,.18); }
+.eyebrow { display: inline-block; font-size: .76rem; font-weight: 800; letter-spacing: .18em; text-transform: uppercase; color: var(--gold); }
+.hero .eyebrow { color: #ffd7df; }
+h1, h2, .love-letter p { font-family: Georgia, "Times New Roman", serif; }
+h1 { margin: 20px 0 14px; font-size: clamp(2.6rem, 8vw, 5.8rem); line-height: .98; letter-spacing: -.045em; }
+.hero-content > p { max-width: 630px; margin: 0 auto 30px; color: rgba(255,255,255,.78); font-size: clamp(1rem, 2vw, 1.2rem); line-height: 1.75; }
+.tap-hint { display: block; margin-top: 14px; opacity: .66; }
+
+.envelope-wrap { width: 145px; height: 112px; margin: 46px auto 10px; perspective: 700px; }
+.envelope { position: relative; width: 145px; height: 94px; margin-top: 18px; filter: drop-shadow(0 14px 20px rgba(0,0,0,.25)); }
+.envelope-back { position: absolute; inset: 0; border-radius: 8px; background: #f6c4cf; }
+.envelope-front { position: absolute; inset: 0; border-radius: 8px; overflow: hidden; z-index: 3; }
+.envelope-front::before, .envelope-front::after { content: ""; position: absolute; width: 104px; height: 104px; background: #f8d3dc; bottom: -52px; transform: rotate(45deg); }
+.envelope-front::before { left: -52px; }
+.envelope-front::after { right: -52px; }
+.envelope-flap { position: absolute; left: 0; top: 0; width: 0; height: 0; border-left: 72.5px solid transparent; border-right: 72.5px solid transparent; border-top: 56px solid #ffe0e7; transform-origin: top; z-index: 4; animation: flap 3.2s ease-in-out infinite; }
+.letter { position: absolute; width: 110px; height: 72px; left: 17px; bottom: 10px; border-radius: 7px; background: white; display: grid; place-items: center; color: var(--wine); font-size: 25px; z-index: 2; animation: letter 3.2s ease-in-out infinite; }
+
+.primary-button, .secondary-button, .round-button, .gallery-arrow {
+  border: 0;
+  transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
+}
+.primary-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 52px;
+  padding: 0 24px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #fff, #ffe0e7);
+  color: var(--wine);
+  font-weight: 800;
+  box-shadow: 0 12px 32px rgba(0,0,0,.19);
+}
+.surprise-content .primary-button { background: linear-gradient(135deg, var(--wine), #a53f60); color: #fff; }
+.primary-button:hover, .secondary-button:hover, .round-button:hover, .gallery-arrow:hover { transform: translateY(-2px); }
+.primary-button:focus-visible, .secondary-button:focus-visible, .round-button:focus-visible, .gallery-arrow:focus-visible, .memory-album:focus-visible, input:focus-visible, textarea:focus-visible, a:focus-visible { outline: 3px solid rgba(201,154,74,.55); outline-offset: 3px; }
+.pulse { animation: softPulse 2.4s infinite; }
+.secondary-button { min-height: 52px; padding: 0 22px; border-radius: 999px; background: rgba(111,23,49,.08); color: var(--wine); font-weight: 800; }
+
+.surprise-content { position: relative; }
+.section { position:relative; padding:110px 20px; content-visibility:auto; contain-intrinsic-size:auto 900px; }
+.section-heading { max-width: 780px; margin: 0 auto 46px; text-align: center; }
+.section-heading h2, .ending-card h2, .guestbook-card h2 { margin: 12px 0; font-size: clamp(2.1rem, 5vw, 4rem); line-height: 1.06; letter-spacing: -.035em; color: var(--wine-dark); }
+.section-heading p { margin: 0; color: var(--muted); line-height: 1.7; }
+
+.floating-nav {
+  position: fixed;
+  z-index: 50;
+  top: 50%;
+  right: 18px;
+  transform: translateY(-50%);
+  display: grid;
+  gap: 10px;
+  padding: 10px;
+  border: 1px solid rgba(111,23,49,.1);
+  border-radius: 999px;
+  background: rgba(255,253,249,.8);
+  box-shadow: 0 14px 40px rgba(64,18,31,.12);
+  backdrop-filter: blur(14px);
+}
+.floating-nav a { width: 38px; height: 38px; display: grid; place-items: center; border-radius: 50%; text-decoration: none; color: var(--wine); }
+.floating-nav a:hover { background: var(--rose-light); }
+
+.counter-section { background: linear-gradient(180deg, #fffaf7, #fff); }
+.counter-grid { max-width: 940px; margin: 0 auto; display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; }
+.counter-grid article { min-height: 145px; padding: 24px 14px; display: grid; place-content: center; justify-items: center; border-radius: 24px; border: 1px solid rgba(111,23,49,.08); background: rgba(255,255,255,.82); box-shadow: 0 16px 50px rgba(111,23,49,.07); }
+.counter-grid strong { font-family: Georgia, serif; font-size: clamp(2.2rem, 6vw, 4rem); color: var(--wine); line-height: 1; }
+.counter-grid span { margin-top: 10px; color: var(--muted); font-size: .78rem; text-transform: uppercase; letter-spacing: .12em; text-align: center; }
+.counter-grid .clock-card { grid-column: span 2; }
+.counter-grid .clock-card strong { font-size: clamp(1.8rem, 5vw, 3.1rem); letter-spacing: .03em; }
+.total-days { text-align: center; color: var(--muted); margin-top: 28px; }
+.total-days strong { color: var(--wine); }
+
+.music-section { background: linear-gradient(140deg, var(--wine-dark), #771c39); color: white; overflow: hidden; }
+.music-section::before { content:""; position:absolute; width: 470px; height:470px; border-radius:50%; background: rgba(255,255,255,.06); right:-220px; top:-200px; }
+.music-card { max-width: 900px; margin: 0 auto; display: grid; grid-template-columns: 220px 1fr; align-items: center; gap: 52px; padding: 48px; border: 1px solid rgba(255,255,255,.12); border-radius: var(--radius); background: rgba(255,255,255,.07); box-shadow: 0 34px 90px rgba(0,0,0,.22); backdrop-filter: blur(15px); }
+.music-card .eyebrow { color: #ffd2dc; }
+.music-card h2 { margin: 10px 0 8px; font-family: Georgia, serif; font-size: clamp(2rem, 4.5vw, 3.6rem); line-height: 1.05; }
+.music-card p { color: rgba(255,255,255,.72); }
+.vinyl { aspect-ratio: 1; border-radius: 50%; position: relative; display: grid; place-items: center; background: repeating-radial-gradient(circle at center, #171216 0 5px, #252027 6px 8px); box-shadow: 0 24px 50px rgba(0,0,0,.35); }
+.vinyl::before { content:"Nossa música"; width: 42%; aspect-ratio:1; border-radius:50%; display:grid; place-items:center; text-align:center; background: linear-gradient(135deg, #e8a7b8, #8e2b4a); font-family:Georgia,serif; font-size:.75rem; padding:10px; }
+.vinyl div { position:absolute; width:14px; height:14px; border-radius:50%; background:#f4e7df; }
+.vinyl.playing { animation: spin 5s linear infinite; }
+.full-song-player-wrap { margin-top:24px; padding:7px; border-radius:20px; background:rgba(255,255,255,.10); box-shadow:0 18px 42px rgba(0,0,0,.22); }
+.full-song-player { display:block; width:100%; aspect-ratio:16/9; min-height:310px; border:0; border-radius:14px; background:#121212; }
+.music-note { font-size: .82rem; margin: 12px 0 0; }
+.music-note strong { color:#fff; }
+
+.message-section { background: #fff9f5; }
+.love-letter { max-width: 820px; margin: 0 auto; position: relative; padding: 66px 70px; border: 1px solid rgba(111,23,49,.08); border-radius: 8px 36px 8px 36px; background: var(--paper); box-shadow: var(--shadow); background-image: linear-gradient(rgba(111,23,49,.035) 1px, transparent 1px); background-size: 100% 34px; }
+.love-letter::before { content:""; position:absolute; inset:14px; border:1px solid rgba(201,154,74,.28); border-radius: 4px 26px 4px 26px; pointer-events:none; }
+.quote-mark { position:absolute; top:18px; left:32px; font-family:Georgia,serif; font-size:6rem; color:rgba(111,23,49,.12); line-height:1; }
+.love-letter p { position:relative; margin:0; white-space:pre-line; font-size: clamp(1.25rem, 2.4vw, 1.72rem); line-height:1.8; color:#4c2b35; }
+.signature { position:relative; display:block; margin-top:36px; color:var(--wine); font-family: "Segoe Script", "Bradley Hand", cursive; font-size:1.35rem; text-align:right; }
+
+.gallery-section {
+  overflow: hidden;
+  isolation: isolate;
+  background:
+    radial-gradient(circle at 12% 12%, rgba(196, 143, 80, .11), transparent 25%),
+    radial-gradient(circle at 90% 72%, rgba(148, 44, 76, .09), transparent 27%),
+    linear-gradient(180deg, #fffdf8, #fff6ef 50%, #fffaf6);
+}
+.gallery-section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  opacity: .32;
+  background-image:
+    linear-gradient(rgba(111,23,49,.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(111,23,49,.025) 1px, transparent 1px);
+  background-size: 34px 34px;
+}
+.memory-heading { margin-bottom: 58px; }
+.album-meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 22px;
+  padding: 9px 15px;
+  border: 1px solid rgba(111,23,49,.10);
+  border-radius: 999px;
+  background: rgba(255,255,255,.68);
+  color: var(--wine);
+  font-size: .72rem;
+  font-weight: 800;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  box-shadow: 0 10px 30px rgba(111,23,49,.06);
+}
+.memory-sparkle { position:absolute; z-index:-1; color:rgba(153,48,79,.14); font-family:Georgia,serif; }
+.sparkle-one { top:120px; left:8vw; font-size:4rem; transform:rotate(-12deg); }
+.sparkle-two { top:240px; right:7vw; font-size:5rem; transform:rotate(11deg); }
+.memory-album {
+  width: min(1080px, 100%);
+  min-height: 650px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1.08fr) minmax(330px, .92fr);
+  align-items: center;
+  gap: clamp(38px, 7vw, 92px);
+  padding: clamp(28px, 5vw, 62px);
+  border: 1px solid rgba(111,23,49,.10);
+  border-radius: 42px 10px 42px 10px;
+  background: rgba(255,253,249,.88);
+  box-shadow: 0 34px 90px rgba(91,24,44,.13), inset 0 0 0 10px rgba(255,255,255,.35);
+  backdrop-filter: blur(10px);
+}
+.gallery-photo-area { position:relative; width:min(100%, 560px); justify-self:center; transform:rotate(-1.4deg); }
+.gallery-photo-area::before,
+.gallery-photo-area::after {
+  content:"";
+  position:absolute;
+  z-index:-1;
+  width:68%;
+  height:38%;
+  border-radius:18px;
+  background:#f0c7d2;
+  opacity:.28;
+}
+.gallery-photo-area::before { top:-17px; left:-18px; transform:rotate(-5deg); }
+.gallery-photo-area::after { right:-18px; bottom:-18px; transform:rotate(5deg); background:#d8b06a; }
+.gallery-photo-frame {
+  position:relative;
+  padding: 13px 13px 58px;
+  overflow:hidden;
+  border-radius:8px;
+  background:#fffdfa;
+  box-shadow:0 28px 65px rgba(54,13,27,.24);
+}
+.gallery-photo-frame::after {
+  content:"♥ nossa história";
+  position:absolute;
+  left:18px;
+  bottom:18px;
+  color:var(--wine);
+  font-family:"Segoe Script", "Bradley Hand", cursive;
+  font-size:.96rem;
+  transform:rotate(-2deg);
+}
+.gallery-photo-frame img {
+  width:100%;
+  height:525px;
+  object-fit:cover;
+  border-radius:3px;
+  background:#eadde0;
+  transition:opacity .26s ease, transform .55s ease, filter .3s ease;
+}
+.gallery-photo-frame img.changing { opacity:.36; transform:scale(.985); filter:saturate(.7); }
+.photo-date {
+  position:absolute;
+  right:18px;
+  bottom:21px;
+  color:#9d858b;
+  font-size:.67rem;
+  font-weight:800;
+  letter-spacing:.14em;
+}
+.photo-tape {
+  position:absolute;
+  z-index:3;
+  width:92px;
+  height:28px;
+  top:-10px;
+  background:rgba(237,211,161,.72);
+  box-shadow:0 3px 8px rgba(80,43,21,.08);
+}
+.photo-tape-left { left:20%; transform:rotate(-7deg); }
+.photo-tape-right { right:16%; transform:rotate(6deg); }
+.memory-story { position:relative; padding: 18px 4px; }
+.memory-story::before {
+  content:"♥";
+  position:absolute;
+  right:0;
+  top:-48px;
+  color:rgba(111,23,49,.07);
+  font-family:Georgia,serif;
+  font-size:9rem;
+  line-height:1;
+}
+.memory-kicker {
+  display:block;
+  margin-bottom:22px;
+  color:var(--gold);
+  font-size:.74rem;
+  font-weight:900;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+}
+.memory-story > strong {
+  position:relative;
+  display:block;
+  color:var(--wine-dark);
+  font-family:Georgia, "Times New Roman", serif;
+  font-size:clamp(2.1rem, 4vw, 3.65rem);
+  font-weight:600;
+  line-height:1.03;
+  letter-spacing:-.04em;
+}
+.memory-divider { display:block; width:74px; height:2px; margin:28px 0; background:linear-gradient(90deg,var(--gold),transparent); }
+.memory-story > p { margin:0; color:#715c62; font-size:1.04rem; line-height:1.9; }
+.gallery-controls { display:flex; align-items:center; gap:16px; margin-top:36px; }
+.gallery-controls > span { min-width:54px; color:#9a7c83; font-size:.75rem; font-weight:800; letter-spacing:.12em; text-align:center; text-transform:uppercase; }
+.gallery-arrow {
+  width:52px;
+  height:52px;
+  border:1px solid rgba(111,23,49,.10);
+  border-radius:50%;
+  background:#fff;
+  color:var(--wine);
+  font-family:Georgia,serif;
+  font-size:2rem;
+  line-height:1;
+  box-shadow:0 10px 28px rgba(111,23,49,.12);
+}
+.gallery-arrow:hover { background:var(--wine); color:white; }
+.memory-film {
+  width:min(940px,100%);
+  margin:28px auto 0;
+  padding:18px 20px 20px;
+  border-radius:20px;
+  background:#3b111e;
+  box-shadow:0 18px 48px rgba(61,13,29,.18);
+}
+.film-label { display:block; margin:0 0 12px; color:#e6bdc8; font-size:.66rem; font-weight:800; letter-spacing:.15em; text-align:center; text-transform:uppercase; }
+.thumbnails { display:flex; justify-content:center; gap:12px; overflow:auto; padding:2px 2px 4px; scrollbar-width:thin; }
+.thumbnail {
+  position:relative;
+  flex:0 0 148px;
+  height:94px;
+  padding:5px;
+  border:1px solid rgba(255,255,255,.10);
+  border-radius:8px;
+  overflow:hidden;
+  opacity:.52;
+  background:#fff8f3;
+  transition:opacity .2s ease, transform .2s ease, border-color .2s ease;
+}
+.thumbnail img { width:100%; height:100%; object-fit:cover; border-radius:3px; }
+.thumbnail:hover { opacity:.82; transform:translateY(-2px); }
+.thumbnail.active { opacity:1; border-color:#f0bcc9; box-shadow:0 0 0 2px rgba(240,188,201,.24); }
+.memory-closing {
+  max-width:760px;
+  margin:74px auto 0;
+  padding:0;
+  border:0;
+  color:var(--wine-dark);
+  text-align:center;
+}
+.memory-closing > span { display:block; height:48px; color:rgba(111,23,49,.18); font-family:Georgia,serif; font-size:5rem; line-height:1; }
+.memory-closing p { margin:0; font-family:Georgia,serif; font-size:clamp(1.45rem,3vw,2.2rem); font-style:italic; line-height:1.52; }
+.memory-closing small { display:block; margin-top:22px; color:var(--gold); font-weight:800; letter-spacing:.06em; }
+
+.timeline-section { background: linear-gradient(180deg, #fff8f3, #fff); }
+.timeline { max-width:920px; margin:0 auto; position:relative; }
+.timeline::before { content:""; position:absolute; left:50%; top:0; bottom:0; width:2px; transform:translateX(-50%); background:linear-gradient(var(--rose), rgba(233,167,184,.12)); }
+.timeline-item { width:50%; position:relative; padding:0 42px 60px 0; }
+.timeline-item:nth-child(even) { margin-left:50%; padding:0 0 60px 42px; }
+.timeline-dot { position:absolute; top:22px; right:-8px; width:16px; height:16px; border-radius:50%; background:var(--wine); border:4px solid #fff; box-shadow:0 0 0 3px var(--rose); }
+.timeline-item:nth-child(even) .timeline-dot { left:-8px; right:auto; }
+.timeline-card { overflow:hidden; border:1px solid rgba(111,23,49,.08); border-radius:24px; background:white; box-shadow:0 18px 55px rgba(111,23,49,.08); }
+.timeline-card img { width:100%; height:230px; object-fit:cover; }
+.timeline-copy { padding:22px; }
+.timeline-copy time { color:var(--wine); font-weight:800; font-size:.76rem; text-transform:uppercase; letter-spacing:.1em; }
+.timeline-copy h3 { margin:8px 0 6px; font-family:Georgia,serif; font-size:1.55rem; }
+.timeline-copy p { margin:0; color:var(--muted); line-height:1.65; }
+
+.future-section {
+  overflow:hidden;
+  background:
+    radial-gradient(circle at 8% 14%, rgba(201,154,74,.17), transparent 22%),
+    radial-gradient(circle at 92% 82%, rgba(233,167,184,.28), transparent 26%),
+    linear-gradient(150deg,#3b0a19,#731c38 54%,#4a0c20);
+  color:#fff;
+}
+.future-section::before { content:""; position:absolute; inset:0; opacity:.12; background-image:radial-gradient(#fff 1px,transparent 1px); background-size:28px 28px; }
+.future-spark { position:absolute; color:rgba(255,226,168,.28); font-family:Georgia,serif; line-height:1; }
+.future-spark-one { top:9%; left:6%; font-size:clamp(3rem,8vw,7rem); transform:rotate(-12deg); }
+.future-spark-two { right:5%; bottom:6%; font-size:clamp(5rem,12vw,10rem); transform:rotate(9deg); }
+.future-heading { position:relative; z-index:1; }
+.future-heading .eyebrow { color:#f4c875; }
+.future-heading h2 { color:#fff; }
+.future-heading p { color:rgba(255,255,255,.72); }
+.future-board { position:relative; z-index:1; width:min(1060px,100%); margin:0 auto; padding:clamp(24px,5vw,54px); border:1px solid rgba(255,255,255,.16); border-radius:42px 12px 42px 12px; background:rgba(255,250,246,.96); color:var(--ink); box-shadow:0 35px 100px rgba(25,0,8,.34); }
+.future-board::before { content:"Para nós dois"; position:absolute; top:17px; right:24px; color:rgba(111,23,49,.2); font-family:Georgia,serif; font-size:.72rem; font-style:italic; letter-spacing:.08em; }
+.future-summary { display:grid; grid-template-columns:1fr auto 1fr; align-items:center; max-width:620px; margin:0 auto 48px; padding:20px 26px; border:1px solid rgba(111,23,49,.09); border-radius:999px; background:linear-gradient(135deg,#fff,#fff4ef); box-shadow:0 15px 38px rgba(67,12,30,.09); }
+.future-summary > div { display:grid; justify-items:center; gap:3px; text-align:center; }
+.future-summary strong { color:var(--wine); font-family:Georgia,serif; font-size:2rem; line-height:1; }
+.future-summary span:not(.future-summary-heart) { color:var(--muted); font-size:.66rem; font-weight:800; letter-spacing:.07em; text-transform:uppercase; }
+.future-summary-heart { display:grid; place-items:center; width:38px; height:38px; border-radius:50%; color:var(--wine); background:var(--rose-light); }
+.future-plans-list { display:grid; gap:42px; }
+.future-plan-group h3 { margin:0 0 20px; color:var(--wine-dark); font-family:Georgia,serif; font-size:clamp(1.45rem,3vw,2rem); text-align:center; }
+.future-plan-group.completed-group h3 { color:#8c6e76; }
+.future-plan-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:20px; }
+.future-plan-card { position:relative; min-width:0; padding:24px 24px 22px; overflow:hidden; border:1px solid rgba(111,23,49,.11); border-radius:8px 26px 26px 26px; background:linear-gradient(145deg,#fff,#fff8f1); box-shadow:0 16px 40px rgba(69,14,31,.09); }
+.future-plan-card::after { content:"♡"; position:absolute; right:14px; bottom:-24px; color:rgba(111,23,49,.055); font-family:Georgia,serif; font-size:7rem; line-height:1; pointer-events:none; }
+.future-plan-card.is-complete { border-color:rgba(201,154,74,.25); background:linear-gradient(145deg,#fffdf8,#f4eee5); }
+.future-plan-card.is-complete::after { content:"✓"; bottom:-18px; color:rgba(201,154,74,.09); }
+.future-plan-meta { position:relative; z-index:1; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px 12px; }
+.future-plan-meta > span:last-child { color:#9a8188; font-size:.7rem; font-weight:800; }
+.future-plan-badge { display:inline-flex; align-items:center; border-radius:999px; padding:7px 11px; color:var(--wine); background:var(--rose-light); font-size:.68rem; font-weight:900; letter-spacing:.05em; text-transform:uppercase; }
+.future-plan-card.is-complete .future-plan-badge { color:#785825; background:#f6ead4; }
+.future-plan-card h4 { position:relative; z-index:1; margin:18px 0 10px; color:var(--wine-dark); font-family:Georgia,serif; font-size:clamp(1.35rem,3vw,1.8rem); line-height:1.16; }
+.future-plan-card > p { position:relative; z-index:1; margin:0; white-space:pre-line; color:var(--muted); line-height:1.7; }
+.future-plan-footer { position:relative; z-index:1; display:grid; gap:12px; margin-top:22px; padding-top:16px; border-top:1px dashed rgba(111,23,49,.16); }
+.future-plan-footer > small { color:#a0878e; font-size:.7rem; }
+.future-lived-label { color:#856226; font-size:.75rem; font-weight:900; }
+.future-transform-button { justify-self:start; border:0; border-radius:999px; padding:10px 14px; color:var(--wine); background:rgba(111,23,49,.08); font-size:.75rem; font-weight:900; }
+.future-transform-button:hover { background:var(--rose-light); }
+.future-complete-composer summary { width:fit-content; cursor:pointer; color:var(--wine); font-size:.76rem; font-weight:900; list-style:none; }
+.future-complete-composer summary::-webkit-details-marker { display:none; }
+.future-complete-form { display:grid; gap:8px; margin-top:12px; padding:14px; border-radius:16px; background:rgba(111,23,49,.045); }
+.future-complete-form label { color:var(--wine); font-size:.68rem; font-weight:900; }
+.future-complete-form input { width:100%; border:1px solid rgba(111,23,49,.15); border-radius:12px; padding:11px 12px; color:var(--ink); background:#fff; outline:none; }
+.future-complete-form button { justify-self:start; border:0; border-radius:999px; padding:10px 14px; color:#fff; background:var(--wine); font-size:.73rem; font-weight:900; }
+.future-complete-form button:disabled { cursor:wait; opacity:.65; }
+.future-complete-status { min-height:1.2em; color:var(--muted); font-size:.7rem; line-height:1.45; }
+.future-complete-status[data-state="error"] { color:#b3263d; font-weight:800; }
+.future-empty { display:grid; justify-items:center; gap:8px; margin:0; padding:46px 22px; border:1px dashed rgba(111,23,49,.18); border-radius:28px; color:var(--muted); text-align:center; background:rgba(255,255,255,.55); }
+.future-empty > span { color:var(--rose); font-size:3rem; line-height:1; }
+.future-empty > strong { color:var(--wine-dark); font-family:Georgia,serif; font-size:1.25rem; }
+.future-empty > p { max-width:560px; margin:0; line-height:1.65; }
+.future-empty.future-error { color:#a2374f; font-weight:800; }
+.future-composer { margin-top:46px; border-top:1px solid rgba(111,23,49,.11); padding-top:28px; }
+.future-composer > summary { display:flex; align-items:center; justify-content:center; gap:10px; width:fit-content; margin:0 auto; cursor:pointer; color:var(--wine); font-family:Georgia,serif; font-size:1.1rem; font-weight:800; list-style:none; }
+.future-composer > summary::-webkit-details-marker { display:none; }
+.future-composer > summary span { display:grid; place-items:center; width:30px; height:30px; border-radius:50%; color:#fff; background:var(--wine); font-family:Inter,sans-serif; transition:transform .2s ease; }
+.future-composer[open] > summary span { transform:rotate(45deg); }
+.future-plan-form { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:18px; margin-top:28px; padding:clamp(20px,4vw,34px); border-radius:28px; background:linear-gradient(145deg,rgba(111,23,49,.055),rgba(233,167,184,.09)); }
+.future-plan-field { display:grid; align-content:start; gap:8px; }
+.future-plan-field-wide { grid-column:1/-1; }
+.future-plan-field label { color:var(--wine); font-size:.77rem; font-weight:900; }
+.future-plan-field input, .future-plan-field textarea, .future-plan-field select { width:100%; border:1px solid rgba(111,23,49,.14); border-radius:15px; padding:14px 15px; color:var(--ink); background:#fff; outline:none; }
+.future-plan-field textarea { min-height:120px; resize:vertical; line-height:1.6; }
+.future-plan-field input:focus, .future-plan-field textarea:focus, .future-plan-field select:focus, .future-complete-form input:focus { border-color:rgba(111,23,49,.4); box-shadow:0 0 0 3px rgba(233,167,184,.2); }
+.future-plan-field > small { color:var(--muted); line-height:1.5; }
+.future-plan-actions { display:flex; align-items:center; flex-wrap:wrap; gap:14px; }
+.future-plan-actions .primary-button:disabled { cursor:wait; opacity:.65; transform:none; }
+#futurePlanStatus { flex:1; min-width:220px; color:var(--muted); line-height:1.5; }
+#futurePlanStatus[data-state="success"] { color:#7a2440; font-weight:800; }
+#futurePlanStatus[data-state="error"] { color:#b3263d; font-weight:800; }
+.creator-form.prefilled-from-plan { animation:planToMemory 1.1s ease; }
+
+.corner-empty { margin:0; padding:28px 20px; border:1px dashed rgba(111,23,49,.18); border-radius:22px; color:var(--muted); text-align:center; line-height:1.65; background:rgba(255,255,255,.48); }
+.corner-list-heading { margin-bottom:22px; }
+.corner-list-heading > span { color:var(--gold); font-size:.7rem; font-weight:900; letter-spacing:.13em; text-transform:uppercase; }
+.corner-list-heading h3 { margin:7px 0 0; color:var(--wine-dark); font-family:Georgia,serif; font-size:clamp(1.45rem,3vw,2rem); line-height:1.15; }
+
+.date-idea-section { overflow:hidden; background:linear-gradient(150deg,#fff9f0,#fce4e8 52%,#fff7ef); }
+.date-orbit { position:absolute; color:rgba(111,23,49,.08); font-family:Georgia,serif; line-height:1; }
+.date-orbit-one { top:8%; left:5%; font-size:clamp(5rem,12vw,11rem); transform:rotate(-10deg); }
+.date-orbit-two { right:5%; bottom:4%; font-size:clamp(4rem,10vw,8rem); transform:rotate(12deg); }
+.date-idea-card { position:relative; width:min(1050px,100%); margin:0 auto; padding:clamp(24px,5vw,52px); border:1px solid rgba(111,23,49,.10); border-radius:40px 10px 40px 10px; background:rgba(255,253,249,.94); box-shadow:var(--shadow); }
+.date-idea-ticket { position:relative; min-height:300px; display:grid; align-content:center; justify-items:center; padding:clamp(34px,7vw,70px); overflow:hidden; border:1px solid rgba(201,154,74,.28); border-radius:28px; text-align:center; background:
+  radial-gradient(circle at 0 50%,var(--paper) 0 13px,transparent 14px),
+  radial-gradient(circle at 100% 50%,var(--paper) 0 13px,transparent 14px),
+  linear-gradient(145deg,#fff8e9,#fffdf7); }
+.date-idea-ticket::before { content:"ENCONTRO DE HOJE"; position:absolute; top:21px; left:24px; color:rgba(111,23,49,.28); font-size:.62rem; font-weight:900; letter-spacing:.18em; }
+.date-idea-origin { position:absolute; top:15px; right:18px; display:flex; align-items:center; gap:6px; padding:7px 10px; border:1px solid rgba(201,154,74,.22); border-radius:999px; color:var(--wine); background:rgba(255,255,255,.68); font-size:.62rem; font-weight:900; letter-spacing:.06em; }
+.date-idea-origin span { color:var(--gold); }
+.date-idea-ticket > span { color:var(--gold); font-size:.7rem; font-weight:900; letter-spacing:.12em; text-transform:uppercase; }
+.date-idea-ticket h3 { max-width:720px; margin:15px 0 12px; color:var(--wine-dark); font-family:Georgia,serif; font-size:clamp(2rem,5vw,3.7rem); line-height:1.03; letter-spacing:-.03em; }
+.date-idea-ticket > p { max-width:700px; margin:0; color:var(--muted); line-height:1.75; }
+.date-idea-extra { display:flex; align-items:flex-start; gap:11px; max-width:680px; margin-top:22px; padding:14px 17px; border:1px solid rgba(201,154,74,.22); border-radius:18px; color:var(--wine); text-align:left; background:rgba(255,255,255,.58); }
+.date-idea-extra[hidden] { display:none; }
+.date-idea-extra > span { display:grid; place-items:center; width:30px; height:30px; flex:none; border-radius:50%; color:#fff; background:var(--wine); }
+.date-idea-extra p { display:grid; gap:3px; margin:0; line-height:1.5; }
+.date-idea-extra strong { font-size:.72rem; letter-spacing:.06em; text-transform:uppercase; }
+.date-idea-extra p span { color:var(--muted); font-size:.86rem; }
+.date-idea-details { display:flex; justify-content:center; flex-wrap:wrap; gap:9px; margin-top:24px; }
+.date-idea-details span { border-radius:999px; padding:8px 12px; color:var(--wine); background:rgba(111,23,49,.07); font-size:.7rem; font-weight:800; }
+.date-idea-controls { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); align-items:end; gap:14px; margin-top:24px; }
+.date-idea-controls > div { display:grid; gap:7px; }
+.date-idea-controls label, .date-save-composer label { color:var(--wine); font-size:.72rem; font-weight:900; }
+.date-idea-controls select, .date-save-composer select, .date-save-composer input { width:100%; border:1px solid rgba(111,23,49,.14); border-radius:14px; padding:12px 13px; color:var(--ink); background:#fff; outline:none; }
+.date-idea-controls select:focus { border-color:rgba(111,23,49,.4); box-shadow:0 0 0 3px rgba(233,167,184,.2); }
+.date-random-action { display:grid; grid-template-columns:minmax(220px,1fr) auto; align-items:center; gap:16px; margin-top:18px; padding:18px; border:1px solid rgba(111,23,49,.08); border-radius:22px; background:linear-gradient(145deg,rgba(111,23,49,.04),rgba(233,167,184,.08)); }
+.date-random-action p { display:grid; gap:5px; margin:0; }
+.date-random-action strong { color:var(--wine); font-size:.78rem; }
+.date-random-action span { color:var(--muted); font-size:.72rem; line-height:1.45; }
+.date-random-button { min-height:48px; white-space:nowrap; box-shadow:none; }
+.date-idea-status { display:block; min-height:1.4em; margin-top:10px; color:var(--muted); text-align:center; line-height:1.45; }
+.date-idea-status[data-state="success"] { color:#7a2440; font-weight:800; }
+.date-idea-status[data-state="error"] { color:#b3263d; font-weight:800; }
+.date-save-composer { margin-top:24px; padding-top:22px; border-top:1px dashed rgba(111,23,49,.18); }
+.date-save-composer > summary { display:flex; align-items:center; justify-content:center; gap:9px; width:fit-content; margin:auto; cursor:pointer; color:var(--wine); font-weight:900; list-style:none; }
+.date-save-composer > summary::-webkit-details-marker { display:none; }
+.date-save-composer > summary span { display:grid; place-items:center; width:28px; height:28px; border-radius:50%; color:#fff; background:var(--wine); transition:transform .2s ease; }
+.date-save-composer[open] > summary span { transform:rotate(45deg); }
+.date-save-composer form { display:grid; grid-template-columns:1fr 1fr auto; align-items:end; gap:14px; margin-top:20px; padding:20px; border-radius:22px; background:rgba(111,23,49,.045); }
+.date-save-composer form label { grid-row:1; }
+.date-save-composer form select, .date-save-composer form input, .date-save-composer form button { grid-row:2; }
+.date-save-composer form small { grid-column:1/-1; min-height:1.3em; color:var(--muted); }
+
+.daily-section { background:linear-gradient(180deg,#fffdf9,#fff5f2); }
+.daily-layout { width:min(1120px,100%); margin:0 auto; display:grid; grid-template-columns:minmax(300px,.9fr) minmax(0,1.15fr); gap:clamp(24px,5vw,48px); align-items:start; }
+.daily-form, .letters-form { display:grid; gap:9px; padding:clamp(24px,4vw,38px); border:1px solid rgba(111,23,49,.10); border-radius:30px 8px 30px 8px; background:#fffdf9; box-shadow:0 22px 60px rgba(73,13,32,.10); }
+.corner-form-heading { display:flex; align-items:center; gap:14px; margin-bottom:13px; }
+.corner-form-heading > span { display:grid; place-items:center; width:58px; height:58px; flex:none; border-radius:50%; color:#fff; background:var(--wine); font-family:Georgia,serif; font-size:1.35rem; }
+.corner-form-heading strong { display:block; color:var(--wine-dark); font-family:Georgia,serif; font-size:1.3rem; }
+.corner-form-heading small { display:block; margin-top:4px; color:var(--muted); font-size:.7rem; }
+.daily-form label, .letters-form label, .complaint-upload-card label { color:var(--wine); font-size:.73rem; font-weight:900; }
+.daily-form input, .daily-form select, .letters-form input, .letters-form select, .letters-form textarea, .complaint-upload-card input, .complaint-upload-card select { width:100%; border:1px solid rgba(111,23,49,.14); border-radius:14px; padding:13px 14px; color:var(--ink); background:#fff; outline:none; }
+.daily-form button, .letters-form button, .complaint-upload-card button { justify-self:start; margin-top:8px; }
+#dailyStatus, #letterStatus, #complaintStatus, #dateSaveStatus { min-height:1.3em; color:var(--muted); line-height:1.45; }
+#dailyStatus[data-state="success"], #letterStatus[data-state="success"], #complaintStatus[data-state="success"], #dateSaveStatus[data-state="success"] { color:#7a2440; font-weight:800; }
+#dailyStatus[data-state="error"], #letterStatus[data-state="error"], #complaintStatus[data-state="error"], #dateSaveStatus[data-state="error"] { color:#b3263d; font-weight:800; }
+
+.daily-archive, .letters-archive { min-width:0; }
+.daily-entries-list, .letters-list { display:grid; gap:16px; max-height:850px; overflow:auto; padding:3px 10px 20px 2px; scrollbar-color:rgba(111,23,49,.25) transparent; }
+.daily-entry-card { padding:22px; border:1px solid rgba(111,23,49,.09); border-radius:7px 24px 24px 24px; background:#fff; box-shadow:0 15px 36px rgba(74,13,32,.07); }
+.daily-entry-card > div { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px; }
+.daily-entry-badge { border-radius:999px; padding:7px 10px; color:var(--wine); background:var(--rose-light); font-size:.64rem; font-weight:900; text-transform:uppercase; }
+.daily-entry-card time { color:#a0878e; font-size:.64rem; font-weight:800; }
+.daily-entry-card h4 { margin:16px 0 10px; color:var(--wine-dark); font-family:Georgia,serif; font-size:1.16rem; }
+.daily-entry-card ol { display:grid; gap:8px; margin:0; padding-left:28px; color:var(--muted); line-height:1.58; }
+.daily-entry-card li::marker { color:var(--gold); font-family:Georgia,serif; font-weight:900; }
+
+.complaints-section { background:
+  radial-gradient(circle at 12% 18%,rgba(255,255,255,.06),transparent 24%),
+  linear-gradient(145deg,#2d0713,#64152e 58%,#3a0919); color:#fff; }
+.complaints-heading h2 { color:#fff; }
+.complaints-heading p { color:rgba(255,255,255,.67); }
+.complaints-heading .eyebrow { color:#f2c872; }
+.complaint-upload-card { width:min(760px,100%); margin:0 auto 54px; padding:clamp(24px,5vw,44px); border:1px solid rgba(255,255,255,.14); border-radius:34px 10px 34px 10px; background:rgba(255,255,255,.08); box-shadow:0 26px 70px rgba(0,0,0,.25); }
+.complaint-upload-card form { display:grid; gap:10px; }
+.complaint-form-copy { display:flex; align-items:center; gap:14px; margin-bottom:12px; }
+.complaint-number { display:grid; place-items:center; width:58px; height:58px; flex:none; border-radius:50%; color:var(--wine-dark); background:#f4c875; font-family:Georgia,serif; font-size:2rem; font-weight:900; }
+.complaint-form-copy strong { display:block; color:#fff; font-family:Georgia,serif; font-size:1.35rem; }
+.complaint-form-copy small { display:block; margin-top:4px; color:rgba(255,255,255,.6); }
+.complaint-upload-card label { color:#f4d6dd; }
+.complaint-upload-card input, .complaint-upload-card select { color:#fff; border-color:rgba(255,255,255,.16); background:rgba(255,255,255,.08); }
+.complaint-upload-card input::placeholder { color:rgba(255,255,255,.42); }
+.complaint-upload-card select option { color:var(--ink); background:#fff; }
+.complaint-upload-card input[type="file"] { padding:11px; }
+.complaint-upload-card input[type="file"]::file-selector-button { margin-right:10px; border:0; border-radius:999px; padding:9px 12px; color:var(--wine); background:#ffe8ee; font-weight:900; }
+.complaint-upload-card #complaintStatus { color:rgba(255,255,255,.65); }
+.complaint-upload-card #complaintStatus[data-state="success"] { color:#ffd7e1; }
+.complaint-upload-card #complaintStatus[data-state="error"] { color:#ffd0d0; }
+.complaint-preview { width:min(330px,100%); margin:8px 0; padding:10px 10px 30px; transform:rotate(-1.5deg); background:#fff; box-shadow:0 18px 45px rgba(0,0,0,.26); }
+.complaint-preview img { width:100%; max-height:390px; object-fit:cover; }
+.complaints-list { width:min(1080px,100%); margin:0 auto; display:grid; gap:28px; }
+.complaints-list > .corner-empty { color:rgba(255,255,255,.7); border-color:rgba(255,255,255,.18); background:rgba(255,255,255,.05); }
+.complaint-card { display:grid; grid-template-columns:minmax(260px,.85fr) minmax(0,1.15fr); overflow:hidden; border:1px solid rgba(255,255,255,.14); border-radius:28px; background:#fffaf7; color:var(--ink); box-shadow:0 25px 70px rgba(0,0,0,.22); }
+.complaint-card figure { position:relative; min-height:360px; margin:0; background:#e7d9dd; }
+.complaint-card figure img { width:100%; height:100%; min-height:360px; object-fit:cover; }
+.complaint-tape { position:absolute; z-index:1; top:15px; left:50%; width:92px; height:25px; transform:translateX(-50%) rotate(-3deg); background:rgba(236,211,177,.8); }
+.complaint-copy { padding:clamp(24px,4vw,40px); }
+.complaint-copy > span { color:var(--gold); font-size:.66rem; font-weight:900; letter-spacing:.09em; text-transform:uppercase; }
+.complaint-copy h3 { margin:9px 0 20px; color:var(--wine-dark); font-family:Georgia,serif; font-size:clamp(1.55rem,3vw,2.25rem); }
+.complaint-interpretations { display:grid; gap:10px; }
+.complaint-interpretations > div { padding:14px 15px; border-left:3px solid var(--rose); border-radius:5px 16px 16px 5px; background:#fff1f4; }
+.complaint-interpretations strong { color:var(--wine); font-family:Georgia,serif; }
+.complaint-interpretations p { margin:6px 0; white-space:pre-line; color:var(--ink); line-height:1.55; }
+.complaint-interpretations small { color:#a0878e; font-size:.62rem; }
+.complaint-interpretations .corner-empty { background:rgba(111,23,49,.035); }
+.complaint-interpretation-composer { margin-top:18px; }
+.complaint-interpretation-composer > summary { width:fit-content; cursor:pointer; color:var(--wine); font-weight:900; list-style:none; }
+.complaint-interpretation-composer > summary::-webkit-details-marker { display:none; }
+.complaint-interpretation-composer form { display:grid; gap:8px; margin-top:14px; padding:16px; border-radius:18px; background:rgba(111,23,49,.05); }
+.complaint-interpretation-composer label { color:var(--wine); font-size:.7rem; font-weight:900; }
+.complaint-interpretation-composer input, .complaint-interpretation-composer select, .complaint-interpretation-composer textarea { width:100%; border:1px solid rgba(111,23,49,.14); border-radius:12px; padding:11px 12px; color:var(--ink); background:#fff; }
+.complaint-interpretation-composer textarea { min-height:90px; resize:vertical; }
+.complaint-interpretation-composer button { justify-self:start; border:0; border-radius:999px; padding:10px 14px; color:#fff; background:var(--wine); font-weight:900; }
+.complaint-interpretation-composer button:disabled { cursor:wait; opacity:.65; }
+.complaint-interpretation-status { min-height:1.2em; color:var(--muted); }
+.complaint-interpretation-status[data-state="error"] { color:#b3263d; font-weight:800; }
+
+.letters-section { background:
+  linear-gradient(rgba(111,23,49,.035) 1px,transparent 1px),
+  linear-gradient(90deg,rgba(111,23,49,.025) 1px,transparent 1px),
+  #fff9f1; background-size:30px 30px; }
+.letters-layout { width:min(1120px,100%); margin:0 auto; display:grid; grid-template-columns:minmax(310px,.9fr) minmax(0,1.1fr); gap:clamp(26px,5vw,52px); align-items:start; }
+.letters-form { position:relative; overflow:hidden; background:#fffdf8; }
+.letter-form-mark { position:absolute; top:-28px; right:20px; color:rgba(111,23,49,.06); font-family:Georgia,serif; font-size:9rem; line-height:1; }
+.letters-form textarea { min-height:260px; resize:vertical; line-height:1.7; }
+.letter-card { overflow:hidden; border:1px solid rgba(111,23,49,.10); border-radius:8px 24px 24px 24px; background:#fff; box-shadow:0 14px 36px rgba(77,14,34,.07); }
+.letter-card summary { display:flex; align-items:center; gap:13px; padding:20px; cursor:pointer; list-style:none; }
+.letter-card summary::-webkit-details-marker { display:none; }
+.letter-card summary > span { display:grid; place-items:center; width:42px; height:42px; flex:none; border-radius:50%; color:#fff; background:var(--wine); font-family:Georgia,serif; font-size:1.15rem; }
+.letter-card summary strong { display:block; color:var(--wine-dark); font-family:Georgia,serif; font-size:1.14rem; }
+.letter-card summary small { display:block; margin-top:4px; color:var(--muted); font-size:.67rem; }
+.letter-card-body { padding:4px 24px 26px; border-top:1px dashed rgba(111,23,49,.14); }
+.letter-card-body p { margin:20px 0; white-space:pre-line; color:var(--ink); font-family:Georgia,serif; font-size:1.02rem; line-height:1.85; }
+.letter-card-body span { color:var(--wine); font-family:Georgia,serif; font-style:italic; }
+
+.memory-live-posts { width:min(1080px,100%); margin:82px auto 0; }
+.memory-live-heading { max-width:760px; margin:0 auto 42px; text-align:center; }
+.memory-live-heading h3 { margin:10px 0 0; font-family:Georgia,serif; font-size:clamp(1.9rem,4vw,3.2rem); line-height:1.12; color:var(--wine-dark); }
+.memory-live-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:clamp(28px,5vw,54px); align-items:start; }
+.memory-live-card { position:relative; padding:14px 14px 32px; border:1px solid rgba(111,23,49,.09); border-radius:7px; background:#fffdfa; box-shadow:0 24px 62px rgba(61,14,29,.18); transform:rotate(-1.2deg); }
+.memory-live-card:nth-child(even) { transform:rotate(1.2deg) translateY(20px); }
+.memory-live-card figure { position:relative; margin:0; overflow:visible; background:#eee0e4; }
+.memory-live-card figure img { width:100%; height:min(54vw,520px); object-fit:cover; }
+.memory-live-tape { position:absolute; z-index:2; top:-24px; left:50%; width:96px; height:28px; transform:translateX(-50%) rotate(-3deg); background:rgba(226,196,156,.72); box-shadow:0 2px 4px rgba(71,38,22,.08); }
+.memory-live-card:nth-child(even) .memory-live-tape { transform:translateX(-50%) rotate(3deg); }
+.memory-live-copy { padding:24px 14px 4px; text-align:center; }
+.memory-live-copy time { display:block; color:var(--gold); font-size:.68rem; font-weight:800; letter-spacing:.10em; text-transform:uppercase; }
+.memory-live-copy h4 { margin:10px 0 12px; font-family:Georgia,serif; font-size:clamp(1.6rem,3vw,2.25rem); line-height:1.08; color:var(--wine-dark); }
+.memory-live-copy p { margin:0; white-space:pre-line; color:var(--muted); line-height:1.75; }
+.timeline-item.user-added .timeline-card { border-color:rgba(201,154,74,.34); box-shadow:0 20px 60px rgba(111,23,49,.13); }
+.timeline-item.user-added .timeline-copy::before { content:"Novo capítulo"; display:inline-block; margin-bottom:8px; color:var(--gold); font-size:.66rem; font-weight:900; letter-spacing:.12em; text-transform:uppercase; }
+.timeline-item.user-added .timeline-dot { background:var(--gold); }
+
+.gallery-diary-shell { width:min(900px,100%); margin:30px auto 0; }
+.gallery-diary-shell > .publication-replies { margin:0; padding:26px clamp(20px,4vw,36px); border:1px solid rgba(111,23,49,.10); border-radius:22px 7px 22px 7px; background:rgba(255,253,249,.92); box-shadow:0 18px 48px rgba(111,23,49,.09); }
+.gallery-diary-shell > .content-manager { margin-top:14px; padding:16px clamp(20px,4vw,36px); border:1px solid rgba(111,23,49,.10); border-radius:7px 22px 7px 22px; background:rgba(255,253,249,.92); box-shadow:0 14px 38px rgba(111,23,49,.07); }
+.publication-replies { margin:24px 10px 0; padding:24px 16px 4px; border-top:1px solid rgba(111,23,49,.12); text-align:left; }
+.timeline-card > .publication-replies { margin:0 22px 24px; padding:22px 0 0; }
+.publication-replies-heading span { display:block; color:var(--gold); font-size:.66rem; font-weight:900; letter-spacing:.13em; text-transform:uppercase; }
+.publication-replies-heading h5 { margin:7px 0 0; color:var(--wine-dark); font-family:Georgia,serif; font-size:1.2rem; line-height:1.3; }
+.publication-replies-empty { margin:12px 0 0; color:var(--muted); font-size:.84rem; font-style:italic; line-height:1.6; }
+.publication-replies-list { display:grid; gap:12px; margin-top:16px; }
+.publication-reply { padding:15px 16px; border:1px solid rgba(111,23,49,.09); border-left:3px solid var(--rose); border-radius:5px 18px 18px 5px; background:linear-gradient(145deg,#fff7f8,#fffdfb); box-shadow:0 10px 26px rgba(111,23,49,.06); }
+.publication-reply > div { display:flex; align-items:baseline; justify-content:space-between; flex-wrap:wrap; gap:5px 10px; }
+.publication-reply strong { color:var(--wine); font-family:Georgia,serif; font-size:1rem; }
+.publication-reply time { color:var(--gold); font-size:.58rem; font-weight:800; letter-spacing:.06em; text-transform:uppercase; }
+.publication-reply p { margin:9px 0 0; white-space:pre-line; color:var(--ink); font-size:.9rem; line-height:1.7; }
+.publication-reply-composer { margin-top:16px; }
+.publication-reply-composer summary { width:fit-content; cursor:pointer; color:var(--wine); font-size:.82rem; font-weight:900; list-style:none; }
+.publication-reply-composer summary::-webkit-details-marker { display:none; }
+.publication-reply-composer summary::before { content:"＋"; display:inline-block; margin-right:7px; color:var(--gold); transition:transform .2s ease; }
+.publication-reply-composer[open] summary::before { transform:rotate(45deg); }
+.publication-reply-form { display:grid; gap:8px; margin-top:15px; padding:16px; border-radius:18px; background:rgba(111,23,49,.045); }
+.publication-reply-form label { color:var(--wine); font-size:.7rem; font-weight:900; }
+.publication-reply-form textarea, .publication-reply-form input, .publication-reply-form select { width:100%; border:1px solid rgba(111,23,49,.14); border-radius:13px; padding:11px 12px; color:var(--ink); background:#fff; outline:none; }
+.publication-reply-form textarea { min-height:96px; resize:vertical; line-height:1.55; }
+.publication-reply-form textarea:focus, .publication-reply-form input:focus, .publication-reply-form select:focus { border-color:rgba(111,23,49,.38); box-shadow:0 0 0 3px rgba(233,167,184,.2); }
+.publication-reply-actions { display:grid; gap:8px; margin-top:4px; }
+.publication-reply-actions button { justify-self:start; border:0; border-radius:999px; padding:11px 16px; color:#fff; background:var(--wine); font-weight:900; cursor:pointer; box-shadow:0 8px 20px rgba(111,23,49,.16); }
+.publication-reply-actions button:disabled { cursor:wait; opacity:.65; }
+.publication-reply-status { min-height:1.3em; color:var(--muted); line-height:1.45; }
+.publication-reply-status[data-state="error"] { color:#b3263d; font-weight:800; }
+
+.creator-section { background:linear-gradient(155deg,#fffaf7,#f8e6eb); }
+.creator-card { width:min(980px,100%); margin:0 auto; padding:clamp(30px,5vw,58px); border:1px solid rgba(111,23,49,.10); border-radius:38px 10px 38px 10px; background:rgba(255,253,249,.9); box-shadow:var(--shadow); }
+.creator-card[data-selected-section="historia"] { border-radius:20px; box-shadow:0 28px 75px rgba(111,23,49,.14); }
+.creator-intro { max-width:760px; margin:0 auto 38px; text-align:center; }
+.creator-intro h2 { margin:12px 0; font-family:Georgia,serif; font-size:clamp(2.2rem,5vw,4rem); line-height:1.04; color:var(--wine-dark); }
+.creator-intro p { margin:0; color:var(--muted); line-height:1.75; }
+.creator-form { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:22px; }
+.creator-field { display:grid; align-content:start; gap:9px; }
+.creator-field-wide { grid-column:1/-1; }
+.creator-field label { color:var(--wine); font-size:.8rem; font-weight:800; }
+.creator-field input, .creator-field textarea, .creator-field select { width:100%; border:1px solid rgba(111,23,49,.14); border-radius:16px; padding:15px 16px; color:var(--ink); background:#fff; outline:none; }
+.creator-field textarea { min-height:150px; resize:vertical; }
+.creator-field input[type="file"] { padding:12px; color:var(--muted); }
+.creator-field input[type="file"]::file-selector-button { margin-right:12px; border:0; border-radius:999px; padding:9px 13px; color:#fff; background:var(--wine); font-weight:800; cursor:pointer; }
+.creator-field > small { color:var(--muted); line-height:1.5; }
+.publication-preview { width:min(360px,100%); margin-top:8px; overflow:hidden; border:8px solid #fff; border-radius:20px; box-shadow:0 18px 45px rgba(70,17,34,.16); }
+.publication-preview img { width:100%; max-height:420px; object-fit:cover; }
+.publication-preview[data-selected-section="fotos"] { transform:rotate(-1.5deg); border-radius:5px; padding-bottom:22px; }
+.publication-preview[data-selected-section="historia"] { border-width:1px; border-radius:24px; padding:0; }
+.creator-actions { display:flex; align-items:center; flex-wrap:wrap; gap:14px; }
+.creator-actions .primary-button:disabled { cursor:wait; opacity:.65; transform:none; }
+#publicationStatus { flex:1; min-width:220px; color:var(--muted); line-height:1.5; }
+#publicationStatus[data-state="success"] { color:#7a2440; font-weight:800; }
+#publicationStatus[data-state="error"] { color:#b3263d; font-weight:800; }
+
+.content-manager { position:relative; z-index:2; margin-top:18px; padding-top:14px; border-top:1px dashed rgba(111,23,49,.16); color:var(--ink); text-align:left; }
+.content-manager > summary, .letter-card .content-manager > summary { display:flex; align-items:center; width:fit-content; gap:7px; padding:0; cursor:pointer; color:var(--wine); font-family:Inter,ui-sans-serif,system-ui,sans-serif; font-size:.7rem; font-weight:900; font-style:normal; letter-spacing:.02em; list-style:none; }
+.content-manager > summary::-webkit-details-marker { display:none; }
+.content-manager > summary::before { content:"✎"; color:var(--gold); font-size:.9rem; }
+.content-manager-form { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; margin-top:14px; padding:16px; border:1px solid rgba(111,23,49,.08); border-radius:16px; background:rgba(111,23,49,.04); }
+.content-manager-field { display:grid; align-content:start; gap:6px; min-width:0; }
+.content-manager-field:has(textarea), .content-manager-field:has(input[type="file"]) { grid-column:1/-1; }
+.content-manager-field label { color:var(--wine); font-family:Inter,ui-sans-serif,system-ui,sans-serif; font-size:.68rem; font-weight:900; font-style:normal; }
+.content-manager-field input, .content-manager-field textarea, .content-manager-field select { width:100%; border:1px solid rgba(111,23,49,.14); border-radius:12px; padding:10px 11px; color:var(--ink); background:#fff; outline:none; }
+.content-manager-field textarea { min-height:78px; resize:vertical; line-height:1.55; }
+.content-manager-field input[type="file"] { padding:9px; color:var(--muted); font-size:.7rem; }
+.content-manager-field input[type="file"]::file-selector-button { margin-right:9px; border:0; border-radius:999px; padding:7px 10px; color:#fff; background:var(--wine); font-weight:800; cursor:pointer; }
+.content-manager-field input:focus, .content-manager-field textarea:focus, .content-manager-field select:focus { border-color:rgba(111,23,49,.38); box-shadow:0 0 0 3px rgba(233,167,184,.2); }
+.content-manager-field small { margin:0; color:var(--muted); font-family:Inter,ui-sans-serif,system-ui,sans-serif; font-size:.62rem; font-style:normal; line-height:1.4; }
+.content-manager-actions { grid-column:1/-1; display:flex; align-items:center; flex-wrap:wrap; gap:9px; }
+.content-manager-actions button { border:0; border-radius:999px; padding:9px 13px; font-size:.7rem; font-weight:900; cursor:pointer; }
+.content-edit-button { color:#fff; background:var(--wine); }
+.content-delete-button { color:#a1233f; background:#ffe4e9; }
+.content-manager-actions button:disabled { cursor:wait; opacity:.6; }
+.content-manager-status { grid-column:1/-1; min-height:1.2em; margin:0; color:var(--muted); font-family:Inter,ui-sans-serif,system-ui,sans-serif; font-size:.68rem; font-style:normal; line-height:1.45; }
+.content-manager-status[data-state="success"] { color:#7a2440; font-weight:800; }
+.content-manager-status[data-state="error"] { color:#b3263d; font-weight:800; }
+.timeline-card > .content-manager { margin:0 22px 24px; }
+.memory-live-card > .content-manager { margin-inline:10px; }
+.publication-reply > .content-manager, .complaint-interpretations .content-manager { margin-top:12px; padding-top:10px; }
+.publication-reply .content-manager-form, .complaint-interpretations .content-manager-form { grid-template-columns:1fr; padding:12px; }
+.publication-reply .content-manager-field, .complaint-interpretations .content-manager-field, .publication-reply .content-manager-actions, .complaint-interpretations .content-manager-actions, .publication-reply .content-manager-status, .complaint-interpretations .content-manager-status { grid-column:1; }
+.future-plan-card > .content-manager { margin-top:20px; }
+.letter-card-body > .content-manager { margin-top:24px; }
+.note-card .content-manager { border-color:rgba(255,255,255,.15); color:#fff; }
+.note-card .content-manager > summary { color:#ffd4df; }
+.note-card .content-manager-form { border-color:rgba(255,255,255,.12); background:rgba(255,255,255,.06); }
+.note-card .content-manager-field label { color:#f6d7df; }
+.note-card .content-manager-field input, .note-card .content-manager-field textarea { border-color:rgba(255,255,255,.16); color:#fff; background:rgba(255,255,255,.08); }
+.note-card .content-manager-status, .note-card .content-manager-field small { color:rgba(255,255,255,.62); }
+.note-card .content-manager-status[data-state="error"] { color:#ffbdca; }
+.note-card .content-manager-status[data-state="success"] { color:#ffd4df; }
+
+.guestbook-section { background: var(--wine-dark); color:white; }
+.guestbook-card { max-width:900px; margin:0 auto; padding:48px; border-radius:var(--radius); background:linear-gradient(145deg, rgba(255,255,255,.1), rgba(255,255,255,.05)); border:1px solid rgba(255,255,255,.12); box-shadow:0 30px 80px rgba(0,0,0,.22); }
+.guestbook-card h2 { color:white; }
+.guestbook-card > div:first-child p { color:rgba(255,255,255,.68); }
+.guestbook-card form { display:grid; gap:10px; margin-top:28px; }
+.guestbook-card label { font-size:.8rem; font-weight:800; color:#f6d7df; }
+.guestbook-card input, .guestbook-card textarea { width:100%; border:1px solid rgba(255,255,255,.16); border-radius:16px; padding:15px 16px; color:white; background:rgba(255,255,255,.08); outline:none; }
+.guestbook-card textarea { min-height:120px; resize:vertical; }
+.guestbook-card input::placeholder, .guestbook-card textarea::placeholder { color:rgba(255,255,255,.4); }
+.guestbook-card .primary-button { justify-self:start; margin-top:8px; }
+.guestbook-card .primary-button:disabled { cursor:wait; opacity:.68; transform:none; }
+#guestbookStatus { min-height:1.4em; color:rgba(255,255,255,.68); }
+#guestbookStatus[data-state="success"] { color:#ffd4df; }
+#guestbookStatus[data-state="error"], .notes-error { color:#ffd0d0; }
+.notes-list { display:grid; gap:12px; margin-top:28px; }
+.note-card { position:relative; padding:18px; border-radius:18px; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.1); }
+.note-card strong { display:block; color:#ffd4df; margin-bottom:6px; }
+.note-card p { margin:0; line-height:1.6; color:rgba(255,255,255,.82); }
+.note-card small { display:block; margin-top:10px; color:rgba(255,255,255,.42); }
+
+.ending-section { padding-block:130px; background:radial-gradient(circle at center, #fff, #fff4f0); }
+.ending-card { max-width:820px; margin:0 auto; text-align:center; }
+.big-heart { display:inline-grid; place-items:center; width:86px; height:86px; border-radius:50%; background:var(--rose-light); color:var(--wine); font-size:2.4rem; animation:heartbeat 1.35s infinite; }
+.ending-card p { max-width:620px; margin:0 auto 28px; color:var(--muted); font-size:1.05rem; line-height:1.75; }
+.ending-actions { display:flex; justify-content:center; flex-wrap:wrap; gap:12px; }
+#shareStatus { display:block; min-height:20px; margin-top:14px; color:var(--wine); }
+#shareStatus a { display:inline-block; max-width:100%; margin-top:6px; color:var(--wine); font-weight:800; overflow-wrap:anywhere; }
+footer { min-height:100px; display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:8px; padding:24px 18px; text-align:center; background:var(--wine-dark); color:rgba(255,255,255,.7); }
+footer span:last-child { color:#f1a8ba; }
+
+.ambient-hearts { pointer-events:none; position:fixed; inset:0; z-index:100; overflow:hidden; }
+.floating-heart { position:absolute; bottom:-30px; color:rgba(164,54,87,.45); animation:floatUp linear forwards; }
+
+.reveal { opacity:0; transform:translateY(28px); transition:opacity .75s ease, transform .75s ease; }
+.reveal.visible { opacity:1; transform:none; }
+
+@keyframes heartbeat { 0%,100%{transform:scale(1)} 15%{transform:scale(1.14)} 30%{transform:scale(1)} 45%{transform:scale(1.08)} 60%{transform:scale(1)} }
+@keyframes softPulse { 0%,100%{box-shadow:0 12px 32px rgba(0,0,0,.19)} 50%{box-shadow:0 12px 42px rgba(255,215,225,.38)} }
+@keyframes flap { 0%,28%,100%{transform:rotateX(0)} 45%,74%{transform:rotateX(178deg); z-index:1} }
+@keyframes letter { 0%,28%,100%{transform:translateY(0)} 48%,72%{transform:translateY(-42px)} }
+@keyframes spin { to{transform:rotate(360deg)} }
+@keyframes floatUp { to{transform:translateY(-110vh) rotate(360deg); opacity:0} }
+@keyframes planToMemory { 0%,100%{filter:none} 40%{filter:drop-shadow(0 0 18px rgba(201,154,74,.55))} }
+
+@media (max-width: 820px) {
+  .hero-memories { display:none; }
+  .hero-content { padding:26px 18px 30px; background:rgba(47,7,20,.18); }
+  .floating-nav { display:none; }
+  .section { padding:86px 18px; }
+  .counter-grid { grid-template-columns: repeat(3,1fr); }
+  .counter-grid .clock-card { grid-column:1/-1; }
+  .music-card { grid-template-columns:1fr; text-align:center; padding:34px 24px; }
+  .vinyl { width:min(210px,62vw); margin:0 auto; }
+  .full-song-player-wrap { margin-top:20px; padding:5px; }
+  .full-song-player { min-height:0; }
+  .love-letter { padding:54px 32px; }
+  .memory-album { min-height:0; grid-template-columns:1fr; gap:22px; padding:28px 24px 34px; border-radius:30px 8px 30px 8px; }
+  .gallery-photo-area { width:min(100%,520px); }
+  .gallery-photo-frame img { height:min(118vw,590px); }
+  .memory-story { padding:22px 4px 0; text-align:center; }
+  .memory-story::before { top:-22px; right:2%; font-size:6.5rem; }
+  .memory-divider { margin:24px auto; }
+  .gallery-controls { justify-content:center; }
+  .memory-film { margin-top:20px; }
+  .thumbnails { justify-content:flex-start; }
+  .timeline::before { left:8px; }
+  .timeline-item, .timeline-item:nth-child(even) { width:100%; margin-left:0; padding:0 0 42px 36px; }
+  .timeline-dot, .timeline-item:nth-child(even) .timeline-dot { left:0; right:auto; }
+  .future-plan-grid { grid-template-columns:1fr; }
+  .future-plan-form { grid-template-columns:1fr; }
+  .future-plan-field-wide { grid-column:auto; }
+  .date-idea-controls { grid-template-columns:1fr 1fr; }
+  .date-random-action { grid-template-columns:1fr; }
+  .date-save-composer form { grid-template-columns:1fr; }
+  .date-save-composer form label, .date-save-composer form select, .date-save-composer form input, .date-save-composer form button { grid-row:auto; }
+  .daily-layout, .letters-layout { grid-template-columns:1fr; }
+  .daily-entries-list, .letters-list { max-height:none; }
+  .complaint-card { grid-template-columns:1fr; }
+  .complaint-card figure, .complaint-card figure img { min-height:0; height:min(105vw,600px); }
+  .memory-live-grid { grid-template-columns:1fr; }
+  .creator-form { grid-template-columns:1fr; }
+  .creator-field-wide { grid-column:auto; }
+  .guestbook-card { padding:34px 22px; }
+}
+
+@media (max-width: 520px) {
+  h1 { font-size:2.85rem; }
+  .counter-grid { grid-template-columns:repeat(3,1fr); gap:8px; }
+  .counter-grid article { min-height:115px; padding:18px 6px; border-radius:18px; }
+  .counter-grid strong { font-size:2.15rem; }
+  .counter-grid span { font-size:.62rem; }
+  .gallery-section { padding-inline:14px; }
+  .memory-heading { padding-inline:8px; margin-bottom:36px; }
+  .album-meta { font-size:.62rem; letter-spacing:.08em; }
+  .memory-album { padding:22px 16px 28px; }
+  .gallery-photo-frame { padding:9px 9px 50px; }
+  .gallery-photo-frame img { height:min(120vw,500px); }
+  .gallery-photo-frame::after { left:13px; bottom:15px; font-size:.82rem; }
+  .photo-date { right:13px; bottom:17px; font-size:.58rem; }
+  .photo-tape { width:70px; height:22px; }
+  .memory-story > strong { font-size:2.15rem; }
+  .memory-story > p { font-size:.97rem; line-height:1.76; }
+  .memory-film { width:calc(100% - 12px); padding:16px 12px 17px; }
+  .thumbnail { flex-basis:104px; height:74px; }
+  .memory-closing { margin-top:58px; padding-inline:10px; }
+  .gallery-diary-shell { margin-top:20px; }
+  .timeline-card img { height:210px; }
+  .future-board { padding:30px 18px; border-radius:30px 9px 30px 9px; }
+  .future-board::before { display:none; }
+  .future-summary { grid-template-columns:1fr; gap:12px; border-radius:24px; }
+  .future-summary-heart { margin:auto; }
+  .future-plan-card { padding:21px 18px; }
+  .future-plan-actions { align-items:stretch; }
+  .future-plan-actions .primary-button { width:100%; }
+  .date-idea-card { padding:24px 16px; border-radius:30px 8px 30px 8px; }
+  .date-idea-ticket { padding:55px 20px 34px; }
+  .date-idea-origin { position:static; margin:0 0 20px; }
+  .date-idea-controls { grid-template-columns:1fr; }
+  .date-random-action { padding:16px 12px; }
+  .date-random-button { width:100%; white-space:normal; }
+  .content-manager-form { grid-template-columns:1fr; padding:13px 11px; }
+  .content-manager-field, .content-manager-actions, .content-manager-status { grid-column:1; }
+  .content-manager-actions { align-items:stretch; }
+  .content-manager-actions button { flex:1; }
+  .timeline-card > .content-manager { margin-inline:18px; }
+  .date-save-composer form { padding:16px 12px; }
+  .date-save-composer form .primary-button { width:100%; }
+  .daily-form, .letters-form { padding:25px 18px; }
+  .daily-form .primary-button, .letters-form .primary-button, .complaint-upload-card .primary-button { width:100%; }
+  .complaint-upload-card { padding:25px 18px; }
+  .complaint-copy { padding:24px 18px; }
+  .complaint-interpretation-composer button { width:100%; }
+  .memory-live-posts { margin-top:62px; }
+  .memory-live-card, .memory-live-card:nth-child(even) { transform:none; }
+  .memory-live-card figure img { height:min(118vw,500px); }
+  .publication-replies { margin-inline:2px; padding-inline:8px; }
+  .timeline-card > .publication-replies { margin-inline:18px; }
+  .publication-reply-form { padding:14px 12px; }
+  .publication-reply-actions button { width:100%; }
+  .creator-card { padding:30px 20px; }
+  .creator-actions { align-items:stretch; }
+  .creator-actions .primary-button { width:100%; }
+  .ending-actions { display:grid; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior:auto !important; animation-duration:.01ms !important; animation-iteration-count:1 !important; transition-duration:.01ms !important; }
+}
+@media (max-width: 520px) { footer { font-size:.82rem; } }
+
+</style>
+</head>
+<body>
+  <div class="loading-screen" id="loadingScreen" aria-live="polite">
+    <div class="loading-heart" aria-hidden="true">♥</div>
+    <p>Preparando o nosso cantinho…</p>
+    <small>Bianca &amp; Natã</small>
+  </div>
+
+  <div class="ambient-hearts" id="ambientHearts" aria-hidden="true"></div>
+
+  <main>
+    <section class="hero" id="inicio">
+      <div class="hero-glow hero-glow-one"></div>
+      <div class="hero-glow hero-glow-two"></div>
+
+      <div class="hero-memories" aria-hidden="true">
+        <figure class="hero-memory memory-one" hidden><img alt="" /></figure>
+        <figure class="hero-memory memory-two" hidden><img alt="" /></figure>
+        <figure class="hero-memory memory-three" hidden><img alt="" /></figure>
+        <figure class="hero-memory memory-four" hidden><img alt="" /></figure>
+      </div>
+
+      <div class="hero-content reveal">
+        <span class="eyebrow">Uma história de Bianca &amp; Natã</span>
+        <div class="envelope-wrap" aria-hidden="true">
+          <div class="envelope">
+            <div class="envelope-back"></div>
+            <div class="letter"><span>♥</span></div>
+            <div class="envelope-front"></div>
+            <div class="envelope-flap"></div>
+          </div>
+        </div>
+        <h1 id="introTitle">Bianca &amp; Natã, a nossa história mora aqui.</h1>
+        <p id="introText">Uma pequena lembrança de tudo o que vivemos desde 21 de maio de 2026.</p>
+        <button class="primary-button pulse" id="openSurprise" type="button">
+          <span>Abrir minha surpresa</span>
+          <span aria-hidden="true">💌</span>
+        </button>
+        <small class="tap-hint">Toque para revelar</small>
+      </div>
+    </section>
+
+    <div class="surprise-content" id="surpriseContent" hidden>
+      <nav class="floating-nav" aria-label="Navegação da página">
+        <a href="#contador" title="Tempo juntos">♥</a>
+        <a href="#mensagem" title="Carta">✉</a>
+        <a href="#fotos" title="Fotos">▣</a>
+        <a href="#historia" title="Nossa história">⌛</a>
+        <a href="#planos" title="Coisas que ainda vamos viver">✦</a>
+        <a href="#encontro" title="Nosso cantinho">☼</a>
+        <a href="#adicionar" title="Adicionar lembrança">＋</a>
+      </nav>
+
+      <section class="section counter-section" id="contador">
+        <div class="section-heading reveal">
+          <span class="eyebrow">Desde que começamos a namorar</span>
+          <h2 id="pageTitle">Bianca &amp; Natã — nossa história</h2>
+          <p>Juntos desde <strong id="startDateLabel"></strong></p>
+        </div>
+
+        <div class="counter-grid reveal" aria-label="Tempo juntos">
+          <article><strong id="years">0</strong><span>Anos</span></article>
+          <article><strong id="months">0</strong><span>Meses</span></article>
+          <article><strong id="days">0</strong><span>Dias</span></article>
+          <article class="clock-card"><strong id="clock">00:00:00</strong><span>Horas · Minutos · Segundos</span></article>
+        </div>
+        <p class="total-days reveal">Já são <strong id="totalDays">0</strong> dias escolhendo um ao outro.</p>
+      </section>
+
+      <section class="section music-section" id="musica">
+        <div class="music-card reveal">
+          <div class="vinyl" id="vinyl" aria-hidden="true"><div></div></div>
+          <div class="music-info">
+            <span class="eyebrow">Nossa música</span>
+            <h2 id="songTitle">Partilhar</h2>
+            <p id="songArtist">Rubel &amp; ANAVITÓRIA</p>
+            <div class="full-song-player-wrap">
+              <iframe
+                id="fullSongPlayer"
+                class="full-song-player"
+                title="Partilhar — música completa de Rubel e ANAVITÓRIA"
+                src="https://www.youtube-nocookie.com/embed/RLlWIQCl7iQ?rel=0&amp;playsinline=1&amp;modestbranding=1"
+                width="100%"
+                height="360"
+                frameborder="0"
+                allowfullscreen=""
+                allow="autoplay; encrypted-media; fullscreen; picture-in-picture"
+                loading="lazy"></iframe>
+            </div>
+            <p class="music-note"><strong>Música completa.</strong> Toque no play e continue navegando pela nossa história sem sair da página. ♥</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section message-section" id="mensagem">
+        <div class="section-heading reveal">
+          <span class="eyebrow">O que meu coração queria dizer</span>
+          <h2>Uma carta para você</h2>
+        </div>
+        <article class="love-letter reveal">
+          <span class="quote-mark">“</span>
+          <p id="loveMessage"></p>
+          <span class="signature" id="signature">Com todo o meu amor, Natã.</span>
+        </article>
+      </section>
+
+      <section class="section gallery-section" id="fotos">
+        <div class="memory-sparkle sparkle-one" aria-hidden="true">✦</div>
+        <div class="memory-sparkle sparkle-two" aria-hidden="true">♥</div>
+
+        <div class="section-heading memory-heading reveal">
+          <span class="eyebrow">Nosso pequeno álbum</span>
+          <h2>Memórias que moram em mim</h2>
+          <p>Alguns dos capítulos que eu quero guardar para sempre.</p>
+          <div class="album-meta" aria-label="Álbum com sete memórias">
+            <span>Bianca + Natã</span>
+            <span aria-hidden="true">•</span>
+            <span id="albumMemoryCount">Carregando memórias…</span>
+          </div>
+        </div>
+
+        <div class="memory-album reveal" tabindex="0" role="region" aria-label="Álbum de memórias; use as setas do teclado para navegar">
+          <div class="gallery-photo-area">
+            <span class="photo-tape photo-tape-left" aria-hidden="true"></span>
+            <span class="photo-tape photo-tape-right" aria-hidden="true"></span>
+            <div class="gallery-photo-frame">
+              <img id="galleryImage" alt="" />
+              <span class="photo-date">21 · 05 · 2026</span>
+            </div>
+          </div>
+
+          <div class="memory-story" aria-live="polite">
+            <span class="memory-kicker">Capítulo <span id="galleryIndexPadded">01</span></span>
+            <strong id="galleryCaption">Carregando as memórias…</strong>
+            <span class="memory-divider" aria-hidden="true"></span>
+            <p id="galleryText">As fotos estão chegando da nuvem.</p>
+
+            <div class="gallery-controls">
+              <button class="gallery-arrow gallery-prev" id="galleryPrev" type="button" aria-label="Foto anterior">‹</button>
+              <span id="galleryIndex">1 de 7</span>
+              <button class="gallery-arrow gallery-next" id="galleryNext" type="button" aria-label="Próxima foto">›</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="gallery-diary-shell reveal" id="galleryDiary" role="region" aria-label="Nosso diário desta memória"></div>
+
+        <div class="memory-film reveal">
+          <span class="film-label">Toque em uma foto para reviver</span>
+          <div class="thumbnails" id="thumbnails" aria-label="Miniaturas das fotos"></div>
+        </div>
+
+        <blockquote class="memory-closing reveal">
+          <span aria-hidden="true">“</span>
+          <p>Algumas memórias ficam guardadas em fotografias. Outras ficam guardadas no coração. As nossas moram em mim todos os dias.</p>
+          <small>Com amor, Natã <span aria-hidden="true">♥</span></small>
+        </blockquote>
+        <div class="memory-live-posts" data-live-section="fotos" hidden></div>
+      </section>
+
+      <section class="section timeline-section" id="historia">
+        <div class="section-heading reveal">
+          <span class="eyebrow">Nossa história</span>
+          <h2>Momentos que fizeram de nós, nós</h2>
+        </div>
+        <div class="timeline" id="timeline"></div>
+      </section>
+
+      <section class="section future-section" id="planos">
+        <span class="future-spark future-spark-one" aria-hidden="true">✦</span>
+        <span class="future-spark future-spark-two" aria-hidden="true">♡</span>
+
+        <div class="section-heading future-heading reveal">
+          <span class="eyebrow">Nosso próximo capítulo</span>
+          <h2>Coisas que ainda vamos viver</h2>
+          <p>Uma lista de sonhos, lugares e pequenos planos que queremos transformar em lembranças.</p>
+        </div>
+
+        <div class="future-board reveal">
+          <div class="future-summary" aria-label="Resumo dos nossos planos">
+            <div>
+              <strong id="futurePendingCount">0</strong>
+              <span>Ainda vamos viver</span>
+            </div>
+            <span class="future-summary-heart" aria-hidden="true">♥</span>
+            <div>
+              <strong id="futureCompletedCount">0</strong>
+              <span>Já viraram história</span>
+            </div>
+          </div>
+
+          <div class="future-plans-list" id="futurePlansList" aria-live="polite">
+            <p class="future-empty">Carregando nossos próximos capítulos…</p>
+          </div>
+
+          <details class="future-composer" id="futurePlanComposer">
+            <summary>Adicionar algo que ainda vamos viver <span aria-hidden="true">＋</span></summary>
+            <form class="future-plan-form" id="futurePlanForm">
+              <div class="future-plan-field">
+                <label for="futurePlanAuthor">Quem está sonhando?</label>
+                <select id="futurePlanAuthor" required>
+                  <option value="Bianca">Bianca</option>
+                  <option value="Natã">Natã</option>
+                </select>
+              </div>
+
+              <div class="future-plan-field">
+                <label for="futurePlanCategory">Que tipo de plano é?</label>
+                <select id="futurePlanCategory" required>
+                  <option value="viagem">Uma viagem</option>
+                  <option value="encontro">Um encontro</option>
+                  <option value="sonho">Um sonho</option>
+                  <option value="aventura">Uma aventura</option>
+                  <option value="outro">Outro plano nosso</option>
+                </select>
+              </div>
+
+              <div class="future-plan-field future-plan-field-wide">
+                <label for="futurePlanTitle">O que vamos viver?</label>
+                <input id="futurePlanTitle" maxlength="100" placeholder="Ex.: ver o pôr do sol na praia" required />
+              </div>
+
+              <div class="future-plan-field future-plan-field-wide">
+                <label for="futurePlanDetails">Detalhes que queremos guardar</label>
+                <textarea id="futurePlanDetails" maxlength="600" placeholder="Conte como vocês imaginam esse momento…"></textarea>
+              </div>
+
+              <div class="future-plan-field future-plan-field-wide">
+                <label for="futurePlanCode">Código reservado</label>
+                <input id="futurePlanCode" type="password" autocomplete="off" placeholder="Digite o código para adicionar" required />
+                <small>O mesmo código do nosso diário. Ele não fica salvo no site ou no aparelho.</small>
+              </div>
+
+              <div class="future-plan-actions future-plan-field-wide">
+                <button class="primary-button" type="submit">Guardar este sonho ♥</button>
+                <small id="futurePlanStatus" role="status" aria-live="polite"></small>
+              </div>
+            </form>
+          </details>
+        </div>
+      </section>
+
+      <section class="section date-idea-section" id="encontro">
+        <div class="date-orbit date-orbit-one" aria-hidden="true">♡</div>
+        <div class="date-orbit date-orbit-two" aria-hidden="true">✦</div>
+
+        <div class="section-heading reveal">
+          <span class="eyebrow">Criador de encontros</span>
+          <h2>Um encontro para hoje</h2>
+          <p id="dateTodayLabel">Hoje pode virar uma lembrança nova.</p>
+        </div>
+
+        <div class="date-idea-card reveal">
+          <div class="date-idea-ticket">
+            <div class="date-idea-origin" id="dateIdeaOrigin"><span aria-hidden="true">✦</span> Sugestão do dia</div>
+            <span id="dateIdeaTag">Em casa · econômico</span>
+            <h3 id="dateIdeaTitle">Preparar uma noite de cinema diferente</h3>
+            <p id="dateIdeaDescription">Escolham um filme que nenhum dos dois viu, preparem alguma coisa gostosa e deixem os celulares de lado.</p>
+            <div class="date-idea-extra" id="dateIdeaExtra" hidden>
+              <span aria-hidden="true">♡</span>
+              <p><strong>Um toque especial</strong><span id="dateIdeaSpecialTouch"></span></p>
+            </div>
+            <div class="date-idea-details" aria-label="Detalhes da sugestão">
+              <span id="dateIdeaPlace">⌂ Em casa</span>
+              <span id="dateIdeaBudget">◌ Econômico</span>
+              <span id="dateIdeaDuration">◷ Uma noite</span>
+            </div>
+          </div>
+
+          <div class="date-idea-controls">
+            <div>
+              <label for="datePlaceFilter">Onde?</label>
+              <select id="datePlaceFilter">
+                <option value="todos">Tanto faz</option>
+                <option value="casa">Em casa</option>
+                <option value="sair">Quero sair</option>
+              </select>
+            </div>
+            <div>
+              <label for="dateBudgetFilter">Quanto gastar?</label>
+              <select id="dateBudgetFilter">
+                <option value="todos">Tanto faz</option>
+                <option value="gratis">Sem gastar</option>
+                <option value="baixo">Pouco</option>
+                <option value="especial">Algo especial</option>
+              </select>
+            </div>
+            <div>
+              <label for="dateDurationFilter">Quanto tempo?</label>
+              <select id="dateDurationFilter">
+                <option value="todos">Tanto faz</option>
+                <option value="rapido">Até 1 hora</option>
+                <option value="medio">Algumas horas</option>
+                <option value="longo">Um dia inteiro</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="date-random-action">
+            <p>
+              <strong>Feito no próprio site</strong>
+              <span>Escolham as opções e sorteiem quantas vezes quiserem, sem cadastro e sem custo.</span>
+            </p>
+            <button class="secondary-button date-random-button" id="newDateIdea" type="button"><span aria-hidden="true">✦</span> Sortear outro encontro</button>
+          </div>
+          <small id="dateIdeaStatus" class="date-idea-status" role="status" aria-live="polite"></small>
+
+          <details class="date-save-composer" id="dateSaveComposer">
+            <summary>Guardar em “Coisas que ainda vamos viver” <span aria-hidden="true">＋</span></summary>
+            <form id="dateSaveForm">
+              <label for="dateSaveAuthor">Quem está guardando?</label>
+              <select id="dateSaveAuthor" required>
+                <option value="Bianca">Bianca</option>
+                <option value="Natã">Natã</option>
+              </select>
+              <label for="dateSaveCode">Código reservado</label>
+              <input id="dateSaveCode" type="password" autocomplete="off" placeholder="Digite o código" required />
+              <button class="primary-button" type="submit">Guardar este encontro ♥</button>
+              <small id="dateSaveStatus" role="status" aria-live="polite"></small>
+            </form>
+          </details>
+        </div>
+      </section>
+
+      <section class="section daily-section" id="tres-coisas">
+        <div class="section-heading reveal">
+          <span class="eyebrow">Um ritual para todos os dias</span>
+          <h2>Três coisas de hoje</h2>
+          <p>Três motivos para olhar com carinho para o outro ou para o dia que acabou de passar.</p>
+        </div>
+
+        <div class="daily-layout">
+          <form class="daily-form reveal" id="dailyEntryForm">
+            <div class="corner-form-heading">
+              <span aria-hidden="true">03</span>
+              <div>
+                <strong>O registro de hoje</strong>
+                <small id="dailyFormDate"></small>
+              </div>
+            </div>
+
+            <label for="dailyAuthor">Quem está escrevendo?</label>
+            <select id="dailyAuthor" required>
+              <option value="Bianca">Bianca</option>
+              <option value="Natã">Natã</option>
+            </select>
+
+            <label for="dailyType">O que você quer registrar?</label>
+            <select id="dailyType" required>
+              <option value="gosto_em_voce">Três coisas que gosto em você</option>
+              <option value="coisas_boas">Três coisas boas do dia</option>
+              <option value="gratidao">Três motivos de gratidão</option>
+            </select>
+
+            <label for="dailyItem1">Primeira coisa</label>
+            <input id="dailyItem1" maxlength="240" placeholder="Escreva a primeira…" required />
+            <label for="dailyItem2">Segunda coisa</label>
+            <input id="dailyItem2" maxlength="240" placeholder="Agora a segunda…" required />
+            <label for="dailyItem3">Terceira coisa</label>
+            <input id="dailyItem3" maxlength="240" placeholder="E mais uma para guardar…" required />
+
+            <label for="dailyCode">Código reservado</label>
+            <input id="dailyCode" type="password" autocomplete="off" placeholder="Digite o código" required />
+            <button class="primary-button" type="submit">Guardar as três ♥</button>
+            <small id="dailyStatus" role="status" aria-live="polite"></small>
+          </form>
+
+          <div class="daily-archive reveal">
+            <div class="corner-list-heading">
+              <span>Nosso arquivo</span>
+              <h3>Pequenas coisas que merecem ficar</h3>
+            </div>
+            <div class="daily-entries-list" id="dailyEntriesList" aria-live="polite">
+              <p class="corner-empty">Carregando os registros de vocês…</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section complaints-section" id="reclamacoes">
+        <div class="section-heading complaints-heading reveal">
+          <span class="eyebrow">Um jogo só de vocês</span>
+          <h2>Decifra essa reclamação</h2>
+          <p>Quem reclama publica apenas uma foto. A outra pessoa precisa descobrir o que ela quer dizer.</p>
+        </div>
+
+        <div class="complaint-upload-card reveal">
+          <form id="complaintForm">
+            <div class="complaint-form-copy">
+              <span class="complaint-number" aria-hidden="true">?</span>
+              <div>
+                <strong>Envie sua pista</strong>
+                <small>Nada de explicar: aqui a reclamação só pode ser uma foto.</small>
+              </div>
+            </div>
+            <label for="complaintAuthor">Quem está reclamando?</label>
+            <select id="complaintAuthor" required>
+              <option value="Bianca">Bianca</option>
+              <option value="Natã">Natã</option>
+            </select>
+            <label for="complaintImage">A foto da reclamação</label>
+            <input id="complaintImage" type="file" accept="image/jpeg,image/png,image/webp" required />
+            <div class="complaint-preview" id="complaintPreview" hidden>
+              <img id="complaintPreviewImage" alt="Prévia da reclamação misteriosa" />
+            </div>
+            <label for="complaintCode">Código reservado</label>
+            <input id="complaintCode" type="password" autocomplete="off" placeholder="Digite o código" required />
+            <button class="primary-button" type="submit">Publicar sem explicar 💃🏻</button>
+            <small id="complaintStatus" role="status" aria-live="polite"></small>
+          </form>
+        </div>
+
+        <div class="complaints-list reveal" id="complaintsList" aria-live="polite">
+          <p class="corner-empty">Carregando as reclamações misteriosas…</p>
+        </div>
+      </section>
+
+      <section class="section letters-section" id="cartas">
+        <div class="section-heading reveal">
+          <span class="eyebrow">Palavras que merecem tempo</span>
+          <h2>Cartas entre nós</h2>
+          <p>Um espaço somente para escrever o que nem sempre cabe em uma mensagem rápida.</p>
+        </div>
+
+        <div class="letters-layout">
+          <form class="letters-form reveal" id="letterForm">
+            <span class="letter-form-mark" aria-hidden="true">“</span>
+            <label for="letterAuthor">Quem está escrevendo?</label>
+            <select id="letterAuthor" required>
+              <option value="Bianca">Bianca</option>
+              <option value="Natã">Natã</option>
+            </select>
+            <label for="letterTitle">Título da carta</label>
+            <input id="letterTitle" maxlength="100" placeholder="O que você quer dizer hoje?" required />
+            <label for="letterText">Sua carta</label>
+            <textarea id="letterText" maxlength="5000" placeholder="Escreva sem pressa…" required></textarea>
+            <label for="letterCode">Código reservado</label>
+            <input id="letterCode" type="password" autocomplete="off" placeholder="Digite o código" required />
+            <button class="primary-button" type="submit">Guardar esta carta ♥</button>
+            <small id="letterStatus" role="status" aria-live="polite"></small>
+          </form>
+
+          <div class="letters-archive reveal">
+            <div class="corner-list-heading">
+              <span>Correspondência de Bianca &amp; Natã</span>
+              <h3>Cartas que já chegaram</h3>
+            </div>
+            <div class="letters-list" id="lettersList" aria-live="polite">
+              <p class="corner-empty">Carregando as cartas de vocês…</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section creator-section" id="adicionar">
+        <div class="creator-card reveal">
+          <div class="creator-intro">
+            <span class="eyebrow">Um espaço para nós dois</span>
+            <h2>Acrescente um novo capítulo</h2>
+            <p>Escolha entre o álbum de memórias e a linha do tempo. A foto e o texto vão aparecer com o mesmo visual da área escolhida, em tempo real para todos.</p>
+          </div>
+
+          <form id="publicationForm" class="creator-form">
+            <div class="creator-field">
+              <label for="publicationSection">Onde deseja publicar?</label>
+              <select id="publicationSection" required>
+                <option value="fotos">Memórias que moram em mim</option>
+                <option value="historia">Momentos que fizeram de nós, nós</option>
+              </select>
+              <small id="publicationDesignHint">A lembrança aparecerá como uma nova fotografia do álbum.</small>
+            </div>
+
+            <div class="creator-field">
+              <label for="publicationTitle">Título</label>
+              <input id="publicationTitle" maxlength="80" placeholder="O nome desta lembrança" required />
+            </div>
+
+            <div class="creator-field creator-field-wide">
+              <label for="publicationText">O que você quer escrever?</label>
+              <textarea id="publicationText" maxlength="1000" placeholder="Conte o que tornou esse momento especial…" required></textarea>
+            </div>
+
+            <div class="creator-field creator-field-wide">
+              <label for="publicationImage">Escolha uma foto</label>
+              <input id="publicationImage" type="file" accept="image/jpeg,image/png,image/webp" required />
+              <small id="publicationImageHint">JPG, PNG ou WEBP, com até 8 MB. A foto será otimizada sem reduzir suas dimensões; se a qualidade não puder ser preservada, o arquivo original será usado.</small>
+              <div class="publication-preview" id="publicationPreview" hidden>
+                <img id="publicationPreviewImage" alt="Prévia da foto escolhida" />
+              </div>
+            </div>
+
+            <div class="creator-field creator-field-wide">
+              <label for="publicationCode">Código reservado</label>
+              <input id="publicationCode" type="password" autocomplete="off" placeholder="Digite o código para publicar" required />
+              <small>O código não fica salvo no site ou no aparelho.</small>
+            </div>
+
+            <div class="creator-actions creator-field-wide">
+              <button class="primary-button" type="submit">Publicar lembrança ♥</button>
+              <small id="publicationStatus" role="status" aria-live="polite"></small>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <section class="section guestbook-section" id="recados">
+        <div class="guestbook-card reveal">
+          <div>
+            <span class="eyebrow">Um cantinho só nosso</span>
+            <h2>Deixe um recado para guardar</h2>
+            <p>Os recados ficam guardados na nossa página e aparecem em todos os aparelhos.</p>
+          </div>
+          <form id="guestbookForm">
+            <label for="guestName">Seu nome</label>
+            <input id="guestName" maxlength="40" placeholder="Bianca ou Natã" required />
+            <label for="guestMessage">Recado</label>
+            <textarea id="guestMessage" maxlength="240" placeholder="Escreva algo que queira guardar…" required></textarea>
+            <button class="primary-button" type="submit">Guardar recado ♥</button>
+            <small id="guestbookStatus" role="status" aria-live="polite"></small>
+          </form>
+          <div class="notes-list" id="notesList" aria-live="polite"></div>
+        </div>
+      </section>
+
+      <section class="section ending-section">
+        <div class="ending-card reveal">
+          <span class="big-heart" aria-hidden="true">♥</span>
+          <h2 id="endingTitle">Bianca, eu quero partilhar a vida boa com você.</h2>
+          <p id="endingText">Desde 21 de maio de 2026, cada dia ao seu lado ganhou um lugar especial na minha história.</p>
+          <div class="ending-actions">
+            <button class="primary-button" id="shareButton" type="button">Compartilhar esta surpresa</button>
+            <button class="secondary-button" id="replayButton" type="button">Ver desde o começo</button>
+          </div>
+          <small id="shareStatus" role="status"></small>
+        </div>
+      </section>
+
+      <footer>
+        <span>Bianca Leticia de França Aragão</span>
+        <span aria-hidden="true">♥</span>
+        <span>Natã Victor Lima Olegario Teixeira</span>
+      </footer>
+    </div>
+  </main>
+
+  <script>
+/*
+  Surpresa personalizada para Bianca Leticia de França Aragão.
+  Feita por Natã Victor Lima Olegario Teixeira.
+*/
+const CONFIG = {
+  pageTitle: "surpresaparabianca",
+  introTitle: "Bianca & Natã, a nossa história mora aqui.",
+  introText: "Uma pequena lembrança de tudo o que vivemos desde 21 de maio de 2026.",
+  startDate: "2026-05-21T00:00:00-03:00",
+  songTitle: "Partilhar",
+  songArtist: "Rubel & ANAVITÓRIA",
+  youtubeVideoId: "RLlWIQCl7iQ",
+  message: `Desde o primeiro momento em que te vi, senti que havia encontrado o amor da minha vida.
+
+Obrigado por me fazer o homem mais sortudo do mundo, meu amor. Fiz esta página com todo o carinho para que você possa voltar aqui sempre que quiser e lembrar o quanto é amada.
+
+Eu te amo, hoje e sempre. ❤️`,
+  signature: "Com todo o meu amor, Natã.",
+  endingTitle: "Bianca, eu quero partilhar a vida boa com você.",
+  endingText: "Desde 21 de maio de 2026, cada dia ao seu lado ganhou um lugar especial na minha história."
+};
+
+const SUPABASE = Object.freeze({
+  url: "https://mijtdivqfjrkwchqdqvr.supabase.co",
+  publishableKey: "sb_publishable_ukedGcRlxvIYSyF8rSONig_koPKNEVh",
+  publishFunction: "publicar-lembranca",
+  replyFunction: "responder-publicacao",
+  plansFunction: "gerenciar-planos",
+  cornerFunction: "gerenciar-cantinho",
+  manageFunction: "gerenciar-conteudo"
+});
+
+const IMAGE_UPLOAD = Object.freeze({
+  maxBytes: 8 * 1024 * 1024,
+  outputType: "image/webp",
+  qualityLevels: [0.99, 0.98, 0.97],
+  minimumSaving: 0.1,
+  minimumPsnr: 46,
+  comparisonLongEdge: 640
+});
+
+const FUTURE_PLAN_CATEGORIES = Object.freeze({
+  viagem: { label: "Viagem", symbol: "✈" },
+  encontro: { label: "Encontro", symbol: "♡" },
+  sonho: { label: "Sonho", symbol: "✦" },
+  aventura: { label: "Aventura", symbol: "⌁" },
+  outro: { label: "Nosso plano", symbol: "♥" }
+});
+
+const DAILY_ENTRY_TYPES = Object.freeze({
+  gosto_em_voce: { label: "Três coisas que gosto em você", symbol: "♡" },
+  coisas_boas: { label: "Três coisas boas do dia", symbol: "☼" },
+  gratidao: { label: "Três motivos de gratidão", symbol: "✦" }
+});
+
+const DATE_IDEA_LABELS = Object.freeze({
+  place: { casa: "⌂ Em casa", sair: "⌁ Fora de casa" },
+  budget: { gratis: "◌ Sem gastar", baixo: "◌ Econômico", especial: "✦ Algo especial" },
+  duration: { rapido: "◷ Até 1 hora", medio: "◷ Algumas horas", longo: "☼ Um dia inteiro" }
+});
+
+const DATE_IDEAS = Object.freeze([
+  { title: "Perguntas que aquecem o coração", description: "Sentem juntos por alguns minutos e cada um faz três perguntas que sempre teve vontade de fazer ao outro.", specialTouch: "Terminem contando qual resposta gostariam de guardar para sempre.", place: "casa", budget: "gratis", duration: "rapido" },
+  { title: "Sessão de fotos do nosso jeitinho", description: "Escolham cantinhos da casa, improvisem poses e façam uma pequena sessão usando apenas o celular e o que já têm.", specialTouch: "Escolham a foto mais espontânea para entrar em Memórias que moram em mim.", place: "casa", budget: "gratis", duration: "medio" },
+  { title: "Um dia inteiro sem pressa", description: "Montem juntos um dia em casa com café demorado, música, jogos, comida feita pelos dois e uma noite de filme.", specialTouch: "Cada um escolhe uma parte do dia sem contar antes para o outro.", place: "casa", budget: "gratis", duration: "longo" },
+  { title: "Lanche surpresa em dupla", description: "Cada um prepara ou compra uma bebida, um salgado e um doce para o outro sem revelar as escolhas.", specialTouch: "Façam uma nota divertida para cada escolha e guardem o resultado.", place: "casa", budget: "baixo", duration: "rapido" },
+  { title: "Cinema com cardápio escolhido pelos dois", description: "Escolham um filme que nenhum dos dois viu, preparem uma comida simples e deixem os celulares longe até os créditos.", specialTouch: "Antes do filme, cada um escreve uma previsão sobre a história para comparar no final.", place: "casa", budget: "baixo", duration: "medio" },
+  { title: "Festival particular de filmes e sabores", description: "Escolham dois filmes, preparem lanches para momentos diferentes e transformem a sala no cinema particular de vocês.", specialTouch: "Façam ingressos de papel com a data e o nome do festival.", place: "casa", budget: "baixo", duration: "longo" },
+  { title: "Brinde com sobremesa especial", description: "Escolham uma sobremesa bonita, arrumem a mesa e façam um pequeno brinde a alguma conquista de vocês.", specialTouch: "Cada um completa a frase: hoje eu celebraria em você...", place: "casa", budget: "especial", duration: "rapido" },
+  { title: "Jantar com tema sorteado", description: "Sorteiem um país, uma cor ou uma década e montem juntos um jantar inspirado no tema escolhido.", specialTouch: "Escolham uma música que combine com o tema para abrir a noite.", place: "casa", budget: "especial", duration: "medio" },
+  { title: "Hotel romântico dentro de casa", description: "Preparem café especial, roupas confortáveis, jantar caprichado e uma programação inteira sem tarefas ou pressa.", specialTouch: "Deixem uma cartinha de boas-vindas no travesseiro um do outro.", place: "casa", budget: "especial", duration: "longo" },
+  { title: "Caminhada sem celular", description: "Saiam para caminhar sem destino definido e conversem com calma, prestando atenção ao caminho e um ao outro.", specialTouch: "Cada um faz uma pergunta que nunca fez antes.", place: "sair", budget: "gratis", duration: "rapido" },
+  { title: "Passeio para ver o pôr do sol", description: "Escolham um lugar bonito, levem água e fiquem juntos enquanto o céu muda de cor.", specialTouch: "Tirem uma única foto do momento e contem o que mais gostaram no dia.", place: "sair", budget: "gratis", duration: "medio" },
+  { title: "Turistas a pé na própria cidade", description: "Montem um roteiro por praças, ruas e lugares gratuitos que vocês ainda não conhecem e explorem sem pressa.", specialTouch: "Criem um nome divertido para o passeio e registrem três descobertas.", place: "sair", budget: "gratis", duration: "longo" },
+  { title: "Uma sobremesa em um lugar novo", description: "Procurem uma sobremesa que nunca provaram, dividam a escolha e aproveitem uma saída curta da rotina.", specialTouch: "Cada um escolhe uma colherada perfeita para oferecer ao outro.", place: "sair", budget: "baixo", duration: "rapido" },
+  { title: "Piquenique simples para dois", description: "Levem frutas, café ou lanches fáceis para um lugar tranquilo e passem algumas horas conversando.", specialTouch: "Cada um leva escondido uma coisinha que sabe que o outro gosta.", place: "sair", budget: "baixo", duration: "medio" },
+  { title: "Roteiro econômico pela cidade", description: "Escolham três paradas baratas, como uma praça, um café e um lugar bonito para fotos, e façam um passeio completo.", specialTouch: "Guardem um papel ou uma foto de cada parada para lembrar do roteiro.", place: "sair", budget: "baixo", duration: "longo" },
+  { title: "Um brinde fora da rotina", description: "Escolham um lugar agradável para dividir uma bebida ou petisco e fazer uma pausa especial no dia.", specialTouch: "Brindem a uma coisa pequena que melhorou desde que vocês se conheceram.", place: "sair", budget: "especial", duration: "rapido" },
+  { title: "Recriar uma parte do primeiro encontro", description: "Voltem a um lugar, comida, música ou detalhe do começo e contem o que cada um lembra daquele dia.", specialTouch: "No fim, digam o que fariam igual e o que tornou a história ainda melhor.", place: "sair", budget: "especial", duration: "medio" },
+  { title: "Um dia inteiro escolhido pelos dois", description: "Cada um escolhe em segredo uma parte do dia, como uma comida, um passeio e algo para fazer à noite.", specialTouch: "Só revelem a próxima escolha quando chegar a hora de vivê-la.", place: "sair", budget: "especial", duration: "longo" }
+]);
+
+const $ = (selector) => document.querySelector(selector);
+const $$ = (selector) => [...document.querySelectorAll(selector)];
+
+const loadingScreen = $("#loadingScreen");
+const openSurprise = $("#openSurprise");
+const surpriseContent = $("#surpriseContent");
+const vinyl = $("#vinyl");
+
+let currentPhoto = 0;
+let heartTimer;
+let publicationPreviewUrl = "";
+let publicationsFallbackTimer;
+let preparedPublicationImage = null;
+let publicationImagePromise = null;
+let publicationImageSelection = 0;
+let latestPublicationReplies = [];
+let latestFuturePlans = [];
+let currentDateIdea = null;
+let complaintPreviewUrl = "";
+let sharedContentActivated = false;
+let counterTimer;
+let realtimeClientPromise;
+let originalAlbumPhotos = [];
+let latestRepliesByPublication = new Map();
+
+function hydrateContent() {
+  document.title = CONFIG.pageTitle;
+  $("#pageTitle").textContent = "Bianca & Natã — nossa história";
+  $("#introTitle").textContent = CONFIG.introTitle;
+  $("#introText").textContent = CONFIG.introText;
+  $("#songTitle").textContent = CONFIG.songTitle;
+  $("#songArtist").textContent = CONFIG.songArtist;
+  $("#loveMessage").textContent = CONFIG.message;
+  $("#signature").textContent = CONFIG.signature;
+  $("#endingTitle").textContent = CONFIG.endingTitle;
+  $("#endingText").textContent = CONFIG.endingText;
+
+  const start = new Date(CONFIG.startDate);
+  $("#startDateLabel").textContent = new Intl.DateTimeFormat("pt-BR", {
+    day: "2-digit",
+    month: "long",
+    year: "numeric"
+  }).format(start);
+
+  void loadPublications();
+  setupDateIdea();
+}
+
+function activateSharedContent() {
+  if (sharedContentActivated) return;
+  sharedContentActivated = true;
+  void renderNotes();
+  void loadPublications();
+  void loadFuturePlans();
+  void loadCoupleCorner();
+  void loadRealtimeClient()
+    .then(subscribeToPublications)
+    .catch(startPublicationsFallback);
+}
+
+function loadRealtimeClient() {
+  if (window.supabase?.createClient) return Promise.resolve();
+  if (realtimeClientPromise) return realtimeClientPromise;
+
+  realtimeClientPromise = new Promise((resolve, reject) => {
+    const script = document.createElement("script");
+    script.src = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.111.0/dist/umd/supabase.min.js";
+    script.crossOrigin = "anonymous";
+    script.onload = resolve;
+    script.onerror = () => reject(new Error("Não foi possível ativar as atualizações em tempo real."));
+    document.head.append(script);
+  });
+
+  return realtimeClientPromise;
+}
+
+function preciseDateDiff(start, end) {
+  if (end < start) {
+    return { years: 0, months: 0, days: 0, hours: 0, minutes: 0, seconds: 0, totalDays: 0 };
+  }
+
+  const cursor = new Date(start);
+  let years = end.getFullYear() - cursor.getFullYear();
+  cursor.setFullYear(cursor.getFullYear() + years);
+  if (cursor > end) {
+    years -= 1;
+    cursor.setFullYear(cursor.getFullYear() - 1);
+  }
+
+  let months = (end.getFullYear() - cursor.getFullYear()) * 12 + end.getMonth() - cursor.getMonth();
+  cursor.setMonth(cursor.getMonth() + months);
+  if (cursor > end) {
+    months -= 1;
+    cursor.setMonth(cursor.getMonth() - 1);
+  }
+
+  const remainder = end - cursor;
+  const days = Math.floor(remainder / 86400000);
+  const afterDays = remainder - days * 86400000;
+  const hours = Math.floor(afterDays / 3600000);
+  const minutes = Math.floor((afterDays % 3600000) / 60000);
+  const seconds = Math.floor((afterDays % 60000) / 1000);
+  const totalDays = Math.floor((end - start) / 86400000);
+
+  return { years, months, days, hours, minutes, seconds, totalDays };
+}
+
+function updateCounter() {
+  const diff = preciseDateDiff(new Date(CONFIG.startDate), new Date());
+  $("#years").textContent = diff.years;
+  $("#months").textContent = diff.months;
+  $("#days").textContent = diff.days;
+  $("#clock").textContent = [diff.hours, diff.minutes, diff.seconds]
+    .map((value) => String(value).padStart(2, "0"))
+    .join(":");
+  $("#totalDays").textContent = diff.totalDays.toLocaleString("pt-BR");
+}
+
+function updateHeroMemories(photos) {
+  const preferredPhotos = [1, 2, 3, 4]
+    .map((index) => photos[index])
+    .filter(Boolean);
+  const candidates = preferredPhotos.length ? preferredPhotos : photos.slice(0, 4);
+
+  $$(".hero-memory").forEach((figure, index) => {
+    const photo = candidates[index];
+    const image = figure.querySelector("img");
+    figure.hidden = !photo;
+    if (!photo) {
+      image.removeAttribute("src");
+      return;
+    }
+    image.src = photo.imagem_url;
+    image.alt = "";
+    image.style.objectPosition = photo.posicao || "center";
+  });
+}
+
+function renderGallery(photos = []) {
+  const activePhotoId = originalAlbumPhotos[currentPhoto]?.id;
+  originalAlbumPhotos = [...photos].sort((left, right) => (left.ordem || 0) - (right.ordem || 0));
+  const thumbnails = $("#thumbnails");
+  thumbnails.replaceChildren();
+  updateHeroMemories(originalAlbumPhotos);
+
+  originalAlbumPhotos.forEach((photo, index) => {
+    const button = document.createElement("button");
+    button.className = `thumbnail${index === 0 ? " active" : ""}`;
+    button.type = "button";
+    button.setAttribute("aria-label", `Ver memória ${index + 1}: ${photo.titulo}`);
+    const image = document.createElement("img");
+    image.src = photo.imagem_url;
+    image.alt = "";
+    image.loading = "lazy";
+    image.decoding = "async";
+    button.append(image);
+    button.addEventListener("click", () => showPhoto(index));
+    thumbnails.append(button);
+  });
+
+  if (!originalAlbumPhotos.length) {
+    currentPhoto = 0;
+    $("#galleryImage").removeAttribute("src");
+    $("#galleryImage").alt = "";
+    $("#galleryCaption").textContent = "O álbum está esperando uma nova memória";
+    $("#galleryText").textContent = "Quando vocês publicarem uma foto nesta seção, ela aparecerá aqui.";
+    $("#galleryIndex").textContent = "0 de 0";
+    $("#galleryIndexPadded").textContent = "00";
+    $("#galleryPrev").disabled = true;
+    $("#galleryNext").disabled = true;
+    $("#galleryDiary").replaceChildren();
+    return;
+  }
+
+  $("#galleryPrev").disabled = false;
+  $("#galleryNext").disabled = false;
+  const preservedIndex = originalAlbumPhotos.findIndex((photo) => photo.id === activePhotoId);
+  currentPhoto = preservedIndex >= 0 ? preservedIndex : Math.min(currentPhoto, originalAlbumPhotos.length - 1);
+  showPhoto(currentPhoto, false);
+}
+
+function showPhoto(index, animate = true) {
+  if (!originalAlbumPhotos.length) return;
+  currentPhoto = (index + originalAlbumPhotos.length) % originalAlbumPhotos.length;
+  const photo = originalAlbumPhotos[currentPhoto];
+  const image = $("#galleryImage");
+
+  if (animate) image.classList.add("changing");
+
+  setTimeout(() => {
+    image.src = photo.imagem_url;
+    image.alt = photo.alt_texto || photo.titulo;
+    image.style.objectPosition = photo.posicao || "center";
+    $("#galleryCaption").textContent = photo.titulo;
+    $("#galleryText").textContent = photo.texto;
+    $("#galleryIndex").textContent = `${currentPhoto + 1} de ${originalAlbumPhotos.length}`;
+    $("#galleryIndexPadded").textContent = String(currentPhoto + 1).padStart(2, "0");
+    $$(".thumbnail").forEach((thumb, i) => thumb.classList.toggle("active", i === currentPhoto));
+    renderGalleryDiary();
+    image.classList.remove("changing");
+  }, animate ? 160 : 0);
+}
+
+function renderTimeline(items = [], repliesByPublication = latestRepliesByPublication) {
+  const timeline = $("#timeline");
+  timeline.replaceChildren();
+
+  items
+    .sort((left, right) => (left.ordem || 0) - (right.ordem || 0))
+    .forEach((item) => {
+    const article = document.createElement("article");
+    article.className = "timeline-item cloud-original reveal";
+    if (document.body.classList.contains("surprise-open")) article.classList.add("visible");
+    const dot = document.createElement("span");
+    dot.className = "timeline-dot";
+    dot.setAttribute("aria-hidden", "true");
+    const card = document.createElement("div");
+    card.className = "timeline-card";
+    const image = document.createElement("img");
+    image.src = item.imagem_url;
+    image.alt = item.alt_texto || item.titulo;
+    image.loading = "lazy";
+    image.decoding = "async";
+    image.style.objectPosition = item.posicao || "center";
+    const copy = document.createElement("div");
+    copy.className = "timeline-copy";
+    const date = document.createElement("time");
+    date.textContent = item.rotulo_data || formatPublicationDate(item.criado_em);
+    const title = document.createElement("h3");
+    title.textContent = item.titulo;
+    const text = document.createElement("p");
+    text.textContent = item.texto;
+    copy.append(date, title, text);
+    card.append(
+      image,
+      copy,
+      createPublicationReplyArea(
+        { publicationId: item.id, defaultAuthor: "Bianca" },
+        repliesByPublication.get(String(item.id)) || []
+      ),
+      createPublicationManager(item, {
+        deletePrompt: "Excluir esta foto da nuvem e da linha do tempo?"
+      })
+    );
+    article.append(dot, card);
+    timeline.append(article);
+  });
+
+  if (!items.length) {
+    const empty = document.createElement("p");
+    empty.className = "corner-empty timeline-empty";
+    empty.textContent = "A linha do tempo está esperando um novo capítulo ♥";
+    timeline.append(empty);
+  }
+}
+
+/* A música completa é reproduzida dentro da página pelo player oficial incorporado. */
+
+function revealOnScroll() {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("visible");
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12 });
+
+  $$(".reveal").forEach((element) => observer.observe(element));
+}
+
+function createFloatingHeart() {
+  if (!document.body.classList.contains("surprise-open")) return;
+
+  const heart = document.createElement("span");
+  heart.className = "floating-heart";
+  heart.textContent = Math.random() > 0.3 ? "♥" : "♡";
+  heart.style.left = `${Math.random() * 100}%`;
+  heart.style.fontSize = `${12 + Math.random() * 18}px`;
+  heart.style.animationDuration = `${5 + Math.random() * 5}s`;
+  $("#ambientHearts").append(heart);
+  setTimeout(() => heart.remove(), 10000);
+}
+
+function openExperience() {
+  document.body.classList.add("surprise-open");
+  surpriseContent.hidden = false;
+  activateSharedContent();
+  openSurprise.closest(".hero-content").classList.add("visible");
+  clearInterval(heartTimer);
+  if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    heartTimer = setInterval(createFloatingHeart, 1000);
+  }
+
+  const previewTarget = new URLSearchParams(location.search).has("preview") && location.hash
+    ? document.getElementById(location.hash.slice(1))
+    : null;
+
+  setTimeout(() => {
+    (previewTarget || surpriseContent).scrollIntoView({ behavior: "smooth" });
+  }, 350);
+
+  revealOnScroll();
+}
+
+function setGuestbookStatus(message, state = "") {
+  const status = $("#guestbookStatus");
+  status.textContent = message;
+  status.dataset.state = state;
+}
+
+const AUTHOR_OPTIONS = [
+  { value: "Bianca", label: "Bianca" },
+  { value: "Natã", label: "Natã" }
+];
+
+async function requestManagedContent(payload, editorCode) {
+  const response = await fetch(SUPABASE.url + "/functions/v1/" + SUPABASE.manageFunction, {
+    method: "POST",
+    headers: {
+      apikey: SUPABASE.publishableKey,
+      "x-editor-code": editorCode
+    },
+    body: payload
+  });
+
+  const result = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(result.error || "Não foi possível alterar esse conteúdo.");
+  return result;
+}
+
+function createManageField(config, item, contentType) {
+  const wrapper = document.createElement("div");
+  wrapper.className = "content-manager-field";
+
+  const label = document.createElement("label");
+  const fieldId = "manage-" + contentType + "-" + item.id + "-" + config.name;
+  label.htmlFor = fieldId;
+  label.textContent = config.label;
+
+  let field;
+  if (config.kind === "select") {
+    field = document.createElement("select");
+    (config.options || []).forEach((optionData) => {
+      const option = document.createElement("option");
+      option.value = optionData.value;
+      option.textContent = optionData.label;
+      option.selected = String(config.value ?? item[config.name] ?? "") === optionData.value;
+      field.append(option);
+    });
+  } else if (config.kind === "textarea") {
+    field = document.createElement("textarea");
+    field.rows = config.rows || 4;
+  } else {
+    field = document.createElement("input");
+    field.type = "text";
+  }
+
+  field.id = fieldId;
+  field.name = config.name;
+  if (config.kind !== "select") field.value = String(config.value ?? item[config.name] ?? "");
+  if (config.maxLength) field.maxLength = config.maxLength;
+  if (config.required !== false) field.required = true;
+  wrapper.append(label, field);
+  return wrapper;
+}
+
+function createContentManager(config) {
+  const details = document.createElement("details");
+  details.className = "content-manager";
+
+  const summary = document.createElement("summary");
+  summary.textContent = "Editar ou excluir";
+  details.append(summary);
+
+  const form = document.createElement("form");
+  form.className = "content-manager-form";
+  (config.fields || []).forEach((field) => {
+    form.append(createManageField(field, config.item, config.type));
+  });
+
+  if (config.allowImage) {
+    const imageField = document.createElement("div");
+    imageField.className = "content-manager-field";
+    const imageLabel = document.createElement("label");
+    imageLabel.htmlFor = "manage-" + config.type + "-" + config.item.id + "-imagem";
+    imageLabel.textContent = "Trocar foto, se quiser";
+    const image = document.createElement("input");
+    image.id = imageLabel.htmlFor;
+    image.name = "imagem";
+    image.type = "file";
+    image.accept = "image/jpeg,image/png,image/webp";
+    const hint = document.createElement("small");
+    hint.textContent = "Deixe vazio para manter a foto atual.";
+    imageField.append(imageLabel, image, hint);
+    form.append(imageField);
+  }
+
+  const codeField = document.createElement("div");
+  codeField.className = "content-manager-field";
+  const codeLabel = document.createElement("label");
+  codeLabel.htmlFor = "manage-" + config.type + "-" + config.item.id + "-codigo";
+  codeLabel.textContent = "Código reservado";
+  const code = document.createElement("input");
+  code.id = codeLabel.htmlFor;
+  code.name = "codigo";
+  code.type = "password";
+  code.autocomplete = "off";
+  code.placeholder = "Digite o código para confirmar";
+  code.required = true;
+  codeField.append(codeLabel, code);
+
+  const actions = document.createElement("div");
+  actions.className = "content-manager-actions";
+  const editButton = document.createElement("button");
+  editButton.className = "content-edit-button";
+  editButton.type = "submit";
+  editButton.textContent = "Salvar alterações";
+  const deleteButton = document.createElement("button");
+  deleteButton.className = "content-delete-button";
+  deleteButton.type = "button";
+  deleteButton.textContent = "Excluir";
+  actions.append(editButton, deleteButton);
+
+  const status = document.createElement("small");
+  status.className = "content-manager-status";
+  status.setAttribute("role", "status");
+  status.setAttribute("aria-live", "polite");
+  form.append(codeField, actions, status);
+
+  const setBusy = (busy) => {
+    editButton.disabled = busy;
+    deleteButton.disabled = busy;
+    code.disabled = busy;
+  };
+
+  const finishAction = async (action) => {
+    const editorCode = code.value;
+    if (!editorCode) {
+      status.textContent = "Digite o código reservado para continuar.";
+      status.dataset.state = "error";
+      code.focus();
+      return;
+    }
+
+    if (action === "excluir" && !window.confirm(config.deletePrompt || "Excluir esse conteúdo para sempre?")) {
+      return;
+    }
+
+    setBusy(true);
+    status.textContent = action === "editar" ? "Salvando alterações…" : "Excluindo…";
+    status.dataset.state = "";
+
+    try {
+      let payload;
+      if (action === "editar") {
+        payload = new FormData(form);
+        payload.delete("codigo");
+        const image = payload.get("imagem");
+        if (image instanceof File && image.size > 0) {
+          status.textContent = "Preparando a nova foto sem perder qualidade…";
+          const optimized = await optimizePublicationImage(image)
+            .catch(() => ({ file: image, optimized: false }));
+          const preparedImage = optimized.file || image;
+          payload.set("imagem", preparedImage, preparedImage.name);
+        } else {
+          payload.delete("imagem");
+        }
+      } else {
+        payload = new FormData();
+      }
+
+      payload.set("acao", action);
+      payload.set("tipo", config.type);
+      payload.set("id", String(config.item.id));
+      await requestManagedContent(payload, editorCode);
+      status.textContent = action === "editar" ? "Alterações salvas ♥" : "Conteúdo excluído.";
+      status.dataset.state = "success";
+      await config.reload();
+    } catch (error) {
+      status.textContent = error.message || "Não foi possível alterar esse conteúdo.";
+      status.dataset.state = "error";
+      setBusy(false);
+      if (status.textContent === "Código reservado incorreto.") {
+        code.value = "";
+        code.focus();
+      }
+    }
+  };
+
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+    void finishAction("editar");
+  });
+  deleteButton.addEventListener("click", () => void finishAction("excluir"));
+
+  details.append(form);
+  return details;
+}
+
+function createNoteCard(note) {
+  const card = document.createElement("article");
+  card.className = "note-card";
+
+  const strong = document.createElement("strong");
+  strong.textContent = note.nome;
+
+  const message = document.createElement("p");
+  message.textContent = note.mensagem;
+
+  const date = document.createElement("small");
+  const createdAt = new Date(note.criado_em);
+  date.textContent = Number.isNaN(createdAt.getTime())
+    ? "Recado guardado com carinho"
+    : new Intl.DateTimeFormat("pt-BR", {
+        dateStyle: "long",
+        timeStyle: "short"
+      }).format(createdAt);
+
+  card.append(
+    strong,
+    message,
+    date,
+    createContentManager({
+      type: "recado",
+      item: note,
+      fields: [
+        { name: "nome", label: "Nome", maxLength: 40 },
+        { name: "mensagem", label: "Recado", kind: "textarea", rows: 3, maxLength: 240 }
+      ],
+      reload: renderNotes,
+      deletePrompt: "Excluir este recado para sempre?"
+    })
+  );
+  return card;
+}
+
+async function renderNotes() {
+  const notesList = $("#notesList");
+  const loading = document.createElement("small");
+  loading.textContent = "Carregando os recados…";
+  notesList.replaceChildren(loading);
+
+  try {
+    const response = await fetch(
+      `${SUPABASE.url}/rest/v1/recados?select=id,nome,mensagem,criado_em&order=criado_em.desc&limit=50`,
+      { headers: { apikey: SUPABASE.publishableKey } }
+    );
+
+    if (!response.ok) throw new Error(`Não foi possível carregar os recados (${response.status}).`);
+
+    const notes = await response.json();
+    notesList.replaceChildren();
+
+    if (!notes.length) {
+      const empty = document.createElement("small");
+      empty.textContent = "Nenhum recado ainda. O primeiro pode ser seu ♥";
+      notesList.append(empty);
+      return;
+    }
+
+    notes.forEach((note) => notesList.append(createNoteCard(note)));
+  } catch (error) {
+    notesList.replaceChildren();
+    const warning = document.createElement("small");
+    warning.className = "notes-error";
+    warning.textContent = "Não foi possível carregar os recados agora. Tente novamente em instantes.";
+    notesList.append(warning);
+    console.error(error);
+  }
+}
+
+function formatPublicationDate(value) {
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "Uma nova lembrança";
+
+  return new Intl.DateTimeFormat("pt-BR", {
+    dateStyle: "long",
+    timeStyle: "short"
+  }).format(date);
+}
+
+function formatFuturePlanDate(value) {
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "um dia especial";
+
+  return new Intl.DateTimeFormat("pt-BR", { dateStyle: "long" }).format(date);
+}
+
+function setFuturePlanStatus(message, state = "") {
+  const status = $("#futurePlanStatus");
+  status.textContent = message;
+  status.dataset.state = state;
+}
+
+async function requestFuturePlan(payload, editorCode) {
+  const response = await fetch(`${SUPABASE.url}/functions/v1/${SUPABASE.plansFunction}`, {
+    method: "POST",
+    headers: {
+      apikey: SUPABASE.publishableKey,
+      "Content-Type": "application/json",
+      "x-editor-code": editorCode
+    },
+    body: JSON.stringify(payload)
+  });
+
+  const result = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(result.error || "Não foi possível atualizar nossos planos agora.");
+  return result;
+}
+
+async function completeFuturePlan(event, plan) {
+  event.preventDefault();
+
+  const form = event.currentTarget;
+  const codeField = form.elements.namedItem("codigo");
+  const status = form.querySelector(".future-complete-status");
+  const submitButton = form.querySelector('button[type="submit"]');
+  const editorCode = codeField.value;
+  if (!editorCode) return;
+
+  const originalLabel = submitButton.textContent;
+  submitButton.disabled = true;
+  submitButton.textContent = "Guardando…";
+  status.textContent = "Transformando este plano em um capítulo vivido…";
+  status.dataset.state = "";
+
+  try {
+    await requestFuturePlan({ acao: "concluir", id: plan.id }, editorCode);
+    await loadFuturePlans();
+  } catch (error) {
+    status.textContent = error.message || "Não foi possível marcar este plano agora.";
+    status.dataset.state = "error";
+    submitButton.disabled = false;
+    submitButton.textContent = originalLabel;
+  }
+}
+
+function transformFuturePlanIntoMemory(plan) {
+  const title = String(plan.titulo || "Nosso plano virou memória");
+  $("#publicationSection").value = "historia";
+  $("#publicationTitle").value = title.length > 80 ? `${title.slice(0, 77)}…` : title;
+  $("#publicationText").value = plan.detalhes
+    ? `Nós tiramos este plano do papel: ${plan.detalhes}`
+    : "Mais um sonho saiu da nossa lista e virou uma lembrança para guardar para sempre.";
+  updatePublicationDesign();
+  setPublicationStatus("Plano preenchido! Agora escolha uma foto desse dia para transformá-lo em memória ♥", "success");
+
+  const form = $("#publicationForm");
+  form.classList.add("prefilled-from-plan");
+  $("#adicionar").scrollIntoView({ behavior: "smooth", block: "start" });
+  setTimeout(() => {
+    form.classList.remove("prefilled-from-plan");
+    $("#publicationImage").focus({ preventScroll: true });
+  }, 850);
+}
+
+function createFuturePlanCard(plan) {
+  const category = FUTURE_PLAN_CATEGORIES[plan.categoria] || FUTURE_PLAN_CATEGORIES.outro;
+  const article = document.createElement("article");
+  article.className = `future-plan-card${plan.concluido ? " is-complete" : ""}`;
+  article.dataset.futurePlanId = String(plan.id);
+
+  const meta = document.createElement("div");
+  meta.className = "future-plan-meta";
+
+  const badge = document.createElement("span");
+  badge.className = "future-plan-badge";
+  badge.textContent = `${category.symbol} ${category.label}`;
+
+  const author = document.createElement("span");
+  author.textContent = `Sonho de ${plan.autor}`;
+  meta.append(badge, author);
+
+  const title = document.createElement("h4");
+  title.textContent = plan.titulo;
+
+  article.append(meta, title);
+
+  if (plan.detalhes) {
+    const details = document.createElement("p");
+    details.textContent = plan.detalhes;
+    article.append(details);
+  }
+
+  const footer = document.createElement("div");
+  footer.className = "future-plan-footer";
+
+  if (plan.concluido) {
+    const lived = document.createElement("span");
+    lived.className = "future-lived-label";
+    lived.textContent = `✓ Vivido em ${formatFuturePlanDate(plan.concluido_em)}`;
+
+    const transformButton = document.createElement("button");
+    transformButton.className = "future-transform-button";
+    transformButton.type = "button";
+    transformButton.textContent = "Transformar em memória";
+    transformButton.addEventListener("click", () => transformFuturePlanIntoMemory(plan));
+    footer.append(lived, transformButton);
+  } else {
+    const added = document.createElement("small");
+    added.textContent = `Guardado em ${formatFuturePlanDate(plan.criado_em)}`;
+
+    const composer = document.createElement("details");
+    composer.className = "future-complete-composer";
+    const summary = document.createElement("summary");
+    summary.textContent = "Marcar como vivido ✓";
+
+    const form = document.createElement("form");
+    form.className = "future-complete-form";
+    const label = document.createElement("label");
+    label.htmlFor = `future-complete-code-${plan.id}`;
+    label.textContent = "Código reservado";
+    const code = document.createElement("input");
+    code.id = label.htmlFor;
+    code.name = "codigo";
+    code.type = "password";
+    code.autocomplete = "off";
+    code.placeholder = "Digite o código";
+    code.required = true;
+    const button = document.createElement("button");
+    button.type = "submit";
+    button.textContent = "Sim, nós vivemos isso ♥";
+    const status = document.createElement("small");
+    status.className = "future-complete-status";
+    status.setAttribute("role", "status");
+    status.setAttribute("aria-live", "polite");
+
+    form.append(label, code, button, status);
+    form.addEventListener("submit", (event) => completeFuturePlan(event, plan));
+    composer.append(summary, form);
+    footer.append(added, composer);
+  }
+
+  article.append(
+    footer,
+    createContentManager({
+      type: "plano",
+      item: plan,
+      fields: [
+        { name: "autor", label: "Quem adicionou?", kind: "select", options: AUTHOR_OPTIONS },
+        {
+          name: "categoria",
+          label: "Categoria",
+          kind: "select",
+          options: Object.entries(FUTURE_PLAN_CATEGORIES).map(([value, data]) => ({
+            value,
+            label: data.label
+          }))
+        },
+        { name: "titulo", label: "Título", maxLength: 100 },
+        { name: "detalhes", label: "Detalhes", kind: "textarea", rows: 3, maxLength: 600, required: false }
+      ],
+      reload: loadFuturePlans,
+      deletePrompt: "Excluir este plano da história de vocês?"
+    })
+  );
+  return article;
+}
+
+function createFuturePlanGroup(titleText, plans, completed) {
+  const section = document.createElement("section");
+  section.className = `future-plan-group${completed ? " completed-group" : ""}`;
+
+  const heading = document.createElement("h3");
+  heading.textContent = titleText;
+  const grid = document.createElement("div");
+  grid.className = "future-plan-grid";
+  plans.forEach((plan) => grid.append(createFuturePlanCard(plan)));
+  section.append(heading, grid);
+  return section;
+}
+
+function renderFuturePlans(plans) {
+  latestFuturePlans = plans;
+  const pending = plans.filter((plan) => !plan.concluido);
+  const completed = plans.filter((plan) => plan.concluido);
+  $("#futurePendingCount").textContent = pending.length;
+  $("#futureCompletedCount").textContent = completed.length;
+
+  const list = $("#futurePlansList");
+  list.replaceChildren();
+
+  if (!plans.length) {
+    const empty = document.createElement("div");
+    empty.className = "future-empty";
+    const heart = document.createElement("span");
+    heart.setAttribute("aria-hidden", "true");
+    heart.textContent = "♡";
+    const title = document.createElement("strong");
+    title.textContent = "Nossa lista ainda está esperando o primeiro sonho.";
+    const text = document.createElement("p");
+    text.textContent = "Pode ser uma viagem, um encontro simples ou qualquer coisa que vocês queiram viver juntos.";
+    empty.append(heart, title, text);
+    list.append(empty);
+    return;
+  }
+
+  if (pending.length) {
+    list.append(createFuturePlanGroup("Próximos capítulos", pending, false));
+  }
+  if (completed.length) {
+    list.append(createFuturePlanGroup("Sonhos que já viraram história", completed, true));
+  }
+}
+
+async function loadFuturePlans() {
+  try {
+    const response = await fetch(
+      `${SUPABASE.url}/rest/v1/planos_futuros?select=id,titulo,detalhes,categoria,autor,concluido,concluido_em,criado_em&order=concluido.asc,criado_em.desc`,
+      { headers: { apikey: SUPABASE.publishableKey } }
+    );
+
+    if (!response.ok) throw new Error(`Não foi possível carregar os planos (${response.status}).`);
+    renderFuturePlans(await response.json());
+  } catch (error) {
+    console.error(error);
+    if (!latestFuturePlans.length) {
+      const warning = document.createElement("p");
+      warning.className = "future-empty future-error";
+      warning.textContent = "Não foi possível carregar nossos próximos capítulos agora. Tente novamente em instantes.";
+      $("#futurePlansList").replaceChildren(warning);
+    }
+  }
+}
+
+function formatCornerDate(value, withTime = false) {
+  const date = /^\d{4}-\d{2}-\d{2}$/.test(String(value))
+    ? new Date(`${value}T12:00:00`)
+    : new Date(value);
+  if (Number.isNaN(date.getTime())) return "Uma data para guardar";
+
+  return new Intl.DateTimeFormat("pt-BR", withTime
+    ? { dateStyle: "long", timeStyle: "short" }
+    : { dateStyle: "long" }).format(date);
+}
+
+function setCornerStatus(selector, message, state = "") {
+  const status = $(selector);
+  status.textContent = message;
+  status.dataset.state = state;
+}
+
+function setupDateIdea() {
+  const today = new Date();
+  const longDate = new Intl.DateTimeFormat("pt-BR", {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+    year: "numeric"
+  }).format(today);
+  const naturalDate = longDate.charAt(0).toUpperCase() + longDate.slice(1);
+  $("#dateTodayLabel").textContent = `Hoje é ${naturalDate}. Que tal transformar o dia em uma lembrança nova?`;
+  $("#dailyFormDate").textContent = naturalDate;
+  chooseDateIdea(true);
+}
+
+function getDateIdeaFilters() {
+  return {
+    place: $("#datePlaceFilter").value,
+    budget: $("#dateBudgetFilter").value,
+    duration: $("#dateDurationFilter").value
+  };
+}
+
+function getFilteredDateIdeas() {
+  const { place, budget, duration } = getDateIdeaFilters();
+  const filtered = DATE_IDEAS.filter((idea) => (
+    (place === "todos" || idea.place === place)
+    && (budget === "todos" || idea.budget === budget)
+    && (duration === "todos" || idea.duration === duration)
+  ));
+  return filtered.length ? filtered : DATE_IDEAS;
+}
+
+function renderDateIdea(idea) {
+  currentDateIdea = idea;
+  const placeLabel = idea.place === "casa" ? "Em casa" : "Fora de casa";
+  const budgetLabel = {
+    gratis: "sem gastar",
+    baixo: "econômico",
+    especial: "algo especial"
+  }[idea.budget];
+
+  $("#dateIdeaTag").textContent = `${placeLabel} · ${budgetLabel}`;
+  $("#dateIdeaOrigin").innerHTML = '<span aria-hidden="true">✦</span> Sugestão sorteada';
+  $("#dateIdeaTitle").textContent = idea.title;
+  $("#dateIdeaDescription").textContent = idea.description;
+  const specialTouch = String(idea.specialTouch || "").trim();
+  $("#dateIdeaExtra").hidden = !specialTouch;
+  $("#dateIdeaSpecialTouch").textContent = specialTouch;
+  $("#dateIdeaPlace").textContent = DATE_IDEA_LABELS.place[idea.place];
+  $("#dateIdeaBudget").textContent = DATE_IDEA_LABELS.budget[idea.budget];
+  $("#dateIdeaDuration").textContent = DATE_IDEA_LABELS.duration[idea.duration];
+  setCornerStatus("#dateSaveStatus", "");
+}
+
+function chooseDateIdea(deterministic = false) {
+  const ideas = getFilteredDateIdeas();
+  let index;
+
+  if (deterministic) {
+    const now = new Date();
+    const seed = Number(`${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, "0")}${String(now.getDate()).padStart(2, "0")}`);
+    index = seed % ideas.length;
+  } else {
+    index = Math.floor(Math.random() * ideas.length);
+    if (ideas.length > 1 && ideas[index] === currentDateIdea) index = (index + 1) % ideas.length;
+  }
+
+  renderDateIdea(ideas[index]);
+}
+
+function setDateIdeaStatus(message, state = "") {
+  const status = $("#dateIdeaStatus");
+  status.textContent = message;
+  status.dataset.state = state;
+}
+
+function createDateIdea() {
+  chooseDateIdea(false);
+  setDateIdeaStatus("Pronto! A ideia respeita as escolhas de vocês e não custa nada para gerar ♥", "success");
+}
+
+async function requestCoupleCorner(payload, editorCode) {
+  const isFormData = payload instanceof FormData;
+  const headers = {
+    apikey: SUPABASE.publishableKey,
+    "x-editor-code": editorCode
+  };
+  if (!isFormData) headers["Content-Type"] = "application/json";
+
+  const response = await fetch(`${SUPABASE.url}/functions/v1/${SUPABASE.cornerFunction}`, {
+    method: "POST",
+    headers,
+    body: isFormData ? payload : JSON.stringify(payload)
+  });
+
+  const result = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(result.error || "Não foi possível guardar isso agora.");
+  return result;
+}
+
+function createCornerEmpty(message) {
+  const empty = document.createElement("p");
+  empty.className = "corner-empty";
+  empty.textContent = message;
+  return empty;
+}
+
+function renderDailyEntries(entries) {
+  const list = $("#dailyEntriesList");
+  list.replaceChildren();
+  if (!entries.length) {
+    list.append(createCornerEmpty("O primeiro registro de vocês ainda está esperando para ser escrito ♥"));
+    return;
+  }
+
+  entries.forEach((entry) => {
+    const type = DAILY_ENTRY_TYPES[entry.tipo] || DAILY_ENTRY_TYPES.coisas_boas;
+    const card = document.createElement("article");
+    card.className = "daily-entry-card";
+
+    const header = document.createElement("div");
+    const badge = document.createElement("span");
+    badge.className = "daily-entry-badge";
+    badge.textContent = `${type.symbol} ${type.label}`;
+    const date = document.createElement("time");
+    date.dateTime = entry.data;
+    date.textContent = formatCornerDate(entry.data);
+    header.append(badge, date);
+
+    const author = document.createElement("h4");
+    author.textContent = `Escrito por ${entry.autor}`;
+    const items = document.createElement("ol");
+    [entry.item_1, entry.item_2, entry.item_3].forEach((item) => {
+      const row = document.createElement("li");
+      row.textContent = item;
+      items.append(row);
+    });
+
+    card.append(
+      header,
+      author,
+      items,
+      createContentManager({
+        type: "registro",
+        item: entry,
+        fields: [
+          { name: "autor", label: "Quem escreveu?", kind: "select", options: AUTHOR_OPTIONS },
+          {
+            name: "categoria",
+            label: "Tipo de registro",
+            kind: "select",
+            value: entry.tipo,
+            options: Object.entries(DAILY_ENTRY_TYPES).map(([value, data]) => ({
+              value,
+              label: data.label
+            }))
+          },
+          { name: "item_1", label: "Primeira coisa", kind: "textarea", rows: 2, maxLength: 240 },
+          { name: "item_2", label: "Segunda coisa", kind: "textarea", rows: 2, maxLength: 240 },
+          { name: "item_3", label: "Terceira coisa", kind: "textarea", rows: 2, maxLength: 240 }
+        ],
+        reload: loadDailyEntries,
+        deletePrompt: "Excluir este registro do dia?"
+      })
+    );
+    list.append(card);
+  });
+}
+
+async function loadDailyEntries() {
+  try {
+    const response = await fetch(
+      `${SUPABASE.url}/rest/v1/registros_diarios?select=id,data,autor,tipo,item_1,item_2,item_3,criado_em&order=data.desc,criado_em.desc&limit=60`,
+      { headers: { apikey: SUPABASE.publishableKey } }
+    );
+    if (!response.ok) throw new Error(`Não foi possível carregar os registros (${response.status}).`);
+    renderDailyEntries(await response.json());
+  } catch (error) {
+    console.error(error);
+    $("#dailyEntriesList").replaceChildren(createCornerEmpty("Não foi possível carregar os registros agora."));
+  }
+}
+
+function renderLetters(letters) {
+  const list = $("#lettersList");
+  list.replaceChildren();
+  if (!letters.length) {
+    list.append(createCornerEmpty("Ainda não chegou nenhuma carta. A primeira pode ser escrita hoje ♥"));
+    return;
+  }
+
+  letters.forEach((letter, index) => {
+    const card = document.createElement("details");
+    card.className = "letter-card";
+    if (index === 0) card.open = true;
+
+    const summary = document.createElement("summary");
+    const stamp = document.createElement("span");
+    stamp.textContent = letter.autor === "Bianca" ? "B" : "N";
+    const summaryCopy = document.createElement("div");
+    const title = document.createElement("strong");
+    title.textContent = letter.titulo;
+    const meta = document.createElement("small");
+    const recipient = letter.autor === "Bianca" ? "Natã" : "Bianca";
+    meta.textContent = `De ${letter.autor} para ${recipient} · ${formatCornerDate(letter.criado_em)}`;
+    summaryCopy.append(title, meta);
+    summary.append(stamp, summaryCopy);
+
+    const body = document.createElement("div");
+    body.className = "letter-card-body";
+    const text = document.createElement("p");
+    text.textContent = letter.texto;
+    const signature = document.createElement("span");
+    signature.textContent = `Com carinho, ${letter.autor} ♥`;
+    body.append(
+      text,
+      signature,
+      createContentManager({
+        type: "carta",
+        item: letter,
+        fields: [
+          { name: "autor", label: "Quem escreveu?", kind: "select", options: AUTHOR_OPTIONS },
+          { name: "titulo", label: "Título", maxLength: 100 },
+          { name: "texto", label: "Carta", kind: "textarea", rows: 8, maxLength: 5000 }
+        ],
+        reload: loadLetters,
+        deletePrompt: "Excluir esta carta para sempre?"
+      })
+    );
+    card.append(summary, body);
+    list.append(card);
+  });
+}
+
+async function loadLetters() {
+  try {
+    const response = await fetch(
+      `${SUPABASE.url}/rest/v1/cartas?select=id,autor,titulo,texto,criado_em&order=criado_em.desc&limit=50`,
+      { headers: { apikey: SUPABASE.publishableKey } }
+    );
+    if (!response.ok) throw new Error(`Não foi possível carregar as cartas (${response.status}).`);
+    renderLetters(await response.json());
+  } catch (error) {
+    console.error(error);
+    $("#lettersList").replaceChildren(createCornerEmpty("Não foi possível carregar as cartas agora."));
+  }
+}
+
+async function submitComplaintInterpretation(event, complaint) {
+  event.preventDefault();
+  const form = event.currentTarget;
+  const author = form.elements.namedItem("autor").value;
+  const message = form.elements.namedItem("mensagem").value.trim();
+  const editorCode = form.elements.namedItem("codigo").value;
+  const button = form.querySelector('button[type="submit"]');
+  const status = form.querySelector(".complaint-interpretation-status");
+  if (!author || !message || !editorCode) return;
+
+  const originalLabel = button.textContent;
+  button.disabled = true;
+  button.textContent = "Guardando…";
+  status.textContent = "Guardando sua interpretação…";
+  status.dataset.state = "";
+
+  try {
+    await requestCoupleCorner({
+      acao: "interpretacao",
+      reclamacao_id: complaint.id,
+      autor: author,
+      mensagem: message
+    }, editorCode);
+    await loadComplaints();
+  } catch (error) {
+    status.textContent = error.message || "Não foi possível guardar a interpretação.";
+    status.dataset.state = "error";
+    button.disabled = false;
+    button.textContent = originalLabel;
+  }
+}
+
+function createComplaintCard(complaint, interpretations) {
+  const card = document.createElement("article");
+  card.className = "complaint-card";
+
+  const figure = document.createElement("figure");
+  const image = document.createElement("img");
+  image.src = complaint.imagem_url;
+  image.alt = `Reclamação misteriosa enviada por ${complaint.autor}`;
+  image.loading = "lazy";
+  image.decoding = "async";
+  const tape = document.createElement("span");
+  tape.className = "complaint-tape";
+  tape.setAttribute("aria-hidden", "true");
+  figure.append(tape, image);
+
+  const copy = document.createElement("div");
+  copy.className = "complaint-copy";
+  const meta = document.createElement("span");
+  meta.textContent = `Reclamação de ${complaint.autor} · ${formatCornerDate(complaint.criado_em)}`;
+  const title = document.createElement("h3");
+  title.textContent = "O que essa foto quer dizer?";
+  copy.append(meta, title);
+
+  const replies = document.createElement("div");
+  replies.className = "complaint-interpretations";
+  if (interpretations.length) {
+    interpretations.forEach((interpretation) => {
+      const reply = document.createElement("div");
+      const author = document.createElement("strong");
+      author.textContent = interpretation.autor;
+      const text = document.createElement("p");
+      text.textContent = interpretation.mensagem;
+      const date = document.createElement("small");
+      date.textContent = formatCornerDate(interpretation.criado_em, true);
+      reply.append(
+        author,
+        text,
+        date,
+        createContentManager({
+          type: "interpretacao",
+          item: interpretation,
+          fields: [
+            { name: "autor", label: "Quem escreveu?", kind: "select", options: AUTHOR_OPTIONS },
+            { name: "mensagem", label: "Interpretação", kind: "textarea", rows: 3, maxLength: 1000 }
+          ],
+          reload: loadComplaints,
+          deletePrompt: "Excluir esta interpretação?"
+        })
+      );
+      replies.append(reply);
+    });
+  } else {
+    replies.append(createCornerEmpty("Ninguém decifrou esta reclamação ainda."));
+  }
+
+  const composer = document.createElement("details");
+  composer.className = "complaint-interpretation-composer";
+  const summary = document.createElement("summary");
+  summary.textContent = "Tentar interpretar 💃🏻";
+  const form = document.createElement("form");
+  const authorLabel = document.createElement("label");
+  authorLabel.htmlFor = `complaint-author-${complaint.id}`;
+  authorLabel.textContent = "Quem está interpretando?";
+  const author = document.createElement("select");
+  author.id = authorLabel.htmlFor;
+  author.name = "autor";
+  ["Bianca", "Natã"].forEach((name) => {
+    const option = document.createElement("option");
+    option.value = name;
+    option.textContent = name;
+    option.selected = name !== complaint.autor;
+    author.append(option);
+  });
+  const messageLabel = document.createElement("label");
+  messageLabel.htmlFor = `complaint-message-${complaint.id}`;
+  messageLabel.textContent = "Minha interpretação";
+  const message = document.createElement("textarea");
+  message.id = messageLabel.htmlFor;
+  message.name = "mensagem";
+  message.maxLength = 1000;
+  message.placeholder = "Eu acho que essa foto está reclamando que…";
+  message.required = true;
+  const codeLabel = document.createElement("label");
+  codeLabel.htmlFor = `complaint-code-${complaint.id}`;
+  codeLabel.textContent = "Código reservado";
+  const code = document.createElement("input");
+  code.id = codeLabel.htmlFor;
+  code.name = "codigo";
+  code.type = "password";
+  code.autocomplete = "off";
+  code.placeholder = "Digite o código";
+  code.required = true;
+  const button = document.createElement("button");
+  button.type = "submit";
+  button.textContent = "Guardar interpretação";
+  const status = document.createElement("small");
+  status.className = "complaint-interpretation-status";
+  status.setAttribute("role", "status");
+  status.setAttribute("aria-live", "polite");
+  form.append(authorLabel, author, messageLabel, message, codeLabel, code, button, status);
+  form.addEventListener("submit", (event) => submitComplaintInterpretation(event, complaint));
+  composer.append(summary, form);
+
+  copy.append(
+    replies,
+    composer,
+    createContentManager({
+      type: "reclamacao",
+      item: complaint,
+      fields: [
+        { name: "autor", label: "Quem enviou?", kind: "select", options: AUTHOR_OPTIONS }
+      ],
+      allowImage: true,
+      reload: loadComplaints,
+      deletePrompt: "Excluir esta reclamação e todas as interpretações dela?"
+    })
+  );
+  card.append(figure, copy);
+  return card;
+}
+
+function renderComplaints(complaints, interpretations) {
+  const list = $("#complaintsList");
+  list.replaceChildren();
+  if (!complaints.length) {
+    list.append(createCornerEmpty("Nenhuma reclamação misteriosa ainda. Isso parece suspeito…"));
+    return;
+  }
+
+  const grouped = new Map();
+  interpretations.forEach((interpretation) => {
+    const key = String(interpretation.reclamacao_id);
+    if (!grouped.has(key)) grouped.set(key, []);
+    grouped.get(key).push(interpretation);
+  });
+  complaints.forEach((complaint) => {
+    list.append(createComplaintCard(complaint, grouped.get(String(complaint.id)) || []));
+  });
+}
+
+async function loadComplaints() {
+  try {
+    const [complaintsResponse, interpretationsResponse] = await Promise.all([
+      fetch(
+        `${SUPABASE.url}/rest/v1/reclamacoes?select=id,autor,imagem_url,criado_em&order=criado_em.desc&limit=40`,
+        { headers: { apikey: SUPABASE.publishableKey } }
+      ),
+      fetch(
+        `${SUPABASE.url}/rest/v1/interpretacoes_reclamacao?select=id,reclamacao_id,autor,mensagem,criado_em&order=criado_em.asc&limit=200`,
+        { headers: { apikey: SUPABASE.publishableKey } }
+      )
+    ]);
+    if (!complaintsResponse.ok || !interpretationsResponse.ok) {
+      throw new Error("Não foi possível carregar as reclamações.");
+    }
+    renderComplaints(await complaintsResponse.json(), await interpretationsResponse.json());
+  } catch (error) {
+    console.error(error);
+    $("#complaintsList").replaceChildren(createCornerEmpty("Não foi possível carregar as reclamações agora."));
+  }
+}
+
+async function loadCoupleCorner() {
+  await Promise.all([loadDailyEntries(), loadLetters(), loadComplaints()]);
+}
+
+function createReplyCard(reply) {
+  const article = document.createElement("article");
+  article.className = "publication-reply";
+
+  const header = document.createElement("div");
+  const author = document.createElement("strong");
+  author.textContent = reply.autor;
+  const date = document.createElement("time");
+  date.dateTime = reply.criado_em;
+  date.textContent = formatPublicationDate(reply.criado_em);
+  header.append(author, date);
+
+  const message = document.createElement("p");
+  message.textContent = reply.mensagem;
+  article.append(
+    header,
+    message,
+    createContentManager({
+      type: "resposta",
+      item: reply,
+      fields: [
+        { name: "autor", label: "Quem escreveu?", kind: "select", options: AUTHOR_OPTIONS },
+        { name: "mensagem", label: "Resposta", kind: "textarea", rows: 3, maxLength: 1000 }
+      ],
+      reload: loadPublications,
+      deletePrompt: "Excluir esta resposta do Nosso diário?"
+    })
+  );
+  return article;
+}
+
+function groupPublicationReplies(replies = []) {
+  const byPublication = new Map();
+  const byMemory = new Map();
+
+  replies.forEach((reply) => {
+    const map = reply.publicacao_id != null ? byPublication : byMemory;
+    const key = reply.publicacao_id != null ? String(reply.publicacao_id) : String(reply.memoria_chave || "");
+    if (!key) return;
+    if (!map.has(key)) map.set(key, []);
+    map.get(key).push(reply);
+  });
+
+  return { byPublication, byMemory };
+}
+
+function renderGalleryDiary() {
+  const container = $("#galleryDiary");
+  if (!container) return;
+  const publication = originalAlbumPhotos[currentPhoto];
+  if (!publication) {
+    container.replaceChildren();
+    return;
+  }
+
+  container.replaceChildren(
+    createPublicationReplyArea(
+      { publicationId: publication.id, defaultAuthor: "Bianca" },
+      latestRepliesByPublication.get(String(publication.id)) || []
+    ),
+    createPublicationManager(publication, {
+      deletePrompt: "Excluir esta foto da nuvem, do álbum e todas as respostas escritas nela?"
+    })
+  );
+}
+
+async function submitPublicationReply(event) {
+  event.preventDefault();
+
+  const form = event.currentTarget;
+  const publicationId = form.dataset.publicationId;
+  const memoryKey = form.dataset.memoryKey;
+  const replyTarget = form.dataset.replyTarget;
+  const authorField = form.elements.namedItem("autor");
+  const messageField = form.elements.namedItem("mensagem");
+  const codeField = form.elements.namedItem("codigo");
+  const status = form.querySelector(".publication-reply-status");
+  const submitButton = form.querySelector('button[type="submit"]');
+  const author = authorField.value;
+  const message = messageField.value.trim();
+  const editorCode = codeField.value;
+
+  if ((!publicationId && !memoryKey) || !author || !message || !editorCode) return;
+
+  const originalLabel = submitButton.textContent;
+  submitButton.disabled = true;
+  submitButton.textContent = "Guardando…";
+  status.textContent = "Guardando sua resposta no nosso diário…";
+  status.dataset.state = "";
+
+  try {
+    const response = await fetch(`${SUPABASE.url}/functions/v1/${SUPABASE.replyFunction}`, {
+      method: "POST",
+      headers: {
+        apikey: SUPABASE.publishableKey,
+        "Content-Type": "application/json",
+        "x-editor-code": editorCode
+      },
+      body: JSON.stringify({
+        publicacao_id: publicationId || null,
+        memoria_chave: memoryKey || null,
+        autor: author,
+        mensagem: message
+      })
+    });
+
+    const result = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(result.error || "Não foi possível guardar a resposta agora.");
+
+    form.reset();
+    await loadPublications();
+    const replyArea = document.querySelector(`[data-reply-target="${replyTarget}"]`);
+    if (replyArea) {
+      replyArea.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  } catch (error) {
+    status.textContent = error.message || "Não foi possível guardar a resposta agora.";
+    status.dataset.state = "error";
+  } finally {
+    submitButton.disabled = false;
+    submitButton.textContent = originalLabel;
+  }
+}
+
+function createPublicationReplyArea(target, replies) {
+  const publicationId = target.publicationId != null ? String(target.publicationId) : "";
+  const memoryKey = target.memoryKey || "";
+  const replyTarget = publicationId ? `publicacao-${publicationId}` : memoryKey;
+  const section = document.createElement("section");
+  section.className = "publication-replies";
+  section.dataset.replyTarget = replyTarget;
+
+  const heading = document.createElement("div");
+  heading.className = "publication-replies-heading";
+  const eyebrow = document.createElement("span");
+  eyebrow.textContent = "Nosso diário";
+  const title = document.createElement("h5");
+  title.textContent = replies.length ? "O que essa memória despertou em nós" : "Uma resposta esperando para nascer";
+  heading.append(eyebrow, title);
+  section.append(heading);
+
+  if (replies.length) {
+    const list = document.createElement("div");
+    list.className = "publication-replies-list";
+    replies.forEach((reply) => list.append(createReplyCard(reply)));
+    section.append(list);
+  } else {
+    const empty = document.createElement("p");
+    empty.className = "publication-replies-empty";
+    empty.textContent = "Esta lembrança ainda pode ganhar palavras novas de vocês dois.";
+    section.append(empty);
+  }
+
+  const composer = document.createElement("details");
+  composer.className = "publication-reply-composer";
+  const summary = document.createElement("summary");
+  summary.textContent = replies.length ? "Continuar esta conversa ♥" : "Escrever uma resposta ♥";
+
+  const form = document.createElement("form");
+  form.className = "publication-reply-form";
+  form.dataset.publicationId = publicationId;
+  form.dataset.memoryKey = memoryKey;
+  form.dataset.replyTarget = replyTarget;
+
+  const authorLabel = document.createElement("label");
+  authorLabel.htmlFor = `reply-author-${replyTarget}`;
+  authorLabel.textContent = "Quem está escrevendo?";
+  const author = document.createElement("select");
+  author.id = authorLabel.htmlFor;
+  author.name = "autor";
+  author.required = true;
+  ["Bianca", "Natã"].forEach((name) => {
+    const option = document.createElement("option");
+    option.value = name;
+    option.textContent = name;
+    option.selected = name === target.defaultAuthor;
+    author.append(option);
+  });
+
+  const messageLabel = document.createElement("label");
+  messageLabel.htmlFor = `reply-message-${replyTarget}`;
+  messageLabel.textContent = "Sua resposta";
+  const textarea = document.createElement("textarea");
+  textarea.id = messageLabel.htmlFor;
+  textarea.name = "mensagem";
+  textarea.maxLength = 1000;
+  textarea.rows = 4;
+  textarea.placeholder = "Escreva o que essa lembrança fez você sentir…";
+  textarea.required = true;
+
+  const codeLabel = document.createElement("label");
+  codeLabel.htmlFor = `reply-code-${replyTarget}`;
+  codeLabel.textContent = "Código reservado";
+  const code = document.createElement("input");
+  code.id = codeLabel.htmlFor;
+  code.name = "codigo";
+  code.type = "password";
+  code.autocomplete = "off";
+  code.placeholder = "Digite o código para responder";
+  code.required = true;
+
+  const actions = document.createElement("div");
+  actions.className = "publication-reply-actions";
+  const button = document.createElement("button");
+  button.type = "submit";
+  button.textContent = "Guardar resposta ♥";
+  const status = document.createElement("small");
+  status.className = "publication-reply-status";
+  status.setAttribute("role", "status");
+  status.setAttribute("aria-live", "polite");
+  actions.append(button, status);
+
+  form.append(authorLabel, author, messageLabel, textarea, codeLabel, code, actions);
+  form.addEventListener("submit", submitPublicationReply);
+  composer.append(summary, form);
+  section.append(composer);
+  return section;
+}
+
+function createPublicationManager(publication, options = {}) {
+  return createContentManager({
+    type: "publicacao",
+    item: publication,
+    fields: [
+      { name: "titulo", label: "Título", maxLength: 80 },
+      { name: "texto", label: "Texto", kind: "textarea", rows: 5, maxLength: 1000 }
+    ],
+    allowImage: true,
+    reload: loadPublications,
+    deletePrompt: options.deletePrompt || "Excluir esta memória, a foto e as respostas escritas nela?"
+  });
+}
+
+function createMemoryPublicationCard(publication, replies) {
+  const article = document.createElement("article");
+  article.className = "memory-live-card";
+
+  const figure = document.createElement("figure");
+  const tape = document.createElement("span");
+  tape.className = "memory-live-tape";
+  tape.setAttribute("aria-hidden", "true");
+  const image = document.createElement("img");
+  image.src = publication.imagem_url;
+  image.alt = publication.titulo;
+  image.loading = "lazy";
+  image.decoding = "async";
+  figure.append(tape, image);
+
+  const copy = document.createElement("div");
+  copy.className = "memory-live-copy";
+
+  const date = document.createElement("time");
+  date.dateTime = publication.criado_em;
+  date.textContent = formatPublicationDate(publication.criado_em);
+
+  const title = document.createElement("h4");
+  title.textContent = publication.titulo;
+
+  const text = document.createElement("p");
+  text.textContent = publication.texto;
+
+  copy.append(date, title, text);
+  article.append(
+    figure,
+    copy,
+    createPublicationReplyArea({ publicationId: publication.id, defaultAuthor: "Natã" }, replies),
+    createPublicationManager(publication)
+  );
+  return article;
+}
+
+function createTimelinePublicationItem(publication, replies) {
+  const article = document.createElement("article");
+  article.className = "timeline-item user-added visible";
+
+  const dot = document.createElement("span");
+  dot.className = "timeline-dot";
+  dot.setAttribute("aria-hidden", "true");
+
+  const card = document.createElement("div");
+  card.className = "timeline-card";
+
+  const image = document.createElement("img");
+  image.src = publication.imagem_url;
+  image.alt = publication.titulo;
+  image.loading = "lazy";
+  image.decoding = "async";
+
+  const copy = document.createElement("div");
+  copy.className = "timeline-copy";
+
+  const date = document.createElement("time");
+  date.dateTime = publication.criado_em;
+  date.textContent = formatPublicationDate(publication.criado_em);
+
+  const title = document.createElement("h3");
+  title.textContent = publication.titulo;
+
+  const text = document.createElement("p");
+  text.textContent = publication.texto;
+
+  copy.append(date, title, text);
+  card.append(
+    image,
+    copy,
+    createPublicationReplyArea({ publicationId: publication.id, defaultAuthor: "Natã" }, replies),
+    createPublicationManager(publication)
+  );
+  article.append(dot, card);
+  return article;
+}
+
+function renderPublications(publications, replies) {
+  latestPublicationReplies = replies;
+  const { byPublication: repliesByPublication } = groupPublicationReplies(replies);
+  latestRepliesByPublication = repliesByPublication;
+
+  const originalAlbum = publications.filter(
+    (post) => post.origem === "original" && post.secao === "fotos"
+  );
+  const originalTimeline = publications.filter(
+    (post) => post.origem === "original" && post.secao === "historia"
+  );
+  const addedPublications = publications.filter((post) => post.origem !== "original");
+
+  renderGallery(originalAlbum);
+  renderTimeline(originalTimeline, repliesByPublication);
+  const albumCount = $("#albumMemoryCount");
+  if (albumCount) albumCount.textContent = `${originalAlbum.length} ${originalAlbum.length === 1 ? "memória" : "memórias"}`;
+
+  const memoryFeed = $('[data-live-section="fotos"]');
+  const memoryPosts = addedPublications.filter((post) => post.secao === "fotos");
+
+  if (memoryPosts.length) {
+    const heading = document.createElement("div");
+    heading.className = "memory-live-heading";
+
+    const eyebrow = document.createElement("span");
+    eyebrow.className = "eyebrow";
+    eyebrow.textContent = "Álbum que continua crescendo";
+
+    const title = document.createElement("h3");
+    title.textContent = "Novas memórias que agora também moram aqui";
+    heading.append(eyebrow, title);
+
+    const grid = document.createElement("div");
+    grid.className = "memory-live-grid";
+    memoryPosts.forEach((post) => {
+      grid.append(createMemoryPublicationCard(post, repliesByPublication.get(String(post.id)) || []));
+    });
+
+    memoryFeed.replaceChildren(heading, grid);
+    memoryFeed.hidden = false;
+  } else {
+    memoryFeed.replaceChildren();
+    memoryFeed.hidden = true;
+  }
+
+  const addedTimeline = addedPublications.filter((post) => post.secao === "historia");
+  if (addedTimeline.length) $("#timeline .timeline-empty")?.remove();
+  addedTimeline
+    .forEach((post) => {
+      $("#timeline").append(createTimelinePublicationItem(post, repliesByPublication.get(String(post.id)) || []));
+    });
+}
+
+async function loadPublications() {
+  try {
+    const [publicationsResponse, repliesResponse] = await Promise.all([
+      fetch(
+        `${SUPABASE.url}/rest/v1/publicacoes?select=id,secao,titulo,texto,imagem_url,origem,ordem,alt_texto,rotulo_data,posicao,criado_em&order=origem.asc,ordem.asc.nullslast,criado_em.asc`,
+        { headers: { apikey: SUPABASE.publishableKey } }
+      ),
+      fetch(
+        `${SUPABASE.url}/rest/v1/respostas_publicacoes?select=id,publicacao_id,memoria_chave,autor,mensagem,criado_em&order=criado_em.asc`,
+        { headers: { apikey: SUPABASE.publishableKey } }
+      )
+    ]);
+
+    if (!publicationsResponse.ok) {
+      throw new Error(`Não foi possível carregar as publicações (${publicationsResponse.status}).`);
+    }
+    if (!repliesResponse.ok) {
+      throw new Error(`Não foi possível carregar as respostas (${repliesResponse.status}).`);
+    }
+
+    renderPublications(await publicationsResponse.json(), await repliesResponse.json());
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+function startPublicationsFallback() {
+  if (publicationsFallbackTimer) return;
+  publicationsFallbackTimer = setInterval(() => {
+    void renderNotes();
+    void loadPublications();
+    void loadFuturePlans();
+    void loadCoupleCorner();
+  }, 15000);
+}
+
+function subscribeToPublications() {
+  if (!window.supabase?.createClient) {
+    startPublicationsFallback();
+    return;
+  }
+
+  const client = window.supabase.createClient(SUPABASE.url, SUPABASE.publishableKey, {
+    auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false }
+  });
+
+  client
+    .channel("novas-lembrancas-bianca")
+    .on(
+      "postgres_changes",
+      { event: "*", schema: "public", table: "recados" },
+      () => void renderNotes()
+    )
+    .on(
+      "postgres_changes",
+      { event: "*", schema: "public", table: "publicacoes" },
+      () => void loadPublications()
+    )
+    .on(
+      "postgres_changes",
+      { event: "*", schema: "public", table: "respostas_publicacoes" },
+      () => void loadPublications()
+    )
+    .on(
+      "postgres_changes",
+      { event: "*", schema: "public", table: "planos_futuros" },
+      () => void loadFuturePlans()
+    )
+    .on(
+      "postgres_changes",
+      { event: "*", schema: "public", table: "registros_diarios" },
+      () => void loadDailyEntries()
+    )
+    .on(
+      "postgres_changes",
+      { event: "*", schema: "public", table: "cartas" },
+      () => void loadLetters()
+    )
+    .on(
+      "postgres_changes",
+      { event: "*", schema: "public", table: "reclamacoes" },
+      () => void loadComplaints()
+    )
+    .on(
+      "postgres_changes",
+      { event: "*", schema: "public", table: "interpretacoes_reclamacao" },
+      () => void loadComplaints()
+    )
+    .subscribe((status) => {
+      if (status === "CHANNEL_ERROR" || status === "TIMED_OUT") startPublicationsFallback();
+    });
+}
+
+function clearPublicationPreview() {
+  if (publicationPreviewUrl) URL.revokeObjectURL(publicationPreviewUrl);
+  publicationPreviewUrl = "";
+  preparedPublicationImage = null;
+  publicationImagePromise = null;
+  publicationImageSelection += 1;
+  $("#publicationPreviewImage").removeAttribute("src");
+  $("#publicationPreview").hidden = true;
+  $("#publicationImageHint").textContent = "JPG, PNG ou WEBP, com até 8 MB. A foto será otimizada sem reduzir suas dimensões; se a qualidade não puder ser preservada, o arquivo original será usado.";
+}
+
+function formatImageSize(bytes) {
+  if (bytes < 1024 * 1024) return `${Math.max(1, Math.round(bytes / 1024))} KB`;
+  return `${(bytes / (1024 * 1024)).toLocaleString("pt-BR", { maximumFractionDigits: 1 })} MB`;
+}
+
+function canvasToBlob(canvas, type, quality) {
+  return new Promise((resolve, reject) => {
+    canvas.toBlob(
+      (blob) => blob ? resolve(blob) : reject(new Error("O navegador não conseguiu preparar a imagem.")),
+      type,
+      quality
+    );
+  });
+}
+
+function drawForComparison(source) {
+  const scale = Math.min(1, IMAGE_UPLOAD.comparisonLongEdge / Math.max(source.width, source.height));
+  const canvas = document.createElement("canvas");
+  canvas.width = Math.max(1, Math.round(source.width * scale));
+  canvas.height = Math.max(1, Math.round(source.height * scale));
+  const context = canvas.getContext("2d", { willReadFrequently: true });
+  context.drawImage(source, 0, 0, canvas.width, canvas.height);
+  return context.getImageData(0, 0, canvas.width, canvas.height).data;
+}
+
+function calculatePsnr(reference, candidate) {
+  if (reference.length !== candidate.length) return 0;
+
+  let squaredError = 0;
+  for (let index = 0; index < reference.length; index += 1) {
+    const difference = reference[index] - candidate[index];
+    squaredError += difference * difference;
+  }
+
+  if (squaredError === 0) return Number.POSITIVE_INFINITY;
+  const meanSquaredError = squaredError / reference.length;
+  return 10 * Math.log10((255 * 255) / meanSquaredError);
+}
+
+async function optimizePublicationImage(file) {
+  if (!("createImageBitmap" in window) || !HTMLCanvasElement.prototype.toBlob) {
+    return { file, optimized: false };
+  }
+
+  const originalBitmap = await createImageBitmap(file, { imageOrientation: "from-image" });
+  const canvas = document.createElement("canvas");
+  canvas.width = originalBitmap.width;
+  canvas.height = originalBitmap.height;
+  const context = canvas.getContext("2d");
+
+  if (!context || !canvas.width || !canvas.height) {
+    originalBitmap.close?.();
+    return { file, optimized: false };
+  }
+
+  context.drawImage(originalBitmap, 0, 0);
+  const referencePixels = drawForComparison(originalBitmap);
+  let bestCandidate = null;
+
+  try {
+    for (const quality of IMAGE_UPLOAD.qualityLevels) {
+      const blob = await canvasToBlob(canvas, IMAGE_UPLOAD.outputType, quality);
+      const saving = 1 - blob.size / file.size;
+      if (saving < IMAGE_UPLOAD.minimumSaving) continue;
+
+      const candidateBitmap = await createImageBitmap(blob);
+      const psnr = calculatePsnr(referencePixels, drawForComparison(candidateBitmap));
+      candidateBitmap.close?.();
+
+      if (psnr >= IMAGE_UPLOAD.minimumPsnr && (!bestCandidate || blob.size < bestCandidate.blob.size)) {
+        bestCandidate = { blob, psnr, saving };
+      }
+    }
+  } finally {
+    originalBitmap.close?.();
+  }
+
+  if (!bestCandidate) return { file, optimized: false };
+
+  const baseName = file.name.replace(/\.[^.]+$/, "") || "lembranca";
+  const optimizedFile = new File([bestCandidate.blob], `${baseName}.webp`, {
+    type: IMAGE_UPLOAD.outputType,
+    lastModified: file.lastModified
+  });
+
+  return {
+    file: optimizedFile,
+    optimized: true,
+    originalBytes: file.size,
+    optimizedBytes: optimizedFile.size
+  };
+}
+
+function setPublicationStatus(message, state = "") {
+  const status = $("#publicationStatus");
+  status.textContent = message;
+  status.dataset.state = state;
+}
+
+function updatePublicationDesign() {
+  const section = $("#publicationSection").value;
+  const creatorCard = $(".creator-card");
+  creatorCard.dataset.selectedSection = section;
+  $("#publicationPreview").dataset.selectedSection = section;
+  $("#publicationDesignHint").textContent = section === "historia"
+    ? "A lembrança entrará como uma nova etapa da linha do tempo."
+    : "A lembrança aparecerá como uma nova fotografia do álbum.";
+}
+
+function getShareUrl() {
+  if (location.protocol === "file:") return "";
+
+  try {
+    if (window.top !== window && window.top.location.origin === location.origin) {
+      return window.top.location.href.split("#")[0];
+    }
+  } catch {
+    // Se a página estiver em outro domínio, usa o endereço atual com segurança.
+  }
+
+  return location.href.split("#")[0];
+}
+
+async function copyShareUrl(url) {
+  if (navigator.clipboard && window.isSecureContext) {
+    try {
+      await navigator.clipboard.writeText(url);
+      return true;
+    } catch {
+      // Continua para a alternativa compatível com navegadores mais antigos.
+    }
+  }
+
+  const textarea = document.createElement("textarea");
+  textarea.value = url;
+  textarea.setAttribute("readonly", "");
+  textarea.style.position = "fixed";
+  textarea.style.opacity = "0";
+  textarea.style.pointerEvents = "none";
+  document.body.append(textarea);
+  textarea.select();
+  textarea.setSelectionRange(0, textarea.value.length);
+
+  try {
+    return document.execCommand("copy");
+  } catch {
+    return false;
+  } finally {
+    textarea.remove();
+  }
+}
+
+function showShareFallback(status, url, copied) {
+  status.textContent = copied
+    ? "Link copiado! Agora é só enviar para ela ♥"
+    : "Não foi possível copiar automaticamente. Use o link abaixo:";
+
+  const link = document.createElement("a");
+  link.href = url;
+  link.textContent = url;
+  link.target = "_blank";
+  link.rel = "noopener";
+
+  status.append(document.createElement("br"), link);
+}
+
+async function sharePage() {
+  const shareUrl = getShareUrl();
+  const status = $("#shareStatus");
+
+  if (!shareUrl) {
+    status.textContent = "Publique o site para gerar um link compartilhável.";
+    return;
+  }
+
+  const data = {
+    title: CONFIG.pageTitle,
+    text: "Natã fez uma surpresa para Bianca ♥",
+    url: shareUrl
+  };
+
+  let canUseNativeShare = typeof navigator.share === "function";
+
+  if (canUseNativeShare && typeof navigator.canShare === "function") {
+    try {
+      canUseNativeShare = navigator.canShare(data);
+    } catch {
+      canUseNativeShare = false;
+    }
+  }
+
+  if (canUseNativeShare) {
+    try {
+      await navigator.share(data);
+      status.textContent = "Compartilhado com amor ♥";
+      return;
+    } catch (error) {
+      if (error.name === "AbortError") {
+        status.textContent = "Compartilhamento cancelado.";
+        return;
+      }
+    }
+  }
+
+  const copied = await copyShareUrl(shareUrl);
+  showShareFallback(status, shareUrl, copied);
+}
+
+let touchStartX = 0;
+$(".gallery-photo-area").addEventListener("touchstart", (event) => {
+  touchStartX = event.changedTouches[0].screenX;
+}, { passive: true });
+
+$(".gallery-photo-area").addEventListener("touchend", (event) => {
+  const delta = event.changedTouches[0].screenX - touchStartX;
+  if (Math.abs(delta) > 45) showPhoto(currentPhoto + (delta < 0 ? 1 : -1));
+}, { passive: true });
+
+$(".memory-album").addEventListener("keydown", (event) => {
+  if (event.key === "ArrowLeft") showPhoto(currentPhoto - 1);
+  if (event.key === "ArrowRight") showPhoto(currentPhoto + 1);
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+  hydrateContent();
+  updatePublicationDesign();
+  updateCounter();
+  counterTimer = setInterval(updateCounter, 1000);
+  setTimeout(() => loadingScreen.classList.add("hidden"), 450);
+  setTimeout(() => $(".hero .reveal").classList.add("visible"), 650);
+
+  if (new URLSearchParams(location.search).has("preview")) {
+    setTimeout(() => {
+      openExperience();
+      setTimeout(() => {
+        const section = location.hash ? document.getElementById(location.hash.slice(1)) : null;
+        if (section) section.scrollIntoView({ behavior: "auto", block: "start" });
+      }, 900);
+    }, 1500);
+  }
+});
+
+document.addEventListener("visibilitychange", () => {
+  clearInterval(counterTimer);
+  clearInterval(heartTimer);
+  if (document.hidden) return;
+
+  updateCounter();
+  counterTimer = setInterval(updateCounter, 1000);
+  if (document.body.classList.contains("surprise-open")
+      && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    heartTimer = setInterval(createFloatingHeart, 1000);
+  }
+});
+
+openSurprise.addEventListener("click", openExperience);
+$("#galleryPrev").addEventListener("click", () => showPhoto(currentPhoto - 1));
+$("#galleryNext").addEventListener("click", () => showPhoto(currentPhoto + 1));
+
+$("#guestbookForm").addEventListener("submit", async (event) => {
+  event.preventDefault();
+
+  const name = $("#guestName").value.trim();
+  const message = $("#guestMessage").value.trim();
+  if (!name || !message) return;
+
+  const form = event.currentTarget;
+  const submitButton = form.querySelector('button[type="submit"]');
+  const originalLabel = submitButton.textContent;
+  submitButton.disabled = true;
+  submitButton.textContent = "Guardando…";
+  setGuestbookStatus("Enviando seu recado…");
+
+  try {
+    const response = await fetch(`${SUPABASE.url}/rest/v1/recados`, {
+      method: "POST",
+      headers: {
+        apikey: SUPABASE.publishableKey,
+        "Content-Type": "application/json",
+        Prefer: "return=minimal"
+      },
+      body: JSON.stringify({ nome: name, mensagem: message })
+    });
+
+    if (!response.ok) throw new Error(`Não foi possível guardar o recado (${response.status}).`);
+
+    form.reset();
+    setGuestbookStatus("Recado guardado para aparecer em todos os aparelhos ♥", "success");
+    await renderNotes();
+  } catch (error) {
+    setGuestbookStatus("Não foi possível guardar agora. Confira a internet e tente novamente.", "error");
+    console.error(error);
+  } finally {
+    submitButton.disabled = false;
+    submitButton.textContent = originalLabel;
+  }
+});
+
+$("#publicationImage").addEventListener("change", (event) => {
+  clearPublicationPreview();
+  const [file] = event.currentTarget.files;
+  if (!file) return;
+
+  if (file.size > IMAGE_UPLOAD.maxBytes) {
+    event.currentTarget.value = "";
+    setPublicationStatus("A foto deve ter no máximo 8 MB.", "error");
+    return;
+  }
+
+  const selection = ++publicationImageSelection;
+  preparedPublicationImage = file;
+  $("#publicationImageHint").textContent = "Analisando a foto e preservando a melhor qualidade…";
+  setPublicationStatus("Preparando a foto…");
+
+  publicationImagePromise = optimizePublicationImage(file)
+    .catch(() => ({ file, optimized: false }))
+    .then((result) => {
+      if (selection !== publicationImageSelection) return null;
+
+      preparedPublicationImage = result.file;
+      publicationPreviewUrl = URL.createObjectURL(result.file);
+      $("#publicationPreviewImage").src = publicationPreviewUrl;
+      $("#publicationPreview").hidden = false;
+
+      if (result.optimized) {
+        $("#publicationImageHint").textContent = `Foto otimizada de ${formatImageSize(result.originalBytes)} para ${formatImageSize(result.optimizedBytes)}, mantendo as dimensões e a qualidade visual.`;
+      } else {
+        $("#publicationImageHint").textContent = `Qualidade priorizada: o arquivo original de ${formatImageSize(file.size)} será usado.`;
+      }
+
+      setPublicationStatus("");
+      return result.file;
+    });
+});
+
+$("#publicationSection").addEventListener("change", updatePublicationDesign);
+
+$("#publicationForm").addEventListener("submit", async (event) => {
+  event.preventDefault();
+
+  const form = event.currentTarget;
+  const submitButton = form.querySelector('button[type="submit"]');
+  const [selectedImage] = $("#publicationImage").files;
+  const section = $("#publicationSection").value;
+  const title = $("#publicationTitle").value.trim();
+  const publicationText = $("#publicationText").value.trim();
+  const editorCode = $("#publicationCode").value;
+
+  if (!selectedImage || !title || !publicationText || !editorCode) return;
+
+  const originalLabel = submitButton.textContent;
+  submitButton.disabled = true;
+  submitButton.textContent = "Publicando…";
+  setPublicationStatus("Finalizando a foto com a melhor qualidade…");
+
+  try {
+    if (publicationImagePromise) await publicationImagePromise;
+    const image = preparedPublicationImage || selectedImage;
+    const payload = new FormData();
+    payload.append("secao", section);
+    payload.append("titulo", title);
+    payload.append("texto", publicationText);
+    payload.append("imagem", image, image.name);
+
+    setPublicationStatus("Enviando a foto e preparando a nova lembrança…");
+    const response = await fetch(`${SUPABASE.url}/functions/v1/${SUPABASE.publishFunction}`, {
+      method: "POST",
+      headers: {
+        apikey: SUPABASE.publishableKey,
+        "x-editor-code": editorCode
+      },
+      body: payload
+    });
+
+    const result = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(result.error || "Não foi possível publicar agora.");
+
+    form.reset();
+    clearPublicationPreview();
+    updatePublicationDesign();
+    setPublicationStatus("Lembrança publicada! Ela já está aparecendo na seção escolhida ♥", "success");
+    await loadPublications();
+
+    const destination = section === "historia"
+      ? $("#timeline .timeline-item.user-added:last-child")
+      : $('[data-live-section="fotos"]');
+    if (destination && !destination.hidden) {
+      setTimeout(() => destination.scrollIntoView({ behavior: "smooth", block: "center" }), 250);
+    }
+  } catch (error) {
+    setPublicationStatus(error.message || "Não foi possível publicar agora.", "error");
+  } finally {
+    submitButton.disabled = false;
+    submitButton.textContent = originalLabel;
+  }
+});
+
+$("#futurePlanForm").addEventListener("submit", async (event) => {
+  event.preventDefault();
+
+  const form = event.currentTarget;
+  const submitButton = form.querySelector('button[type="submit"]');
+  const author = $("#futurePlanAuthor").value;
+  const category = $("#futurePlanCategory").value;
+  const title = $("#futurePlanTitle").value.trim();
+  const details = $("#futurePlanDetails").value.trim();
+  const editorCode = $("#futurePlanCode").value;
+  if (!author || !category || !title || !editorCode) return;
+
+  const originalLabel = submitButton.textContent;
+  submitButton.disabled = true;
+  submitButton.textContent = "Guardando…";
+  setFuturePlanStatus("Guardando este sonho na nossa história…");
+
+  try {
+    const result = await requestFuturePlan({
+      acao: "criar",
+      autor: author,
+      categoria: category,
+      titulo: title,
+      detalhes: details
+    }, editorCode);
+
+    form.reset();
+    setFuturePlanStatus("Plano guardado! Ele já aparece para vocês dois ♥", "success");
+    await loadFuturePlans();
+
+    const newPlan = result.plano?.id
+      ? document.querySelector(`[data-future-plan-id="${result.plano.id}"]`)
+      : null;
+    if (newPlan) {
+      setTimeout(() => newPlan.scrollIntoView({ behavior: "smooth", block: "center" }), 200);
+    }
+  } catch (error) {
+    setFuturePlanStatus(error.message || "Não foi possível guardar este plano agora.", "error");
+  } finally {
+    submitButton.disabled = false;
+    submitButton.textContent = originalLabel;
+  }
+});
+
+["#datePlaceFilter", "#dateBudgetFilter", "#dateDurationFilter"].forEach((selector) => {
+  $(selector).addEventListener("change", () => {
+    chooseDateIdea(true);
+    setDateIdeaStatus("Escolhas atualizadas. Toquem no botão para sortear outra ideia.");
+  });
+});
+
+$("#newDateIdea").addEventListener("click", createDateIdea);
+
+$("#dateSaveForm").addEventListener("submit", async (event) => {
+  event.preventDefault();
+  if (!currentDateIdea) return;
+
+  const form = event.currentTarget;
+  const button = form.querySelector('button[type="submit"]');
+  const author = $("#dateSaveAuthor").value;
+  const editorCode = $("#dateSaveCode").value;
+  if (!author || !editorCode) return;
+
+  const originalLabel = button.textContent;
+  button.disabled = true;
+  button.textContent = "Guardando…";
+  setCornerStatus("#dateSaveStatus", "Guardando este encontro nos próximos capítulos…");
+
+  try {
+    await requestFuturePlan({
+      acao: "criar",
+      autor: author,
+      categoria: "encontro",
+      titulo: currentDateIdea.title,
+      detalhes: currentDateIdea.specialTouch
+        ? `${currentDateIdea.description} Toque especial: ${currentDateIdea.specialTouch}`
+        : currentDateIdea.description
+    }, editorCode);
+    $("#dateSaveCode").value = "";
+    setCornerStatus("#dateSaveStatus", "Encontro guardado em “Coisas que ainda vamos viver” ♥", "success");
+    await loadFuturePlans();
+  } catch (error) {
+    setCornerStatus("#dateSaveStatus", error.message || "Não foi possível guardar este encontro.", "error");
+  } finally {
+    button.disabled = false;
+    button.textContent = originalLabel;
+  }
+});
+
+$("#dailyEntryForm").addEventListener("submit", async (event) => {
+  event.preventDefault();
+  const form = event.currentTarget;
+  const button = form.querySelector('button[type="submit"]');
+  const author = $("#dailyAuthor").value;
+  const type = $("#dailyType").value;
+  const items = [
+    $("#dailyItem1").value.trim(),
+    $("#dailyItem2").value.trim(),
+    $("#dailyItem3").value.trim()
+  ];
+  const editorCode = $("#dailyCode").value;
+  if (!author || !type || items.some((item) => !item) || !editorCode) return;
+
+  const originalLabel = button.textContent;
+  button.disabled = true;
+  button.textContent = "Guardando…";
+  setCornerStatus("#dailyStatus", "Guardando as três coisas de hoje…");
+
+  try {
+    await requestCoupleCorner({
+      acao: "registro_diario",
+      autor: author,
+      tipo: type,
+      itens: items
+    }, editorCode);
+    form.reset();
+    setCornerStatus("#dailyStatus", "As três coisas de hoje foram guardadas ♥", "success");
+    await loadDailyEntries();
+  } catch (error) {
+    setCornerStatus("#dailyStatus", error.message || "Não foi possível guardar o registro.", "error");
+  } finally {
+    button.disabled = false;
+    button.textContent = originalLabel;
+  }
+});
+
+$("#letterForm").addEventListener("submit", async (event) => {
+  event.preventDefault();
+  const form = event.currentTarget;
+  const button = form.querySelector('button[type="submit"]');
+  const author = $("#letterAuthor").value;
+  const title = $("#letterTitle").value.trim();
+  const text = $("#letterText").value.trim();
+  const editorCode = $("#letterCode").value;
+  if (!author || !title || !text || !editorCode) return;
+
+  const originalLabel = button.textContent;
+  button.disabled = true;
+  button.textContent = "Guardando…";
+  setCornerStatus("#letterStatus", "Guardando a carta com carinho…");
+
+  try {
+    await requestCoupleCorner({
+      acao: "carta",
+      autor: author,
+      titulo: title,
+      texto: text
+    }, editorCode);
+    form.reset();
+    setCornerStatus("#letterStatus", "Carta guardada e entregue no cantinho de vocês ♥", "success");
+    await loadLetters();
+  } catch (error) {
+    setCornerStatus("#letterStatus", error.message || "Não foi possível guardar a carta.", "error");
+  } finally {
+    button.disabled = false;
+    button.textContent = originalLabel;
+  }
+});
+
+function clearComplaintPreview() {
+  if (complaintPreviewUrl) URL.revokeObjectURL(complaintPreviewUrl);
+  complaintPreviewUrl = "";
+  $("#complaintPreviewImage").removeAttribute("src");
+  $("#complaintPreview").hidden = true;
+}
+
+$("#complaintImage").addEventListener("change", (event) => {
+  clearComplaintPreview();
+  const [file] = event.currentTarget.files;
+  if (!file) return;
+
+  if (file.size > IMAGE_UPLOAD.maxBytes) {
+    event.currentTarget.value = "";
+    setCornerStatus("#complaintStatus", "A foto deve ter no máximo 8 MB.", "error");
+    return;
+  }
+
+  complaintPreviewUrl = URL.createObjectURL(file);
+  $("#complaintPreviewImage").src = complaintPreviewUrl;
+  $("#complaintPreview").hidden = false;
+  setCornerStatus("#complaintStatus", "Foto escolhida. Agora não vale explicar nada.");
+});
+
+$("#complaintForm").addEventListener("submit", async (event) => {
+  event.preventDefault();
+  const form = event.currentTarget;
+  const button = form.querySelector('button[type="submit"]');
+  const author = $("#complaintAuthor").value;
+  const [selectedImage] = $("#complaintImage").files;
+  const editorCode = $("#complaintCode").value;
+  if (!author || !selectedImage || !editorCode) return;
+
+  const originalLabel = button.textContent;
+  button.disabled = true;
+  button.textContent = "Publicando…";
+  setCornerStatus("#complaintStatus", "Preparando a foto sem perder a qualidade…");
+
+  try {
+    const optimized = await optimizePublicationImage(selectedImage)
+      .catch(() => ({ file: selectedImage, optimized: false }));
+    const image = optimized.file || selectedImage;
+    const payload = new FormData();
+    payload.append("acao", "reclamacao");
+    payload.append("autor", author);
+    payload.append("imagem", image, image.name);
+
+    setCornerStatus("#complaintStatus", "Enviando a reclamação misteriosa…");
+    await requestCoupleCorner(payload, editorCode);
+    form.reset();
+    clearComplaintPreview();
+    setCornerStatus("#complaintStatus", "Reclamação publicada. Agora alguém precisa decifrar 💃🏻", "success");
+    await loadComplaints();
+  } catch (error) {
+    setCornerStatus("#complaintStatus", error.message || "Não foi possível publicar a reclamação.", "error");
+  } finally {
+    button.disabled = false;
+    button.textContent = originalLabel;
+  }
+});
+
+$("#shareButton").addEventListener("click", sharePage);
+$("#replayButton").addEventListener("click", () => {
+  window.scrollTo({ top: 0, behavior: "smooth" });
+  setTimeout(() => openSurprise.focus(), 650);
+});
+
+</script>
+</body>
+</html>
