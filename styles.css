@@ -81,7 +81,7 @@ img { max-width: 100%; display: block; }
 .memory-four { right:7vw; bottom:7vh; transform:rotate(-7deg); }
 .hero-content { max-width: 780px; text-align: center; position:relative; z-index:2; padding:34px 40px 40px; border-radius:36px; background:rgba(47,7,20,.26); border:1px solid rgba(255,255,255,.08); backdrop-filter:blur(8px); box-shadow:0 30px 90px rgba(0,0,0,.18); }
 .eyebrow { display: inline-block; font-size: .76rem; font-weight: 800; letter-spacing: .18em; text-transform: uppercase; color: var(--gold); }
-.hero .eyebrow { color: #ffd7df; }
+.hero .eyebrow { color: #ffd7df; text-transform:none; letter-spacing:.1em; }
 h1, h2, .love-letter p { font-family: Georgia, "Times New Roman", serif; }
 h1 { margin: 20px 0 14px; font-size: clamp(2.6rem, 8vw, 5.8rem); line-height: .98; letter-spacing: -.045em; }
 .hero-content > p { max-width: 630px; margin: 0 auto 30px; color: rgba(255,255,255,.78); font-size: clamp(1rem, 2vw, 1.2rem); line-height: 1.75; }
