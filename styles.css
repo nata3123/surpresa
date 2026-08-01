@@ -680,6 +680,44 @@ h1 { margin: 20px 0 14px; font-size: clamp(2.6rem, 8vw, 5.8rem); line-height: .9
 #publicationStatus[data-state="success"] { color:#7a2440; font-weight:800; }
 #publicationStatus[data-state="error"] { color:#b3263d; font-weight:800; }
 
+.content-manager { position:relative; z-index:2; margin-top:18px; padding-top:14px; border-top:1px dashed rgba(111,23,49,.16); color:var(--ink); text-align:left; }
+.content-manager > summary, .letter-card .content-manager > summary { display:flex; align-items:center; width:fit-content; gap:7px; padding:0; cursor:pointer; color:var(--wine); font-family:Inter,ui-sans-serif,system-ui,sans-serif; font-size:.7rem; font-weight:900; font-style:normal; letter-spacing:.02em; list-style:none; }
+.content-manager > summary::-webkit-details-marker { display:none; }
+.content-manager > summary::before { content:"✎"; color:var(--gold); font-size:.9rem; }
+.content-manager-form { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; margin-top:14px; padding:16px; border:1px solid rgba(111,23,49,.08); border-radius:16px; background:rgba(111,23,49,.04); }
+.content-manager-field { display:grid; align-content:start; gap:6px; min-width:0; }
+.content-manager-field:has(textarea), .content-manager-field:has(input[type="file"]) { grid-column:1/-1; }
+.content-manager-field label { color:var(--wine); font-family:Inter,ui-sans-serif,system-ui,sans-serif; font-size:.68rem; font-weight:900; font-style:normal; }
+.content-manager-field input, .content-manager-field textarea, .content-manager-field select { width:100%; border:1px solid rgba(111,23,49,.14); border-radius:12px; padding:10px 11px; color:var(--ink); background:#fff; outline:none; }
+.content-manager-field textarea { min-height:78px; resize:vertical; line-height:1.55; }
+.content-manager-field input[type="file"] { padding:9px; color:var(--muted); font-size:.7rem; }
+.content-manager-field input[type="file"]::file-selector-button { margin-right:9px; border:0; border-radius:999px; padding:7px 10px; color:#fff; background:var(--wine); font-weight:800; cursor:pointer; }
+.content-manager-field input:focus, .content-manager-field textarea:focus, .content-manager-field select:focus { border-color:rgba(111,23,49,.38); box-shadow:0 0 0 3px rgba(233,167,184,.2); }
+.content-manager-field small { margin:0; color:var(--muted); font-family:Inter,ui-sans-serif,system-ui,sans-serif; font-size:.62rem; font-style:normal; line-height:1.4; }
+.content-manager-actions { grid-column:1/-1; display:flex; align-items:center; flex-wrap:wrap; gap:9px; }
+.content-manager-actions button { border:0; border-radius:999px; padding:9px 13px; font-size:.7rem; font-weight:900; cursor:pointer; }
+.content-edit-button { color:#fff; background:var(--wine); }
+.content-delete-button { color:#a1233f; background:#ffe4e9; }
+.content-manager-actions button:disabled { cursor:wait; opacity:.6; }
+.content-manager-status { grid-column:1/-1; min-height:1.2em; margin:0; color:var(--muted); font-family:Inter,ui-sans-serif,system-ui,sans-serif; font-size:.68rem; font-style:normal; line-height:1.45; }
+.content-manager-status[data-state="success"] { color:#7a2440; font-weight:800; }
+.content-manager-status[data-state="error"] { color:#b3263d; font-weight:800; }
+.timeline-card > .content-manager { margin:0 22px 24px; }
+.memory-live-card > .content-manager { margin-inline:10px; }
+.publication-reply > .content-manager, .complaint-interpretations .content-manager { margin-top:12px; padding-top:10px; }
+.publication-reply .content-manager-form, .complaint-interpretations .content-manager-form { grid-template-columns:1fr; padding:12px; }
+.publication-reply .content-manager-field, .complaint-interpretations .content-manager-field, .publication-reply .content-manager-actions, .complaint-interpretations .content-manager-actions, .publication-reply .content-manager-status, .complaint-interpretations .content-manager-status { grid-column:1; }
+.future-plan-card > .content-manager { margin-top:20px; }
+.letter-card-body > .content-manager { margin-top:24px; }
+.note-card .content-manager { border-color:rgba(255,255,255,.15); color:#fff; }
+.note-card .content-manager > summary { color:#ffd4df; }
+.note-card .content-manager-form { border-color:rgba(255,255,255,.12); background:rgba(255,255,255,.06); }
+.note-card .content-manager-field label { color:#f6d7df; }
+.note-card .content-manager-field input, .note-card .content-manager-field textarea { border-color:rgba(255,255,255,.16); color:#fff; background:rgba(255,255,255,.08); }
+.note-card .content-manager-status, .note-card .content-manager-field small { color:rgba(255,255,255,.62); }
+.note-card .content-manager-status[data-state="error"] { color:#ffbdca; }
+.note-card .content-manager-status[data-state="success"] { color:#ffd4df; }
+
 .guestbook-section { background: var(--wine-dark); color:white; }
 .guestbook-card { max-width:900px; margin:0 auto; padding:48px; border-radius:var(--radius); background:linear-gradient(145deg, rgba(255,255,255,.1), rgba(255,255,255,.05)); border:1px solid rgba(255,255,255,.12); box-shadow:0 30px 80px rgba(0,0,0,.22); }
 .guestbook-card h2 { color:white; }
@@ -800,6 +838,11 @@ footer span:last-child { color:#f1a8ba; }
   .date-idea-controls { grid-template-columns:1fr; }
   .date-random-action { padding:16px 12px; }
   .date-random-button { width:100%; white-space:normal; }
+  .content-manager-form { grid-template-columns:1fr; padding:13px 11px; }
+  .content-manager-field, .content-manager-actions, .content-manager-status { grid-column:1; }
+  .content-manager-actions { align-items:stretch; }
+  .content-manager-actions button { flex:1; }
+  .timeline-card > .content-manager { margin-inline:18px; }
   .date-save-composer form { padding:16px 12px; }
   .date-save-composer form .primary-button { width:100%; }
   .daily-form, .letters-form { padding:25px 18px; }

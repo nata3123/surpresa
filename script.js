@@ -122,7 +122,8 @@ const SUPABASE = Object.freeze({
   publishFunction: "publicar-lembranca",
   replyFunction: "responder-publicacao",
   plansFunction: "gerenciar-planos",
-  cornerFunction: "gerenciar-cantinho"
+  cornerFunction: "gerenciar-cantinho",
+  manageFunction: "gerenciar-conteudo"
 });
 
 const IMAGE_UPLOAD = Object.freeze({
@@ -414,6 +415,195 @@ function setGuestbookStatus(message, state = "") {
   status.dataset.state = state;
 }
 
+const AUTHOR_OPTIONS = [
+  { value: "Bianca", label: "Bianca" },
+  { value: "Natã", label: "Natã" }
+];
+
+async function requestManagedContent(payload, editorCode) {
+  const response = await fetch(SUPABASE.url + "/functions/v1/" + SUPABASE.manageFunction, {
+    method: "POST",
+    headers: {
+      apikey: SUPABASE.publishableKey,
+      "x-editor-code": editorCode
+    },
+    body: payload
+  });
+
+  const result = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(result.error || "Não foi possível alterar esse conteúdo.");
+  return result;
+}
+
+function createManageField(config, item, contentType) {
+  const wrapper = document.createElement("div");
+  wrapper.className = "content-manager-field";
+
+  const label = document.createElement("label");
+  const fieldId = "manage-" + contentType + "-" + item.id + "-" + config.name;
+  label.htmlFor = fieldId;
+  label.textContent = config.label;
+
+  let field;
+  if (config.kind === "select") {
+    field = document.createElement("select");
+    (config.options || []).forEach((optionData) => {
+      const option = document.createElement("option");
+      option.value = optionData.value;
+      option.textContent = optionData.label;
+      option.selected = String(config.value ?? item[config.name] ?? "") === optionData.value;
+      field.append(option);
+    });
+  } else if (config.kind === "textarea") {
+    field = document.createElement("textarea");
+    field.rows = config.rows || 4;
+  } else {
+    field = document.createElement("input");
+    field.type = "text";
+  }
+
+  field.id = fieldId;
+  field.name = config.name;
+  if (config.kind !== "select") field.value = String(config.value ?? item[config.name] ?? "");
+  if (config.maxLength) field.maxLength = config.maxLength;
+  if (config.required !== false) field.required = true;
+  wrapper.append(label, field);
+  return wrapper;
+}
+
+function createContentManager(config) {
+  const details = document.createElement("details");
+  details.className = "content-manager";
+
+  const summary = document.createElement("summary");
+  summary.textContent = "Editar ou excluir";
+  details.append(summary);
+
+  const form = document.createElement("form");
+  form.className = "content-manager-form";
+  (config.fields || []).forEach((field) => {
+    form.append(createManageField(field, config.item, config.type));
+  });
+
+  if (config.allowImage) {
+    const imageField = document.createElement("div");
+    imageField.className = "content-manager-field";
+    const imageLabel = document.createElement("label");
+    imageLabel.htmlFor = "manage-" + config.type + "-" + config.item.id + "-imagem";
+    imageLabel.textContent = "Trocar foto, se quiser";
+    const image = document.createElement("input");
+    image.id = imageLabel.htmlFor;
+    image.name = "imagem";
+    image.type = "file";
+    image.accept = "image/jpeg,image/png,image/webp";
+    const hint = document.createElement("small");
+    hint.textContent = "Deixe vazio para manter a foto atual.";
+    imageField.append(imageLabel, image, hint);
+    form.append(imageField);
+  }
+
+  const codeField = document.createElement("div");
+  codeField.className = "content-manager-field";
+  const codeLabel = document.createElement("label");
+  codeLabel.htmlFor = "manage-" + config.type + "-" + config.item.id + "-codigo";
+  codeLabel.textContent = "Código reservado";
+  const code = document.createElement("input");
+  code.id = codeLabel.htmlFor;
+  code.name = "codigo";
+  code.type = "password";
+  code.autocomplete = "off";
+  code.placeholder = "Digite o código para confirmar";
+  code.required = true;
+  codeField.append(codeLabel, code);
+
+  const actions = document.createElement("div");
+  actions.className = "content-manager-actions";
+  const editButton = document.createElement("button");
+  editButton.className = "content-edit-button";
+  editButton.type = "submit";
+  editButton.textContent = "Salvar alterações";
+  const deleteButton = document.createElement("button");
+  deleteButton.className = "content-delete-button";
+  deleteButton.type = "button";
+  deleteButton.textContent = "Excluir";
+  actions.append(editButton, deleteButton);
+
+  const status = document.createElement("small");
+  status.className = "content-manager-status";
+  status.setAttribute("role", "status");
+  status.setAttribute("aria-live", "polite");
+  form.append(codeField, actions, status);
+
+  const setBusy = (busy) => {
+    editButton.disabled = busy;
+    deleteButton.disabled = busy;
+    code.disabled = busy;
+  };
+
+  const finishAction = async (action) => {
+    const editorCode = code.value;
+    if (!editorCode) {
+      status.textContent = "Digite o código reservado para continuar.";
+      status.dataset.state = "error";
+      code.focus();
+      return;
+    }
+
+    if (action === "excluir" && !window.confirm(config.deletePrompt || "Excluir esse conteúdo para sempre?")) {
+      return;
+    }
+
+    setBusy(true);
+    status.textContent = action === "editar" ? "Salvando alterações…" : "Excluindo…";
+    status.dataset.state = "";
+
+    try {
+      let payload;
+      if (action === "editar") {
+        payload = new FormData(form);
+        payload.delete("codigo");
+        const image = payload.get("imagem");
+        if (image instanceof File && image.size > 0) {
+          status.textContent = "Preparando a nova foto sem perder qualidade…";
+          const optimized = await optimizePublicationImage(image)
+            .catch(() => ({ file: image, optimized: false }));
+          const preparedImage = optimized.file || image;
+          payload.set("imagem", preparedImage, preparedImage.name);
+        } else {
+          payload.delete("imagem");
+        }
+      } else {
+        payload = new FormData();
+      }
+
+      payload.set("acao", action);
+      payload.set("tipo", config.type);
+      payload.set("id", String(config.item.id));
+      await requestManagedContent(payload, editorCode);
+      status.textContent = action === "editar" ? "Alterações salvas ♥" : "Conteúdo excluído.";
+      status.dataset.state = "success";
+      await config.reload();
+    } catch (error) {
+      status.textContent = error.message || "Não foi possível alterar esse conteúdo.";
+      status.dataset.state = "error";
+      setBusy(false);
+      if (status.textContent === "Código reservado incorreto.") {
+        code.value = "";
+        code.focus();
+      }
+    }
+  };
+
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+    void finishAction("editar");
+  });
+  deleteButton.addEventListener("click", () => void finishAction("excluir"));
+
+  details.append(form);
+  return details;
+}
+
 function createNoteCard(note) {
   const card = document.createElement("article");
   card.className = "note-card";
@@ -433,7 +623,21 @@ function createNoteCard(note) {
         timeStyle: "short"
       }).format(createdAt);
 
-  card.append(strong, message, date);
+  card.append(
+    strong,
+    message,
+    date,
+    createContentManager({
+      type: "recado",
+      item: note,
+      fields: [
+        { name: "nome", label: "Nome", maxLength: 40 },
+        { name: "mensagem", label: "Recado", kind: "textarea", rows: 3, maxLength: 240 }
+      ],
+      reload: renderNotes,
+      deletePrompt: "Excluir este recado para sempre?"
+    })
+  );
   return card;
 }
 
@@ -634,7 +838,29 @@ function createFuturePlanCard(plan) {
     footer.append(added, composer);
   }
 
-  article.append(footer);
+  article.append(
+    footer,
+    createContentManager({
+      type: "plano",
+      item: plan,
+      fields: [
+        { name: "autor", label: "Quem adicionou?", kind: "select", options: AUTHOR_OPTIONS },
+        {
+          name: "categoria",
+          label: "Categoria",
+          kind: "select",
+          options: Object.entries(FUTURE_PLAN_CATEGORIES).map(([value, data]) => ({
+            value,
+            label: data.label
+          }))
+        },
+        { name: "titulo", label: "Título", maxLength: 100 },
+        { name: "detalhes", label: "Detalhes", kind: "textarea", rows: 3, maxLength: 600, required: false }
+      ],
+      reload: loadFuturePlans,
+      deletePrompt: "Excluir este plano da história de vocês?"
+    })
+  );
   return article;
 }
 
@@ -859,7 +1085,33 @@ function renderDailyEntries(entries) {
       items.append(row);
     });
 
-    card.append(header, author, items);
+    card.append(
+      header,
+      author,
+      items,
+      createContentManager({
+        type: "registro",
+        item: entry,
+        fields: [
+          { name: "autor", label: "Quem escreveu?", kind: "select", options: AUTHOR_OPTIONS },
+          {
+            name: "categoria",
+            label: "Tipo de registro",
+            kind: "select",
+            value: entry.tipo,
+            options: Object.entries(DAILY_ENTRY_TYPES).map(([value, data]) => ({
+              value,
+              label: data.label
+            }))
+          },
+          { name: "item_1", label: "Primeira coisa", kind: "textarea", rows: 2, maxLength: 240 },
+          { name: "item_2", label: "Segunda coisa", kind: "textarea", rows: 2, maxLength: 240 },
+          { name: "item_3", label: "Terceira coisa", kind: "textarea", rows: 2, maxLength: 240 }
+        ],
+        reload: loadDailyEntries,
+        deletePrompt: "Excluir este registro do dia?"
+      })
+    );
     list.append(card);
   });
 }
@@ -909,7 +1161,21 @@ function renderLetters(letters) {
     text.textContent = letter.texto;
     const signature = document.createElement("span");
     signature.textContent = `Com carinho, ${letter.autor} ♥`;
-    body.append(text, signature);
+    body.append(
+      text,
+      signature,
+      createContentManager({
+        type: "carta",
+        item: letter,
+        fields: [
+          { name: "autor", label: "Quem escreveu?", kind: "select", options: AUTHOR_OPTIONS },
+          { name: "titulo", label: "Título", maxLength: 100 },
+          { name: "texto", label: "Carta", kind: "textarea", rows: 8, maxLength: 5000 }
+        ],
+        reload: loadLetters,
+        deletePrompt: "Excluir esta carta para sempre?"
+      })
+    );
     card.append(summary, body);
     list.append(card);
   });
@@ -995,7 +1261,21 @@ function createComplaintCard(complaint, interpretations) {
       text.textContent = interpretation.mensagem;
       const date = document.createElement("small");
       date.textContent = formatCornerDate(interpretation.criado_em, true);
-      reply.append(author, text, date);
+      reply.append(
+        author,
+        text,
+        date,
+        createContentManager({
+          type: "interpretacao",
+          item: interpretation,
+          fields: [
+            { name: "autor", label: "Quem escreveu?", kind: "select", options: AUTHOR_OPTIONS },
+            { name: "mensagem", label: "Interpretação", kind: "textarea", rows: 3, maxLength: 1000 }
+          ],
+          reload: loadComplaints,
+          deletePrompt: "Excluir esta interpretação?"
+        })
+      );
       replies.append(reply);
     });
   } else {
@@ -1050,7 +1330,20 @@ function createComplaintCard(complaint, interpretations) {
   form.addEventListener("submit", (event) => submitComplaintInterpretation(event, complaint));
   composer.append(summary, form);
 
-  copy.append(replies, composer);
+  copy.append(
+    replies,
+    composer,
+    createContentManager({
+      type: "reclamacao",
+      item: complaint,
+      fields: [
+        { name: "autor", label: "Quem enviou?", kind: "select", options: AUTHOR_OPTIONS }
+      ],
+      allowImage: true,
+      reload: loadComplaints,
+      deletePrompt: "Excluir esta reclamação e todas as interpretações dela?"
+    })
+  );
   card.append(figure, copy);
   return card;
 }
@@ -1114,7 +1407,20 @@ function createReplyCard(reply) {
 
   const message = document.createElement("p");
   message.textContent = reply.mensagem;
-  article.append(header, message);
+  article.append(
+    header,
+    message,
+    createContentManager({
+      type: "resposta",
+      item: reply,
+      fields: [
+        { name: "autor", label: "Quem escreveu?", kind: "select", options: AUTHOR_OPTIONS },
+        { name: "mensagem", label: "Resposta", kind: "textarea", rows: 3, maxLength: 1000 }
+      ],
+      reload: loadPublications,
+      deletePrompt: "Excluir esta resposta do Nosso diário?"
+    })
+  );
   return article;
 }
 
@@ -1299,6 +1605,20 @@ function createPublicationReplyArea(target, replies) {
   return section;
 }
 
+function createPublicationManager(publication) {
+  return createContentManager({
+    type: "publicacao",
+    item: publication,
+    fields: [
+      { name: "titulo", label: "Título", maxLength: 80 },
+      { name: "texto", label: "Texto", kind: "textarea", rows: 5, maxLength: 1000 }
+    ],
+    allowImage: true,
+    reload: loadPublications,
+    deletePrompt: "Excluir esta memória, a foto e as respostas escritas nela?"
+  });
+}
+
 function createMemoryPublicationCard(publication, replies) {
   const article = document.createElement("article");
   article.className = "memory-live-card";
@@ -1331,7 +1651,8 @@ function createMemoryPublicationCard(publication, replies) {
   article.append(
     figure,
     copy,
-    createPublicationReplyArea({ publicationId: publication.id, defaultAuthor: "Natã" }, replies)
+    createPublicationReplyArea({ publicationId: publication.id, defaultAuthor: "Natã" }, replies),
+    createPublicationManager(publication)
   );
   return article;
 }
@@ -1370,7 +1691,8 @@ function createTimelinePublicationItem(publication, replies) {
   card.append(
     image,
     copy,
-    createPublicationReplyArea({ publicationId: publication.id, defaultAuthor: "Natã" }, replies)
+    createPublicationReplyArea({ publicationId: publication.id, defaultAuthor: "Natã" }, replies),
+    createPublicationManager(publication)
   );
   article.append(dot, card);
   return article;
@@ -1448,6 +1770,7 @@ async function loadPublications() {
 function startPublicationsFallback() {
   if (publicationsFallbackTimer) return;
   publicationsFallbackTimer = setInterval(() => {
+    void renderNotes();
     void loadPublications();
     void loadFuturePlans();
     void loadCoupleCorner();
@@ -1468,12 +1791,17 @@ function subscribeToPublications() {
     .channel("novas-lembrancas-bianca")
     .on(
       "postgres_changes",
-      { event: "INSERT", schema: "public", table: "publicacoes" },
+      { event: "*", schema: "public", table: "recados" },
+      () => void renderNotes()
+    )
+    .on(
+      "postgres_changes",
+      { event: "*", schema: "public", table: "publicacoes" },
       () => void loadPublications()
     )
     .on(
       "postgres_changes",
-      { event: "INSERT", schema: "public", table: "respostas_publicacoes" },
+      { event: "*", schema: "public", table: "respostas_publicacoes" },
       () => void loadPublications()
     )
     .on(
@@ -1483,22 +1811,22 @@ function subscribeToPublications() {
     )
     .on(
       "postgres_changes",
-      { event: "INSERT", schema: "public", table: "registros_diarios" },
+      { event: "*", schema: "public", table: "registros_diarios" },
       () => void loadDailyEntries()
     )
     .on(
       "postgres_changes",
-      { event: "INSERT", schema: "public", table: "cartas" },
+      { event: "*", schema: "public", table: "cartas" },
       () => void loadLetters()
     )
     .on(
       "postgres_changes",
-      { event: "INSERT", schema: "public", table: "reclamacoes" },
+      { event: "*", schema: "public", table: "reclamacoes" },
       () => void loadComplaints()
     )
     .on(
       "postgres_changes",
-      { event: "INSERT", schema: "public", table: "interpretacoes_reclamacao" },
+      { event: "*", schema: "public", table: "interpretacoes_reclamacao" },
       () => void loadComplaints()
     )
     .subscribe((status) => {

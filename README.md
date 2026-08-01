@@ -35,7 +35,7 @@ O botão **“Compartilhar esta surpresa”** usa o compartilhamento do celular 
 
 Os recados são guardados no Supabase e aparecem em todos os celulares e computadores que abrirem o site. É necessário acesso à internet.
 
-Qualquer pessoa que receber o link consegue ler e enviar um recado. Por segurança, o site não permite editar ou apagar os recados de outras pessoas; a exclusão pode ser feita somente pelo painel do Supabase.
+Qualquer pessoa que receber o link consegue ler e enviar um recado. Cada recado enviado pelo site possui a opção discreta **“Editar ou excluir”**; para salvar qualquer alteração ou confirmar a exclusão, é obrigatório informar o código reservado do casal.
 
 O site usa apenas uma chave pública própria para páginas abertas. A chave secreta do Supabase nunca deve ser incluída nos arquivos do site.
 
@@ -49,9 +49,13 @@ O envio exige o código reservado combinado pelo casal. O código não está esc
 
 Antes do envio, o navegador testa versões WEBP de alta qualidade, sem reduzir as dimensões da fotografia. Uma versão otimizada só é utilizada quando fica pelo menos 10% menor e passa por uma comparação visual conservadora; caso contrário, o arquivo original é enviado. Assim, a economia de espaço nunca tem prioridade sobre a qualidade da lembrança.
 
+As lembranças publicadas pelo casal também possuem a opção **“Editar ou excluir”**. É possível corrigir o título e o texto ou substituir a fotografia; ao substituir ou excluir uma foto, o arquivo antigo também é retirado do armazenamento. Essas operações sempre pedem o código reservado. As sete lembranças originais do site permanecem protegidas e não exibem controles para alteração ou exclusão.
+
 ## Coisas que ainda vamos viver
 
 Bianca e Natã podem adicionar viagens, encontros, sonhos, aventuras e outros planos usando o mesmo código reservado. A lista fica guardada no Supabase e é atualizada em tempo real para todos os aparelhos com o site aberto.
+
+Os planos adicionados podem ser corrigidos ou excluídos diretamente no cartão correspondente, sempre mediante o código reservado.
 
 Quando um plano acontecer, basta escolher **“Marcar como vivido”**. Ele passa para a parte **“Sonhos que já viraram história”** e pode ser transformado em uma nova memória: o site preenche o título e o texto na área de publicação, faltando apenas escolher a foto daquele dia.
 
@@ -64,6 +68,8 @@ Em **“Três coisas de hoje”**, cada pessoa pode guardar uma lista diária de
 Em **“Decifra essa reclamação”**, a publicação aceita somente a autoria e uma foto. As interpretações são escritas depois, embaixo da fotografia, mantendo o formato de brincadeira sugerido por Bianca.
 
 Em **“Cartas entre nós”**, Bianca e Natã podem escrever textos maiores com título, autor e data. Todas essas áreas usam o código reservado, ficam salvas no Supabase e são atualizadas em tempo real em todos os aparelhos.
+
+Os registros diários, cartas, reclamações, interpretações e respostas do **“Nosso diário”** também podem ser editados ou excluídos. A opção aparece apenas no conteúdo que foi enviado pelo site e exige o código reservado em cada ação.
 
 ## Ajustar o horário inicial
 
