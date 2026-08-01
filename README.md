@@ -49,7 +49,7 @@ O envio exige o código reservado combinado pelo casal. O código não está esc
 
 Antes do envio, o navegador testa versões WEBP de alta qualidade, sem reduzir as dimensões da fotografia. Uma versão otimizada só é utilizada quando fica pelo menos 10% menor e passa por uma comparação visual conservadora; caso contrário, o arquivo original é enviado. Assim, a economia de espaço nunca tem prioridade sobre a qualidade da lembrança.
 
-As sete lembranças originais ficam apenas em **“Memórias que moram em mim”**, sem cópias repetidas na linha do tempo. Todas as fotografias existentes e futuras ficam no Supabase e possuem a opção **“Editar ou excluir”**. É possível corrigir o título e o texto ou substituir a fotografia; ao substituir ou excluir uma foto, o arquivo antigo também é retirado do armazenamento. Essas operações sempre pedem o código reservado.
+As sete lembranças originais ficam em **“Memórias que moram em mim”**. A linha do tempo **“Momentos que fizeram de nós, nós”** reaproveita algumas dessas mesmas fotografias da nuvem com títulos e descrições próprios, sem armazenar cópias adicionais dos arquivos. Todas as fotografias existentes e futuras possuem a opção **“Editar ou excluir”**. É possível corrigir o título e o texto ou substituir a fotografia; um arquivo só é retirado do armazenamento quando não está sendo usado por nenhuma outra lembrança. Essas operações sempre pedem o código reservado.
 
 ## Coisas que ainda vamos viver
 

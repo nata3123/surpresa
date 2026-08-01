@@ -978,10 +978,10 @@ footer span:last-child { color:#f1a8ba; }
           <span class="eyebrow">Nosso pequeno álbum</span>
           <h2>Memórias que moram em mim</h2>
           <p>Alguns dos capítulos que eu quero guardar para sempre.</p>
-          <div class="album-meta" aria-label="Álbum com sete memórias">
+          <div class="album-meta" aria-label="Informações do nosso álbum">
             <span>Bianca + Natã</span>
             <span aria-hidden="true">•</span>
-            <span id="albumMemoryCount">Carregando memórias…</span>
+            <span id="albumMemoryCount" aria-live="polite">Carregando memórias…</span>
           </div>
         </div>
 
@@ -1003,7 +1003,7 @@ footer span:last-child { color:#f1a8ba; }
 
             <div class="gallery-controls">
               <button class="gallery-arrow gallery-prev" id="galleryPrev" type="button" aria-label="Foto anterior">‹</button>
-              <span id="galleryIndex">1 de 7</span>
+              <span id="galleryIndex">Carregando…</span>
               <button class="gallery-arrow gallery-next" id="galleryNext" type="button" aria-label="Próxima foto">›</button>
             </div>
           </div>
@@ -1087,7 +1087,7 @@ footer span:last-child { color:#f1a8ba; }
 
               <div class="future-plan-field future-plan-field-wide">
                 <label for="futurePlanDetails">Detalhes que queremos guardar</label>
-                <textarea id="futurePlanDetails" maxlength="600" placeholder="Conte como vocês imaginam esse momento…"></textarea>
+                <textarea id="futurePlanDetails" maxlength="600" placeholder="Conte como imaginamos esse momento…"></textarea>
               </div>
 
               <div class="future-plan-field future-plan-field-wide">
@@ -1120,7 +1120,7 @@ footer span:last-child { color:#f1a8ba; }
             <div class="date-idea-origin" id="dateIdeaOrigin"><span aria-hidden="true">✦</span> Sugestão do dia</div>
             <span id="dateIdeaTag">Em casa · econômico</span>
             <h3 id="dateIdeaTitle">Preparar uma noite de cinema diferente</h3>
-            <p id="dateIdeaDescription">Escolham um filme que nenhum dos dois viu, preparem alguma coisa gostosa e deixem os celulares de lado.</p>
+            <p id="dateIdeaDescription">Vamos escolher um filme que nenhum dos dois viu, preparar alguma coisa gostosa e deixar os celulares de lado.</p>
             <div class="date-idea-extra" id="dateIdeaExtra" hidden>
               <span aria-hidden="true">♡</span>
               <p><strong>Um toque especial</strong><span id="dateIdeaSpecialTouch"></span></p>
@@ -1164,7 +1164,7 @@ footer span:last-child { color:#f1a8ba; }
           <div class="date-random-action">
             <p>
               <strong>Feito no próprio site</strong>
-              <span>Escolham as opções e sorteiem quantas vezes quiserem, sem cadastro e sem custo.</span>
+              <span>Escolhemos as opções e podemos sortear quantas vezes quisermos, sem cadastro e sem custo.</span>
             </p>
             <button class="secondary-button date-random-button" id="newDateIdea" type="button"><span aria-hidden="true">✦</span> Sortear outro encontro</button>
           </div>
@@ -1236,7 +1236,7 @@ footer span:last-child { color:#f1a8ba; }
               <h3>Pequenas coisas que merecem ficar</h3>
             </div>
             <div class="daily-entries-list" id="dailyEntriesList" aria-live="polite">
-              <p class="corner-empty">Carregando os registros de vocês…</p>
+              <p class="corner-empty">Carregando nossos registros…</p>
             </div>
           </div>
         </div>
@@ -1244,9 +1244,9 @@ footer span:last-child { color:#f1a8ba; }
 
       <section class="section complaints-section" id="reclamacoes">
         <div class="section-heading complaints-heading reveal">
-          <span class="eyebrow">Um jogo só de vocês</span>
+          <span class="eyebrow">Um jogo só nosso</span>
           <h2>Decifra essa reclamação</h2>
-          <p>Quem reclama publica apenas uma foto. A outra pessoa precisa descobrir o que ela quer dizer.</p>
+          <p>Quando um de nós reclama, publica apenas uma foto. O outro tenta descobrir o que ela quer dizer.</p>
         </div>
 
         <div class="complaint-upload-card reveal">
@@ -1311,7 +1311,7 @@ footer span:last-child { color:#f1a8ba; }
               <h3>Cartas que já chegaram</h3>
             </div>
             <div class="letters-list" id="lettersList" aria-live="polite">
-              <p class="corner-empty">Carregando as cartas de vocês…</p>
+              <p class="corner-empty">Carregando nossas cartas…</p>
             </div>
           </div>
         </div>
@@ -1471,24 +1471,24 @@ const DATE_IDEA_LABELS = Object.freeze({
 });
 
 const DATE_IDEAS = Object.freeze([
-  { title: "Perguntas que aquecem o coração", description: "Sentem juntos por alguns minutos e cada um faz três perguntas que sempre teve vontade de fazer ao outro.", specialTouch: "Terminem contando qual resposta gostariam de guardar para sempre.", place: "casa", budget: "gratis", duration: "rapido" },
-  { title: "Sessão de fotos do nosso jeitinho", description: "Escolham cantinhos da casa, improvisem poses e façam uma pequena sessão usando apenas o celular e o que já têm.", specialTouch: "Escolham a foto mais espontânea para entrar em Memórias que moram em mim.", place: "casa", budget: "gratis", duration: "medio" },
-  { title: "Um dia inteiro sem pressa", description: "Montem juntos um dia em casa com café demorado, música, jogos, comida feita pelos dois e uma noite de filme.", specialTouch: "Cada um escolhe uma parte do dia sem contar antes para o outro.", place: "casa", budget: "gratis", duration: "longo" },
-  { title: "Lanche surpresa em dupla", description: "Cada um prepara ou compra uma bebida, um salgado e um doce para o outro sem revelar as escolhas.", specialTouch: "Façam uma nota divertida para cada escolha e guardem o resultado.", place: "casa", budget: "baixo", duration: "rapido" },
-  { title: "Cinema com cardápio escolhido pelos dois", description: "Escolham um filme que nenhum dos dois viu, preparem uma comida simples e deixem os celulares longe até os créditos.", specialTouch: "Antes do filme, cada um escreve uma previsão sobre a história para comparar no final.", place: "casa", budget: "baixo", duration: "medio" },
-  { title: "Festival particular de filmes e sabores", description: "Escolham dois filmes, preparem lanches para momentos diferentes e transformem a sala no cinema particular de vocês.", specialTouch: "Façam ingressos de papel com a data e o nome do festival.", place: "casa", budget: "baixo", duration: "longo" },
-  { title: "Brinde com sobremesa especial", description: "Escolham uma sobremesa bonita, arrumem a mesa e façam um pequeno brinde a alguma conquista de vocês.", specialTouch: "Cada um completa a frase: hoje eu celebraria em você...", place: "casa", budget: "especial", duration: "rapido" },
-  { title: "Jantar com tema sorteado", description: "Sorteiem um país, uma cor ou uma década e montem juntos um jantar inspirado no tema escolhido.", specialTouch: "Escolham uma música que combine com o tema para abrir a noite.", place: "casa", budget: "especial", duration: "medio" },
-  { title: "Hotel romântico dentro de casa", description: "Preparem café especial, roupas confortáveis, jantar caprichado e uma programação inteira sem tarefas ou pressa.", specialTouch: "Deixem uma cartinha de boas-vindas no travesseiro um do outro.", place: "casa", budget: "especial", duration: "longo" },
-  { title: "Caminhada sem celular", description: "Saiam para caminhar sem destino definido e conversem com calma, prestando atenção ao caminho e um ao outro.", specialTouch: "Cada um faz uma pergunta que nunca fez antes.", place: "sair", budget: "gratis", duration: "rapido" },
-  { title: "Passeio para ver o pôr do sol", description: "Escolham um lugar bonito, levem água e fiquem juntos enquanto o céu muda de cor.", specialTouch: "Tirem uma única foto do momento e contem o que mais gostaram no dia.", place: "sair", budget: "gratis", duration: "medio" },
-  { title: "Turistas a pé na própria cidade", description: "Montem um roteiro por praças, ruas e lugares gratuitos que vocês ainda não conhecem e explorem sem pressa.", specialTouch: "Criem um nome divertido para o passeio e registrem três descobertas.", place: "sair", budget: "gratis", duration: "longo" },
-  { title: "Uma sobremesa em um lugar novo", description: "Procurem uma sobremesa que nunca provaram, dividam a escolha e aproveitem uma saída curta da rotina.", specialTouch: "Cada um escolhe uma colherada perfeita para oferecer ao outro.", place: "sair", budget: "baixo", duration: "rapido" },
-  { title: "Piquenique simples para dois", description: "Levem frutas, café ou lanches fáceis para um lugar tranquilo e passem algumas horas conversando.", specialTouch: "Cada um leva escondido uma coisinha que sabe que o outro gosta.", place: "sair", budget: "baixo", duration: "medio" },
-  { title: "Roteiro econômico pela cidade", description: "Escolham três paradas baratas, como uma praça, um café e um lugar bonito para fotos, e façam um passeio completo.", specialTouch: "Guardem um papel ou uma foto de cada parada para lembrar do roteiro.", place: "sair", budget: "baixo", duration: "longo" },
-  { title: "Um brinde fora da rotina", description: "Escolham um lugar agradável para dividir uma bebida ou petisco e fazer uma pausa especial no dia.", specialTouch: "Brindem a uma coisa pequena que melhorou desde que vocês se conheceram.", place: "sair", budget: "especial", duration: "rapido" },
-  { title: "Recriar uma parte do primeiro encontro", description: "Voltem a um lugar, comida, música ou detalhe do começo e contem o que cada um lembra daquele dia.", specialTouch: "No fim, digam o que fariam igual e o que tornou a história ainda melhor.", place: "sair", budget: "especial", duration: "medio" },
-  { title: "Um dia inteiro escolhido pelos dois", description: "Cada um escolhe em segredo uma parte do dia, como uma comida, um passeio e algo para fazer à noite.", specialTouch: "Só revelem a próxima escolha quando chegar a hora de vivê-la.", place: "sair", budget: "especial", duration: "longo" }
+  { title: "Perguntas que aquecem o coração", description: "Vamos sentar juntos por alguns minutos e fazer três perguntas que sempre tivemos vontade de fazer um ao outro.", specialTouch: "No fim, contamos qual resposta queremos guardar para sempre.", place: "casa", budget: "gratis", duration: "rapido" },
+  { title: "Sessão de fotos do nosso jeitinho", description: "Vamos escolher cantinhos da casa, improvisar poses e fazer uma pequena sessão usando apenas o celular e o que já temos.", specialTouch: "Escolhemos a foto mais espontânea para entrar em Memórias que moram em mim.", place: "casa", budget: "gratis", duration: "medio" },
+  { title: "Um dia inteiro sem pressa", description: "Vamos montar um dia em casa com café demorado, música, jogos, comida feita por nós e uma noite de filme.", specialTouch: "Cada um escolhe uma parte do dia sem contar antes para o outro.", place: "casa", budget: "gratis", duration: "longo" },
+  { title: "Lanche surpresa em dupla", description: "Cada um prepara ou compra uma bebida, um salgado e um doce para o outro sem revelar as escolhas.", specialTouch: "Damos uma nota divertida para cada escolha e guardamos o resultado.", place: "casa", budget: "baixo", duration: "rapido" },
+  { title: "Cinema com cardápio escolhido pelos dois", description: "Vamos escolher um filme que nenhum dos dois viu, preparar uma comida simples e deixar os celulares longe até os créditos.", specialTouch: "Antes do filme, cada um escreve uma previsão sobre a história para compararmos no final.", place: "casa", budget: "baixo", duration: "medio" },
+  { title: "Festival particular de filmes e sabores", description: "Vamos escolher dois filmes, preparar lanches para momentos diferentes e transformar a sala no nosso cinema particular.", specialTouch: "Podemos fazer ingressos de papel com a data e o nome do festival.", place: "casa", budget: "baixo", duration: "longo" },
+  { title: "Brinde com sobremesa especial", description: "Vamos escolher uma sobremesa bonita, arrumar a mesa e fazer um pequeno brinde a alguma conquista nossa.", specialTouch: "Cada um completa a frase: hoje eu celebraria em você...", place: "casa", budget: "especial", duration: "rapido" },
+  { title: "Jantar com tema sorteado", description: "Vamos sortear um país, uma cor ou uma década e montar juntos um jantar inspirado no tema escolhido.", specialTouch: "Escolhemos uma música que combine com o tema para abrir a noite.", place: "casa", budget: "especial", duration: "medio" },
+  { title: "Hotel romântico dentro de casa", description: "Vamos preparar café especial, roupas confortáveis, jantar caprichado e uma programação inteira sem tarefas ou pressa.", specialTouch: "Cada um deixa uma cartinha de boas-vindas no travesseiro do outro.", place: "casa", budget: "especial", duration: "longo" },
+  { title: "Caminhada sem celular", description: "Vamos caminhar sem destino definido e conversar com calma, prestando atenção ao caminho e um ao outro.", specialTouch: "Cada um faz uma pergunta que nunca fez antes.", place: "sair", budget: "gratis", duration: "rapido" },
+  { title: "Passeio para ver o pôr do sol", description: "Vamos escolher um lugar bonito, levar água e ficar juntos enquanto o céu muda de cor.", specialTouch: "Tiramos uma única foto do momento e contamos o que mais gostamos no dia.", place: "sair", budget: "gratis", duration: "medio" },
+  { title: "Turistas a pé na própria cidade", description: "Vamos montar um roteiro por praças, ruas e lugares gratuitos que ainda não conhecemos e explorar sem pressa.", specialTouch: "Podemos criar um nome divertido para o passeio e registrar três descobertas.", place: "sair", budget: "gratis", duration: "longo" },
+  { title: "Uma sobremesa em um lugar novo", description: "Vamos procurar uma sobremesa que nunca provamos, dividir a escolha e aproveitar uma saída curta da rotina.", specialTouch: "Cada um escolhe uma colherada perfeita para oferecer ao outro.", place: "sair", budget: "baixo", duration: "rapido" },
+  { title: "Piquenique simples para dois", description: "Vamos levar frutas, café ou lanches fáceis para um lugar tranquilo e passar algumas horas conversando.", specialTouch: "Cada um leva escondido uma coisinha que sabe que o outro gosta.", place: "sair", budget: "baixo", duration: "medio" },
+  { title: "Roteiro econômico pela cidade", description: "Vamos escolher três paradas baratas, como uma praça, um café e um lugar bonito para fotos, e fazer um passeio completo.", specialTouch: "Guardamos um papel ou uma foto de cada parada para lembrar do roteiro.", place: "sair", budget: "baixo", duration: "longo" },
+  { title: "Um brinde fora da rotina", description: "Vamos escolher um lugar agradável para dividir uma bebida ou petisco e fazer uma pausa especial no dia.", specialTouch: "Podemos brindar a uma coisa pequena que melhorou desde que nos conhecemos.", place: "sair", budget: "especial", duration: "rapido" },
+  { title: "Recriar uma parte do primeiro encontro", description: "Vamos voltar a um lugar, comida, música ou detalhe do começo e contar o que cada um lembra daquele dia.", specialTouch: "No fim, contamos o que faríamos igual e o que tornou nossa história ainda melhor.", place: "sair", budget: "especial", duration: "medio" },
+  { title: "Um dia inteiro escolhido pelos dois", description: "Cada um escolhe em segredo uma parte do dia, como uma comida, um passeio e algo para fazer à noite.", specialTouch: "Só revelamos a próxima escolha quando chegar a hora de vivê-la.", place: "sair", budget: "especial", duration: "longo" }
 ]);
 
 const $ = (selector) => document.querySelector(selector);
@@ -1640,6 +1640,7 @@ function renderGallery(photos = []) {
   const thumbnails = $("#thumbnails");
   thumbnails.replaceChildren();
   updateHeroMemories(originalAlbumPhotos);
+  updateAlbumMemoryCount(originalAlbumPhotos.length);
 
   originalAlbumPhotos.forEach((photo, index) => {
     const button = document.createElement("button");
@@ -1661,7 +1662,7 @@ function renderGallery(photos = []) {
     $("#galleryImage").removeAttribute("src");
     $("#galleryImage").alt = "";
     $("#galleryCaption").textContent = "O álbum está esperando uma nova memória";
-    $("#galleryText").textContent = "Quando vocês publicarem uma foto nesta seção, ela aparecerá aqui.";
+    $("#galleryText").textContent = "Quando publicarmos uma foto nesta seção, ela aparecerá aqui.";
     $("#galleryIndex").textContent = "0 de 0";
     $("#galleryIndexPadded").textContent = "00";
     $("#galleryPrev").disabled = true;
@@ -1675,6 +1676,17 @@ function renderGallery(photos = []) {
   const preservedIndex = originalAlbumPhotos.findIndex((photo) => photo.id === activePhotoId);
   currentPhoto = preservedIndex >= 0 ? preservedIndex : Math.min(currentPhoto, originalAlbumPhotos.length - 1);
   showPhoto(currentPhoto, false);
+}
+
+function updateAlbumMemoryCount(count) {
+  const label = `${count} ${count === 1 ? "memória" : "memórias"}`;
+  const counter = $("#albumMemoryCount");
+  if (!counter) return;
+  counter.textContent = label;
+  counter.closest(".album-meta")?.setAttribute(
+    "aria-label",
+    `Nosso álbum tem ${label}`
+  );
 }
 
 function showPhoto(index, animate = true) {
@@ -2257,7 +2269,7 @@ function createFuturePlanCard(plan) {
         { name: "detalhes", label: "Detalhes", kind: "textarea", rows: 3, maxLength: 600, required: false }
       ],
       reload: loadFuturePlans,
-      deletePrompt: "Excluir este plano da história de vocês?"
+      deletePrompt: "Excluir este plano da nossa história?"
     })
   );
   return article;
@@ -2295,7 +2307,7 @@ function renderFuturePlans(plans) {
     const title = document.createElement("strong");
     title.textContent = "Nossa lista ainda está esperando o primeiro sonho.";
     const text = document.createElement("p");
-    text.textContent = "Pode ser uma viagem, um encontro simples ou qualquer coisa que vocês queiram viver juntos.";
+    text.textContent = "Pode ser uma viagem, um encontro simples ou qualquer coisa que queiramos viver juntos.";
     empty.append(heart, title, text);
     list.append(empty);
     return;
@@ -2424,7 +2436,7 @@ function setDateIdeaStatus(message, state = "") {
 
 function createDateIdea() {
   chooseDateIdea(false);
-  setDateIdeaStatus("Pronto! A ideia respeita as escolhas de vocês e não custa nada para gerar ♥", "success");
+  setDateIdeaStatus("Pronto! A ideia respeita nossas escolhas e não custa nada para gerar ♥", "success");
 }
 
 async function requestCoupleCorner(payload, editorCode) {
@@ -2457,7 +2469,7 @@ function renderDailyEntries(entries) {
   const list = $("#dailyEntriesList");
   list.replaceChildren();
   if (!entries.length) {
-    list.append(createCornerEmpty("O primeiro registro de vocês ainda está esperando para ser escrito ♥"));
+    list.append(createCornerEmpty("Nosso primeiro registro ainda está esperando para ser escrito ♥"));
     return;
   }
 
@@ -2929,7 +2941,7 @@ function createPublicationReplyArea(target, replies) {
   const eyebrow = document.createElement("span");
   eyebrow.textContent = "Nosso diário";
   const title = document.createElement("h5");
-  title.textContent = replies.length ? "O que essa memória despertou em nós" : "Uma resposta esperando para nascer";
+  title.textContent = replies.length ? "O que essa memória despertou em nós" : "Nossa próxima resposta ainda está por nascer";
   heading.append(eyebrow, title);
   section.append(heading);
 
@@ -2941,7 +2953,7 @@ function createPublicationReplyArea(target, replies) {
   } else {
     const empty = document.createElement("p");
     empty.className = "publication-replies-empty";
-    empty.textContent = "Esta lembrança ainda pode ganhar palavras novas de vocês dois.";
+    empty.textContent = "Esta lembrança ainda pode ganhar novas palavras nossas.";
     section.append(empty);
   }
 
@@ -3035,8 +3047,6 @@ function renderPublications(publications, replies) {
 
   renderGallery(albumMemories);
   renderTimeline(timelineMemories, repliesByPublication);
-  const albumCount = $("#albumMemoryCount");
-  if (albumCount) albumCount.textContent = `${albumMemories.length} ${albumMemories.length === 1 ? "memória" : "memórias"}`;
 }
 
 async function loadPublications() {
@@ -3574,7 +3584,7 @@ $("#futurePlanForm").addEventListener("submit", async (event) => {
     }, editorCode);
 
     form.reset();
-    setFuturePlanStatus("Plano guardado! Ele já aparece para vocês dois ♥", "success");
+    setFuturePlanStatus("Plano guardado! Ele já aparece no nosso cantinho ♥", "success");
     await loadFuturePlans();
 
     const newPlan = result.plano?.id
@@ -3696,7 +3706,7 @@ $("#letterForm").addEventListener("submit", async (event) => {
       texto: text
     }, editorCode);
     form.reset();
-    setCornerStatus("#letterStatus", "Carta guardada e entregue no cantinho de vocês ♥", "success");
+    setCornerStatus("#letterStatus", "Carta guardada e entregue no nosso cantinho ♥", "success");
     await loadLetters();
   } catch (error) {
     setCornerStatus("#letterStatus", error.message || "Não foi possível guardar a carta.", "error");
