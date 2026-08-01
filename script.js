@@ -5,7 +5,7 @@
 const CONFIG = {
   pageTitle: "surpresaparabianca",
   introTitle: "Bianca & Natã, a nossa história mora aqui.",
-  introText: "Uma pequena lembrança de tudo o que vivemos desde 21 de maio de 2026.",
+  introText: "Nosso cantinho para guardar tudo o que vivemos desde 21 de maio de 2026.",
   startDate: "2026-05-21T00:00:00-03:00",
   songTitle: "Partilhar",
   songArtist: "Rubel & ANAVITÓRIA",
@@ -64,7 +64,7 @@ const DATE_IDEAS = Object.freeze([
   { title: "Sessão de fotos do nosso jeitinho", description: "Vamos escolher cantinhos da casa, improvisar poses e fazer uma pequena sessão usando apenas o celular e o que já temos.", specialTouch: "Escolhemos a foto mais espontânea para entrar em Memórias que moram em mim.", place: "casa", budget: "gratis", duration: "medio" },
   { title: "Um dia inteiro sem pressa", description: "Vamos montar um dia em casa com café demorado, música, jogos, comida feita por nós e uma noite de filme.", specialTouch: "Cada um escolhe uma parte do dia sem contar antes para o outro.", place: "casa", budget: "gratis", duration: "longo" },
   { title: "Lanche surpresa em dupla", description: "Cada um prepara ou compra uma bebida, um salgado e um doce para o outro sem revelar as escolhas.", specialTouch: "Damos uma nota divertida para cada escolha e guardamos o resultado.", place: "casa", budget: "baixo", duration: "rapido" },
-  { title: "Cinema com cardápio escolhido pelos dois", description: "Vamos escolher um filme que nenhum dos dois viu, preparar uma comida simples e deixar os celulares longe até os créditos.", specialTouch: "Antes do filme, cada um escreve uma previsão sobre a história para compararmos no final.", place: "casa", budget: "baixo", duration: "medio" },
+  { title: "Cinema com cardápio escolhido por nós dois", description: "Vamos escolher um filme que nenhum de nós viu, preparar uma comida simples e deixar os celulares longe até os créditos.", specialTouch: "Antes do filme, cada um escreve uma previsão sobre a história para compararmos no final.", place: "casa", budget: "baixo", duration: "medio" },
   { title: "Festival particular de filmes e sabores", description: "Vamos escolher dois filmes, preparar lanches para momentos diferentes e transformar a sala no nosso cinema particular.", specialTouch: "Podemos fazer ingressos de papel com a data e o nome do festival.", place: "casa", budget: "baixo", duration: "longo" },
   { title: "Brinde com sobremesa especial", description: "Vamos escolher uma sobremesa bonita, arrumar a mesa e fazer um pequeno brinde a alguma conquista nossa.", specialTouch: "Cada um completa a frase: hoje eu celebraria em você...", place: "casa", budget: "especial", duration: "rapido" },
   { title: "Jantar com tema sorteado", description: "Vamos sortear um país, uma cor ou uma década e montar juntos um jantar inspirado no tema escolhido.", specialTouch: "Escolhemos uma música que combine com o tema para abrir a noite.", place: "casa", budget: "especial", duration: "medio" },
@@ -77,7 +77,7 @@ const DATE_IDEAS = Object.freeze([
   { title: "Roteiro econômico pela cidade", description: "Vamos escolher três paradas baratas, como uma praça, um café e um lugar bonito para fotos, e fazer um passeio completo.", specialTouch: "Guardamos um papel ou uma foto de cada parada para lembrar do roteiro.", place: "sair", budget: "baixo", duration: "longo" },
   { title: "Um brinde fora da rotina", description: "Vamos escolher um lugar agradável para dividir uma bebida ou petisco e fazer uma pausa especial no dia.", specialTouch: "Podemos brindar a uma coisa pequena que melhorou desde que nos conhecemos.", place: "sair", budget: "especial", duration: "rapido" },
   { title: "Recriar uma parte do primeiro encontro", description: "Vamos voltar a um lugar, comida, música ou detalhe do começo e contar o que cada um lembra daquele dia.", specialTouch: "No fim, contamos o que faríamos igual e o que tornou nossa história ainda melhor.", place: "sair", budget: "especial", duration: "medio" },
-  { title: "Um dia inteiro escolhido pelos dois", description: "Cada um escolhe em segredo uma parte do dia, como uma comida, um passeio e algo para fazer à noite.", specialTouch: "Só revelamos a próxima escolha quando chegar a hora de vivê-la.", place: "sair", budget: "especial", duration: "longo" }
+  { title: "Um dia inteiro escolhido por nós dois", description: "Cada um escolhe em segredo uma parte do dia, como uma comida, um passeio e algo para fazer à noite.", specialTouch: "Só revelamos a próxima escolha quando chegar a hora de vivê-la.", place: "sair", budget: "especial", duration: "longo" }
 ]);
 
 const $ = (selector) => document.querySelector(selector);
@@ -355,7 +355,7 @@ function renderTimeline(items = [], repliesByPublication = latestRepliesByPublic
   if (!items.length) {
     const empty = document.createElement("p");
     empty.className = "corner-empty timeline-empty";
-    empty.textContent = "A linha do tempo está esperando um novo capítulo ♥";
+    empty.textContent = "Nossa linha do tempo está esperando o próximo capítulo ♥";
     timeline.append(empty);
   }
 }
@@ -490,14 +490,14 @@ function createContentManager(config) {
     imageField.className = "content-manager-field";
     const imageLabel = document.createElement("label");
     imageLabel.htmlFor = "manage-" + config.type + "-" + config.item.id + "-imagem";
-    imageLabel.textContent = "Trocar foto, se quiser";
+    imageLabel.textContent = "Trocar nossa foto, se quisermos";
     const image = document.createElement("input");
     image.id = imageLabel.htmlFor;
     image.name = "imagem";
     image.type = "file";
     image.accept = "image/jpeg,image/png,image/webp";
     const hint = document.createElement("small");
-    hint.textContent = "Deixe vazio para manter a foto atual.";
+    hint.textContent = "Se deixarmos vazio, nossa foto atual continua aqui.";
     imageField.append(imageLabel, image, hint);
     form.append(imageField);
   }
@@ -506,7 +506,7 @@ function createContentManager(config) {
   codeField.className = "content-manager-field";
   const codeLabel = document.createElement("label");
   codeLabel.htmlFor = "manage-" + config.type + "-" + config.item.id + "-codigo";
-  codeLabel.textContent = "Código reservado";
+  codeLabel.textContent = "Nosso código reservado";
   const code = document.createElement("input");
   code.id = codeLabel.htmlFor;
   code.name = "codigo";
@@ -660,7 +660,7 @@ async function renderNotes() {
 
     if (!notes.length) {
       const empty = document.createElement("small");
-      empty.textContent = "Nenhum recado ainda. O primeiro pode ser seu ♥";
+      empty.textContent = "Nosso primeiro recado ainda está esperando para ser escrito ♥";
       notesList.append(empty);
       return;
     }
@@ -670,7 +670,7 @@ async function renderNotes() {
     notesList.replaceChildren();
     const warning = document.createElement("small");
     warning.className = "notes-error";
-    warning.textContent = "Não foi possível carregar os recados agora. Tente novamente em instantes.";
+    warning.textContent = "Não conseguimos carregar nossos recados agora. Vamos tentar novamente em instantes.";
     notesList.append(warning);
     console.error(error);
   }
@@ -775,7 +775,7 @@ function createFuturePlanCard(plan) {
   badge.textContent = `${category.symbol} ${category.label}`;
 
   const author = document.createElement("span");
-  author.textContent = `Sonho de ${plan.autor}`;
+    author.textContent = `Um sonho nosso, guardado por ${plan.autor}`;
   meta.append(badge, author);
 
   const title = document.createElement("h4");
@@ -844,7 +844,7 @@ function createFuturePlanCard(plan) {
       type: "plano",
       item: plan,
       fields: [
-        { name: "autor", label: "Quem adicionou?", kind: "select", options: AUTHOR_OPTIONS },
+        { name: "autor", label: "Qual de nós adicionou?", kind: "select", options: AUTHOR_OPTIONS },
         {
           name: "categoria",
           label: "Categoria",
@@ -956,7 +956,7 @@ function setupDateIdea() {
     year: "numeric"
   }).format(today);
   const naturalDate = longDate.charAt(0).toUpperCase() + longDate.slice(1);
-  $("#dateTodayLabel").textContent = `Hoje é ${naturalDate}. Que tal transformar o dia em uma lembrança nova?`;
+  $("#dateTodayLabel").textContent = `Hoje é ${naturalDate}. Que tal transformarmos o dia em uma lembrança nossa?`;
   $("#dailyFormDate").textContent = naturalDate;
   chooseDateIdea(true);
 }
@@ -1093,7 +1093,7 @@ function renderDailyEntries(entries) {
         type: "registro",
         item: entry,
         fields: [
-          { name: "autor", label: "Quem escreveu?", kind: "select", options: AUTHOR_OPTIONS },
+          { name: "autor", label: "Qual de nós escreveu?", kind: "select", options: AUTHOR_OPTIONS },
           {
             name: "categoria",
             label: "Tipo de registro",
@@ -1126,7 +1126,7 @@ async function loadDailyEntries() {
     renderDailyEntries(await response.json());
   } catch (error) {
     console.error(error);
-    $("#dailyEntriesList").replaceChildren(createCornerEmpty("Não foi possível carregar os registros agora."));
+    $("#dailyEntriesList").replaceChildren(createCornerEmpty("Não conseguimos carregar nossos registros agora."));
   }
 }
 
@@ -1134,7 +1134,7 @@ function renderLetters(letters) {
   const list = $("#lettersList");
   list.replaceChildren();
   if (!letters.length) {
-    list.append(createCornerEmpty("Ainda não chegou nenhuma carta. A primeira pode ser escrita hoje ♥"));
+    list.append(createCornerEmpty("Nossa primeira carta ainda pode ser escrita hoje ♥"));
     return;
   }
 
@@ -1168,7 +1168,7 @@ function renderLetters(letters) {
         type: "carta",
         item: letter,
         fields: [
-          { name: "autor", label: "Quem escreveu?", kind: "select", options: AUTHOR_OPTIONS },
+          { name: "autor", label: "Qual de nós escreveu?", kind: "select", options: AUTHOR_OPTIONS },
           { name: "titulo", label: "Título", maxLength: 100 },
           { name: "texto", label: "Carta", kind: "textarea", rows: 8, maxLength: 5000 }
         ],
@@ -1191,7 +1191,7 @@ async function loadLetters() {
     renderLetters(await response.json());
   } catch (error) {
     console.error(error);
-    $("#lettersList").replaceChildren(createCornerEmpty("Não foi possível carregar as cartas agora."));
+    $("#lettersList").replaceChildren(createCornerEmpty("Não conseguimos carregar nossas cartas agora."));
   }
 }
 
@@ -1269,7 +1269,7 @@ function createComplaintCard(complaint, interpretations) {
           type: "interpretacao",
           item: interpretation,
           fields: [
-            { name: "autor", label: "Quem escreveu?", kind: "select", options: AUTHOR_OPTIONS },
+            { name: "autor", label: "Qual de nós escreveu?", kind: "select", options: AUTHOR_OPTIONS },
             { name: "mensagem", label: "Interpretação", kind: "textarea", rows: 3, maxLength: 1000 }
           ],
           reload: loadComplaints,
@@ -1279,7 +1279,7 @@ function createComplaintCard(complaint, interpretations) {
       replies.append(reply);
     });
   } else {
-    replies.append(createCornerEmpty("Ninguém decifrou esta reclamação ainda."));
+    replies.append(createCornerEmpty("Nós ainda não deciframos esta reclamação."));
   }
 
   const composer = document.createElement("details");
@@ -1289,7 +1289,7 @@ function createComplaintCard(complaint, interpretations) {
   const form = document.createElement("form");
   const authorLabel = document.createElement("label");
   authorLabel.htmlFor = `complaint-author-${complaint.id}`;
-  authorLabel.textContent = "Quem está interpretando?";
+  authorLabel.textContent = "Qual de nós está interpretando?";
   const author = document.createElement("select");
   author.id = authorLabel.htmlFor;
   author.name = "autor";
@@ -1337,7 +1337,7 @@ function createComplaintCard(complaint, interpretations) {
       type: "reclamacao",
       item: complaint,
       fields: [
-        { name: "autor", label: "Quem enviou?", kind: "select", options: AUTHOR_OPTIONS }
+        { name: "autor", label: "Qual de nós enviou?", kind: "select", options: AUTHOR_OPTIONS }
       ],
       allowImage: true,
       reload: loadComplaints,
@@ -1385,7 +1385,7 @@ async function loadComplaints() {
     renderComplaints(await complaintsResponse.json(), await interpretationsResponse.json());
   } catch (error) {
     console.error(error);
-    $("#complaintsList").replaceChildren(createCornerEmpty("Não foi possível carregar as reclamações agora."));
+    $("#complaintsList").replaceChildren(createCornerEmpty("Não conseguimos carregar nossas reclamações agora."));
   }
 }
 
@@ -1414,7 +1414,7 @@ function createReplyCard(reply) {
       type: "resposta",
       item: reply,
       fields: [
-        { name: "autor", label: "Quem escreveu?", kind: "select", options: AUTHOR_OPTIONS },
+        { name: "autor", label: "Qual de nós escreveu?", kind: "select", options: AUTHOR_OPTIONS },
         { name: "mensagem", label: "Resposta", kind: "textarea", rows: 3, maxLength: 1000 }
       ],
       reload: loadPublications,
@@ -1480,7 +1480,7 @@ async function submitPublicationReply(event) {
   const originalLabel = submitButton.textContent;
   submitButton.disabled = true;
   submitButton.textContent = "Guardando…";
-  status.textContent = "Guardando sua resposta no nosso diário…";
+  status.textContent = "Guardando nossa resposta no nosso diário…";
   status.dataset.state = "";
 
   try {
@@ -1542,7 +1542,7 @@ function createPublicationReplyArea(target, replies) {
   } else {
     const empty = document.createElement("p");
     empty.className = "publication-replies-empty";
-    empty.textContent = "Esta lembrança ainda pode ganhar novas palavras nossas.";
+    empty.textContent = "Esta lembrança ainda pode ganhar palavras novas de nós dois.";
     section.append(empty);
   }
 
@@ -1559,7 +1559,7 @@ function createPublicationReplyArea(target, replies) {
 
   const authorLabel = document.createElement("label");
   authorLabel.htmlFor = `reply-author-${replyTarget}`;
-  authorLabel.textContent = "Quem está escrevendo?";
+  authorLabel.textContent = "Qual de nós está escrevendo?";
   const author = document.createElement("select");
   author.id = authorLabel.htmlFor;
   author.name = "autor";
@@ -1574,7 +1574,7 @@ function createPublicationReplyArea(target, replies) {
 
   const messageLabel = document.createElement("label");
   messageLabel.htmlFor = `reply-message-${replyTarget}`;
-  messageLabel.textContent = "Sua resposta";
+  messageLabel.textContent = "Nossa resposta";
   const textarea = document.createElement("textarea");
   textarea.id = messageLabel.htmlFor;
   textarea.name = "mensagem";
@@ -1847,8 +1847,8 @@ function updatePublicationDesign() {
   creatorCard.dataset.selectedSection = section;
   $("#publicationPreview").dataset.selectedSection = section;
   $("#publicationDesignHint").textContent = section === "historia"
-    ? "A lembrança entrará como uma nova etapa da linha do tempo."
-    : "A lembrança aparecerá como uma nova fotografia do álbum.";
+    ? "Nossa lembrança entrará como uma nova etapa da linha do tempo."
+    : "Nossa lembrança aparecerá como uma nova fotografia do álbum.";
 }
 
 function getShareUrl() {
@@ -1896,7 +1896,7 @@ async function copyShareUrl(url) {
 
 function showShareFallback(status, url, copied) {
   status.textContent = copied
-    ? "Link copiado! Agora é só enviar para ela ♥"
+    ? "Link copiado! Nossa história está pronta para ser enviada ♥"
     : "Não foi possível copiar automaticamente. Use o link abaixo:";
 
   const link = document.createElement("a");
@@ -1913,13 +1913,13 @@ async function sharePage() {
   const status = $("#shareStatus");
 
   if (!shareUrl) {
-    status.textContent = "Publique o site para gerar um link compartilhável.";
+    status.textContent = "Nossa história precisa estar publicada para ganhar um link compartilhável.";
     return;
   }
 
   const data = {
     title: CONFIG.pageTitle,
-    text: "Natã fez uma surpresa para Bianca ♥",
+    text: "A nossa história mora aqui ♥",
     url: shareUrl
   };
 
@@ -2029,7 +2029,7 @@ $("#guestbookForm").addEventListener("submit", async (event) => {
     if (!response.ok) throw new Error(`Não foi possível guardar o recado (${response.status}).`);
 
     form.reset();
-    setGuestbookStatus("Recado guardado para aparecer em todos os aparelhos ♥", "success");
+    setGuestbookStatus("Nosso recado foi guardado no nosso cantinho ♥", "success");
     await renderNotes();
   } catch (error) {
     setGuestbookStatus("Não foi possível guardar agora. Confira a internet e tente novamente.", "error");
@@ -2106,7 +2106,7 @@ $("#publicationForm").addEventListener("submit", async (event) => {
     payload.append("texto", publicationText);
     payload.append("imagem", image, image.name);
 
-    setPublicationStatus("Enviando a foto e preparando a nova lembrança…");
+    setPublicationStatus("Enviando nossa foto e preparando a nova lembrança…");
     const response = await fetch(`${SUPABASE.url}/functions/v1/${SUPABASE.publishFunction}`, {
       method: "POST",
       headers: {
@@ -2193,7 +2193,7 @@ $("#futurePlanForm").addEventListener("submit", async (event) => {
 ["#datePlaceFilter", "#dateBudgetFilter", "#dateDurationFilter"].forEach((selector) => {
   $(selector).addEventListener("change", () => {
     chooseDateIdea(true);
-    setDateIdeaStatus("Escolhas atualizadas. Toquem no botão para sortear outra ideia.");
+    setDateIdeaStatus("Nossas escolhas estão prontas. Agora podemos sortear outra ideia.");
   });
 });
 
@@ -2356,7 +2356,7 @@ $("#complaintForm").addEventListener("submit", async (event) => {
     await requestCoupleCorner(payload, editorCode);
     form.reset();
     clearComplaintPreview();
-    setCornerStatus("#complaintStatus", "Reclamação publicada. Agora alguém precisa decifrar 💃🏻", "success");
+    setCornerStatus("#complaintStatus", "Nossa reclamação foi publicada. Agora falta o outro decifrar 💃🏻", "success");
     await loadComplaints();
   } catch (error) {
     setCornerStatus("#complaintStatus", error.message || "Não foi possível publicar a reclamação.", "error");
