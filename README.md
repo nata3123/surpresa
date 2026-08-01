@@ -13,7 +13,7 @@ Esta página foi personalizada com:
 - a área diária **“Três coisas de hoje”**, incluindo carinho, coisas boas do dia e gratidão
 - o jogo **“Decifra essa reclamação”**, no qual a reclamação é publicada somente por foto
 - a área **“Cartas entre nós”**, reservada para textos maiores
-- a música completa **Partilhar**, de Rubel e ANAVITÓRIA, incorporada diretamente na página
+- a playlist compartilhada **“Nossas músicas”**, com músicas completas do YouTube incorporadas diretamente na página
 
 ## Como abrir
 
@@ -21,9 +21,11 @@ Abra o arquivo `index.html` em um navegador. A página funciona no celular e no 
 
 Também há uma versão em arquivo único chamada `surpresa-bianca.html`, que é mais simples de enviar diretamente. As fotografias são carregadas do Supabase, por isso essa versão continua leve e precisa de internet para exibir o álbum.
 
-## Música completa
+## Nossas músicas
 
-A música toca inteira dentro da própria página pelo player incorporado do YouTube, sem abrir outra aba. É necessário acesso à internet. A pessoa deve tocar no botão de reprodução; navegadores normalmente bloqueiam música automática sem interação.
+As músicas tocam inteiras dentro da própria página pelo player incorporado do YouTube, sem abrir outra aba. É necessário acesso à internet e cada música precisa permitir reprodução incorporada no YouTube. A pessoa deve tocar no botão de reprodução; navegadores normalmente bloqueiam música automática sem interação.
+
+Bianca e Natã podem adicionar novas músicas usando um link comum, curto, incorporado, de Short ou de live do YouTube. A playlist fica guardada no Supabase e é atualizada em tempo real em todos os aparelhos com o site aberto. Cada música pode ser corrigida ou excluída diretamente em seu cartão. Adicionar, editar ou excluir sempre exige o mesmo código reservado, que nunca fica escrito no site.
 
 ## Como transformar em um link
 

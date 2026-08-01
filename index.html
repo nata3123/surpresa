@@ -56,6 +56,7 @@
     <div class="surprise-content" id="surpriseContent" hidden>
       <nav class="floating-nav" aria-label="Navegação da nossa história">
         <a href="#contador" title="Tempo juntos">♥</a>
+        <a href="#musica" title="Nossas músicas">♫</a>
         <a href="#mensagem" title="Carta">✉</a>
         <a href="#fotos" title="Fotos">▣</a>
         <a href="#historia" title="Nossa história">⌛</a>
@@ -81,27 +82,79 @@
       </section>
 
       <section class="section music-section" id="musica">
-        <div class="music-card reveal">
-          <div class="vinyl" id="vinyl" aria-hidden="true"><div></div></div>
-          <div class="music-info">
-            <span class="eyebrow">Nossa música</span>
-            <h2 id="songTitle">Partilhar</h2>
-            <p id="songArtist">Rubel &amp; ANAVITÓRIA</p>
-            <div class="full-song-player-wrap">
-              <iframe
-                id="fullSongPlayer"
-                class="full-song-player"
-                title="Partilhar — música completa de Rubel e ANAVITÓRIA"
-                src="https://www.youtube-nocookie.com/embed/RLlWIQCl7iQ?rel=0&amp;playsinline=1&amp;modestbranding=1"
-                width="100%"
-                height="360"
-                frameborder="0"
-                allowfullscreen=""
-                allow="autoplay; encrypted-media; fullscreen; picture-in-picture"
-                loading="lazy"></iframe>
-            </div>
-            <p class="music-note"><strong>Música completa.</strong> Toque no play e continue navegando pela nossa história sem sair da página. ♥</p>
+        <div class="music-shell">
+          <div class="section-heading music-heading reveal">
+            <span class="eyebrow">Nossa trilha sonora</span>
+            <h2>Nossas músicas</h2>
+            <p>Canções que dizem um pouco sobre nós e guardam partes da nossa história.</p>
           </div>
+
+          <div class="music-card reveal">
+            <div class="vinyl" id="vinyl" aria-hidden="true"><div></div></div>
+            <div class="music-info">
+              <span class="eyebrow">Tocando agora</span>
+              <h3 id="songTitle">Partilhar</h3>
+              <p id="songArtist">Rubel &amp; ANAVITÓRIA</p>
+              <div class="full-song-player-wrap">
+                <iframe
+                  id="fullSongPlayer"
+                  class="full-song-player"
+                  title="Partilhar — música completa de Rubel e ANAVITÓRIA"
+                  src="https://www.youtube-nocookie.com/embed/RLlWIQCl7iQ?rel=0&amp;playsinline=1&amp;modestbranding=1"
+                  width="100%"
+                  height="360"
+                  frameborder="0"
+                  allowfullscreen=""
+                  allow="autoplay; encrypted-media; fullscreen; picture-in-picture"
+                  loading="lazy"></iframe>
+              </div>
+              <p class="music-note"><strong>Música completa.</strong> Tocamos no play e continuamos navegando pela nossa história sem sair da página. ♥</p>
+            </div>
+          </div>
+
+          <section class="music-library reveal" aria-labelledby="musicLibraryTitle">
+            <div class="music-library-heading">
+              <div>
+                <span>Nossa playlist</span>
+                <h3 id="musicLibraryTitle">As músicas que escolhemos para nós</h3>
+              </div>
+              <strong id="musicCount" aria-live="polite">Carregando…</strong>
+            </div>
+            <div class="music-list" id="musicList" aria-live="polite"></div>
+          </section>
+
+          <details class="music-composer reveal" id="musicComposer">
+            <summary>Adicionar uma música nossa <span aria-hidden="true">＋</span></summary>
+            <form id="musicForm">
+              <div class="music-form-grid">
+                <div>
+                  <label for="musicAuthor">Qual de nós está adicionando?</label>
+                  <select id="musicAuthor" name="autor" required>
+                    <option value="Natã">Natã</option>
+                    <option value="Bianca">Bianca</option>
+                  </select>
+                </div>
+                <div>
+                  <label for="musicTitle">Nome da música</label>
+                  <input id="musicTitle" name="titulo" type="text" maxlength="100" placeholder="Ex.: Partilhar" required />
+                </div>
+                <div>
+                  <label for="musicArtist">Artista</label>
+                  <input id="musicArtist" name="artista" type="text" maxlength="100" placeholder="Quem canta essa música?" required />
+                </div>
+                <div>
+                  <label for="musicYoutubeUrl">Link do YouTube</label>
+                  <input id="musicYoutubeUrl" name="youtube_url" type="url" maxlength="500" inputmode="url" placeholder="https://www.youtube.com/watch?v=..." required />
+                </div>
+              </div>
+              <label for="musicCode">Nosso código reservado</label>
+              <input id="musicCode" name="codigo" type="password" autocomplete="off" placeholder="Digite o código para adicionar" required />
+              <div class="music-form-actions">
+                <button type="submit">Guardar em nossas músicas ♥</button>
+                <small id="musicFormStatus" role="status" aria-live="polite"></small>
+              </div>
+            </form>
+          </details>
         </div>
       </section>
 

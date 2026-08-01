@@ -171,6 +171,8 @@ let latestPublicationReplies = [];
 let latestFuturePlans = [];
 let currentDateIdea = null;
 const usedDateIdeasByFilter = new Map();
+let currentSongId = null;
+let latestSongs = [];
 let complaintPreviewUrl = "";
 let sharedContentActivated = false;
 let counterTimer;
@@ -208,6 +210,7 @@ function activateSharedContent() {
   void loadPublications();
   void loadFuturePlans();
   void loadCoupleCorner();
+  void loadMusicLibrary();
   void loadRealtimeClient()
     .then(subscribeToPublications)
     .catch(startPublicationsFallback);
@@ -433,7 +436,169 @@ function renderTimeline(items = [], repliesByPublication = latestRepliesByPublic
   }
 }
 
-/* A música completa é reproduzida dentro da página pelo player oficial incorporado. */
+function extractYouTubeVideoId(value) {
+  const rawValue = String(value || "").trim();
+  if (!rawValue) return "";
+
+  let url;
+  try {
+    url = new URL(rawValue);
+  } catch {
+    return "";
+  }
+
+  const hostname = url.hostname.toLowerCase().replace(/^www\./, "");
+  let videoId = "";
+
+  if (hostname === "youtu.be") {
+    videoId = url.pathname.split("/").filter(Boolean)[0] || "";
+  } else if (["youtube.com", "m.youtube.com", "music.youtube.com", "youtube-nocookie.com"].includes(hostname)) {
+    if (url.pathname === "/watch") {
+      videoId = url.searchParams.get("v") || "";
+    } else {
+      const parts = url.pathname.split("/").filter(Boolean);
+      if (["embed", "shorts", "live"].includes(parts[0])) videoId = parts[1] || "";
+    }
+  }
+
+  return /^[A-Za-z0-9_-]{11}$/.test(videoId) ? videoId : "";
+}
+
+function getYouTubeEmbedUrl(videoId) {
+  if (!/^[A-Za-z0-9_-]{11}$/.test(String(videoId || ""))) return "";
+  return `https://www.youtube-nocookie.com/embed/${videoId}?rel=0&playsinline=1&modestbranding=1`;
+}
+
+function updateActiveMusicCard() {
+  $$(".music-track-card").forEach((card) => {
+    const isActive = card.dataset.musicId === String(currentSongId);
+    card.classList.toggle("is-active", isActive);
+    const button = card.querySelector(".music-play-button");
+    if (button) {
+      button.setAttribute("aria-current", isActive ? "true" : "false");
+      button.textContent = isActive ? "Tocando agora" : "Ouvir agora";
+    }
+  });
+}
+
+function playMusic(song, scrollToPlayer = false) {
+  if (!song) return;
+  const embedUrl = getYouTubeEmbedUrl(song.youtube_video_id);
+  if (!embedUrl) return;
+
+  currentSongId = song.id;
+  $("#songTitle").textContent = song.titulo;
+  $("#songArtist").textContent = song.artista;
+
+  const player = $("#fullSongPlayer");
+  player.hidden = false;
+  player.title = `${song.titulo} — música completa de ${song.artista}`;
+  if (player.src !== embedUrl) player.src = embedUrl;
+  updateActiveMusicCard();
+
+  if (scrollToPlayer) {
+    $(".music-card").scrollIntoView({ behavior: "smooth", block: "center" });
+  }
+}
+
+function createMusicCard(song, index) {
+  const card = document.createElement("article");
+  card.className = "music-track-card";
+  card.dataset.musicId = String(song.id);
+
+  const main = document.createElement("div");
+  main.className = "music-track-main";
+  const number = document.createElement("span");
+  number.className = "music-track-number";
+  number.textContent = String(index + 1).padStart(2, "0");
+  const copy = document.createElement("div");
+  copy.className = "music-track-copy";
+  const title = document.createElement("strong");
+  title.textContent = song.titulo;
+  const artist = document.createElement("span");
+  artist.textContent = song.artista;
+  copy.append(title, artist);
+  main.append(number, copy);
+
+  const footer = document.createElement("div");
+  footer.className = "music-track-footer";
+  const meta = document.createElement("small");
+  meta.textContent = `Escolhida por ${song.autor} · ${formatPublicationDate(song.criado_em)}`;
+  const playButton = document.createElement("button");
+  playButton.className = "music-play-button";
+  playButton.type = "button";
+  playButton.textContent = "Ouvir agora";
+  playButton.addEventListener("click", () => playMusic(song, true));
+  footer.append(meta, playButton);
+
+  card.append(
+    main,
+    footer,
+    createContentManager({
+      type: "musica",
+      item: song,
+      fields: [
+        { name: "autor", label: "Qual de nós escolheu?", kind: "select", options: AUTHOR_OPTIONS },
+        { name: "titulo", label: "Nome da música", maxLength: 100 },
+        { name: "artista", label: "Artista", maxLength: 100 },
+        {
+          name: "youtube_url",
+          label: "Link do YouTube",
+          value: `https://www.youtube.com/watch?v=${song.youtube_video_id}`,
+          maxLength: 500
+        }
+      ],
+      reload: loadMusicLibrary,
+      deletePrompt: "Excluir esta música da nossa playlist?"
+    })
+  );
+  return card;
+}
+
+function renderMusicLibrary(songs) {
+  latestSongs = songs;
+  const list = $("#musicList");
+  list.replaceChildren();
+  $("#musicCount").textContent = songs.length === 1 ? "1 música" : `${songs.length} músicas`;
+
+  if (!songs.length) {
+    currentSongId = null;
+    $("#songTitle").textContent = "Nossa playlist está esperando";
+    $("#songArtist").textContent = "Podemos adicionar aqui a primeira música de uma nova lembrança.";
+    const player = $("#fullSongPlayer");
+    player.hidden = true;
+    player.removeAttribute("src");
+    const empty = document.createElement("p");
+    empty.className = "music-empty";
+    empty.textContent = "Nossa próxima música ainda está esperando para ser escolhida ♥";
+    list.append(empty);
+    return;
+  }
+
+  songs.forEach((song, index) => list.append(createMusicCard(song, index)));
+  const selectedSong = songs.find((song) => String(song.id) === String(currentSongId)) || songs[0];
+  playMusic(selectedSong);
+}
+
+async function loadMusicLibrary() {
+  try {
+    const response = await fetch(
+      `${SUPABASE.url}/rest/v1/musicas?select=id,titulo,artista,youtube_video_id,autor,criado_em&order=criado_em.asc`,
+      { headers: { apikey: SUPABASE.publishableKey } }
+    );
+    if (!response.ok) throw new Error(`Não foi possível carregar nossas músicas (${response.status}).`);
+    renderMusicLibrary(await response.json());
+  } catch (error) {
+    console.error(error);
+    if (!latestSongs.length) {
+      $("#musicCount").textContent = "Indisponível agora";
+      const warning = document.createElement("p");
+      warning.className = "music-empty";
+      warning.textContent = "Não conseguimos carregar nossa playlist agora. A música principal continua disponível acima.";
+      $("#musicList").replaceChildren(warning);
+    }
+  }
+}
 
 function revealOnScroll() {
   const observer = new IntersectionObserver((entries) => {
@@ -1766,6 +1931,7 @@ function startPublicationsFallback() {
     void loadPublications();
     void loadFuturePlans();
     void loadCoupleCorner();
+    void loadMusicLibrary();
   }, 15000);
 }
 
@@ -1820,6 +1986,11 @@ function subscribeToPublications() {
       "postgres_changes",
       { event: "*", schema: "public", table: "interpretacoes_reclamacao" },
       () => void loadComplaints()
+    )
+    .on(
+      "postgres_changes",
+      { event: "*", schema: "public", table: "musicas" },
+      () => void loadMusicLibrary()
     )
     .subscribe((status) => {
       if (status === "CHANNEL_ERROR" || status === "TIMED_OUT") startPublicationsFallback();
@@ -2293,6 +2464,58 @@ $("#futurePlanForm").addEventListener("submit", async (event) => {
 });
 
 $("#newDateIdea").addEventListener("click", createDateIdea);
+
+$("#musicForm").addEventListener("submit", async (event) => {
+  event.preventDefault();
+
+  const form = event.currentTarget;
+  const author = $("#musicAuthor").value;
+  const title = $("#musicTitle").value.trim();
+  const artist = $("#musicArtist").value.trim();
+  const youtubeUrl = $("#musicYoutubeUrl").value.trim();
+  const editorCode = $("#musicCode").value;
+  const button = form.querySelector('button[type="submit"]');
+  const status = $("#musicFormStatus");
+
+  if (!extractYouTubeVideoId(youtubeUrl)) {
+    status.textContent = "Cole um link válido de um vídeo do YouTube.";
+    status.dataset.state = "error";
+    $("#musicYoutubeUrl").focus();
+    return;
+  }
+
+  const originalLabel = button.textContent;
+  button.disabled = true;
+  button.textContent = "Guardando…";
+  status.textContent = "Guardando esta música em nossa playlist…";
+  status.dataset.state = "";
+
+  try {
+    const result = await requestCoupleCorner({
+      acao: "musica",
+      autor: author,
+      titulo: title,
+      artista: artist,
+      youtube_url: youtubeUrl
+    }, editorCode);
+
+    form.reset();
+    status.textContent = "Nossa nova música já está na playlist ♥";
+    status.dataset.state = "success";
+    await loadMusicLibrary();
+    if (result.musica) playMusic(result.musica);
+  } catch (error) {
+    status.textContent = error.message || "Não foi possível guardar esta música agora.";
+    status.dataset.state = "error";
+    if (status.textContent === "Código reservado incorreto.") {
+      $("#musicCode").value = "";
+      $("#musicCode").focus();
+    }
+  } finally {
+    button.disabled = false;
+    button.textContent = originalLabel;
+  }
+});
 
 $("#dateSaveForm").addEventListener("submit", async (event) => {
   event.preventDefault();
