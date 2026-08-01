@@ -76,7 +76,6 @@
           <article class="clock-card"><strong id="clock">00:00:00</strong><span>Horas · Minutos · Segundos</span></article>
         </div>
         <p class="total-days reveal">Já são <strong id="totalDays">0</strong> dias escolhendo um ao outro.</p>
-        <div class="live-posts" data-live-section="contador" hidden></div>
       </section>
 
       <section class="section music-section" id="musica">
@@ -102,7 +101,6 @@
             <p class="music-note"><strong>Música completa.</strong> Toque no play e continue navegando pela nossa história sem sair da página. ♥</p>
           </div>
         </div>
-        <div class="live-posts" data-live-section="musica" hidden></div>
       </section>
 
       <section class="section message-section" id="mensagem">
@@ -115,7 +113,6 @@
           <p id="loveMessage"></p>
           <span class="signature" id="signature">Com todo o meu amor, Natã.</span>
         </article>
-        <div class="live-posts" data-live-section="mensagem" hidden></div>
       </section>
 
       <section class="section gallery-section" id="fotos">
@@ -167,7 +164,7 @@
           <p>Algumas memórias ficam guardadas em fotografias. Outras ficam guardadas no coração. As nossas moram em mim todos os dias.</p>
           <small>Com amor, Natã <span aria-hidden="true">♥</span></small>
         </blockquote>
-        <div class="live-posts" data-live-section="fotos" hidden></div>
+        <div class="memory-live-posts" data-live-section="fotos" hidden></div>
       </section>
 
       <section class="section timeline-section" id="historia">
@@ -176,7 +173,6 @@
           <h2>Momentos que fizeram de nós, nós</h2>
         </div>
         <div class="timeline" id="timeline"></div>
-        <div class="live-posts" data-live-section="historia" hidden></div>
       </section>
 
       <section class="section creator-section" id="adicionar">
@@ -184,7 +180,7 @@
           <div class="creator-intro">
             <span class="eyebrow">Um espaço para a Bianca</span>
             <h2>Acrescente um novo capítulo</h2>
-            <p>Escolha onde a lembrança deve aparecer, envie uma foto e escreva o que quiser guardar. A novidade aparece para todos em tempo real.</p>
+            <p>Escolha entre o álbum de memórias e a linha do tempo. A foto e o texto vão aparecer com o mesmo visual da área escolhida, em tempo real para todos.</p>
           </div>
 
           <form id="publicationForm" class="creator-form">
@@ -192,13 +188,9 @@
               <label for="publicationSection">Onde deseja publicar?</label>
               <select id="publicationSection" required>
                 <option value="fotos">Memórias que moram em mim</option>
-                <option value="historia">Nossa história</option>
-                <option value="mensagem">Carta para você</option>
-                <option value="recados">Recados</option>
-                <option value="contador">Tempo juntos</option>
-                <option value="musica">Nossa música</option>
-                <option value="final">Final da surpresa</option>
+                <option value="historia">Momentos que fizeram de nós, nós</option>
               </select>
+              <small id="publicationDesignHint">A lembrança aparecerá como uma nova fotografia do álbum.</small>
             </div>
 
             <div class="creator-field">
@@ -251,7 +243,6 @@
           </form>
           <div class="notes-list" id="notesList" aria-live="polite"></div>
         </div>
-        <div class="live-posts" data-live-section="recados" hidden></div>
       </section>
 
       <section class="section ending-section">
@@ -265,7 +256,6 @@
           </div>
           <small id="shareStatus" role="status"></small>
         </div>
-        <div class="live-posts" data-live-section="final" hidden></div>
       </section>
 
       <footer>

@@ -122,16 +122,6 @@ const SUPABASE = Object.freeze({
   publishFunction: "publicar-lembranca"
 });
 
-const SECTION_LABELS = Object.freeze({
-  contador: "Tempo juntos",
-  musica: "Nossa música",
-  mensagem: "Carta para você",
-  fotos: "Memórias que moram em mim",
-  historia: "Nossa história",
-  recados: "Recados",
-  final: "Final da surpresa"
-});
-
 const $ = (selector) => document.querySelector(selector);
 const $$ = (selector) => [...document.querySelectorAll(selector)];
 
@@ -390,19 +380,22 @@ function formatPublicationDate(value) {
   }).format(date);
 }
 
-function createPublicationCard(publication) {
+function createMemoryPublicationCard(publication) {
   const article = document.createElement("article");
-  article.className = "live-post-card";
+  article.className = "memory-live-card";
 
   const figure = document.createElement("figure");
+  const tape = document.createElement("span");
+  tape.className = "memory-live-tape";
+  tape.setAttribute("aria-hidden", "true");
   const image = document.createElement("img");
   image.src = publication.imagem_url;
   image.alt = publication.titulo;
   image.loading = "lazy";
-  figure.append(image);
+  figure.append(tape, image);
 
   const copy = document.createElement("div");
-  copy.className = "live-post-copy";
+  copy.className = "memory-live-copy";
 
   const date = document.createElement("time");
   date.dateTime = publication.criado_em;
@@ -419,35 +412,73 @@ function createPublicationCard(publication) {
   return article;
 }
 
+function createTimelinePublicationItem(publication) {
+  const article = document.createElement("article");
+  article.className = "timeline-item user-added visible";
+
+  const dot = document.createElement("span");
+  dot.className = "timeline-dot";
+  dot.setAttribute("aria-hidden", "true");
+
+  const card = document.createElement("div");
+  card.className = "timeline-card";
+
+  const image = document.createElement("img");
+  image.src = publication.imagem_url;
+  image.alt = publication.titulo;
+  image.loading = "lazy";
+
+  const copy = document.createElement("div");
+  copy.className = "timeline-copy";
+
+  const date = document.createElement("time");
+  date.dateTime = publication.criado_em;
+  date.textContent = formatPublicationDate(publication.criado_em);
+
+  const title = document.createElement("h3");
+  title.textContent = publication.titulo;
+
+  const text = document.createElement("p");
+  text.textContent = publication.texto;
+
+  copy.append(date, title, text);
+  card.append(image, copy);
+  article.append(dot, card);
+  return article;
+}
+
 function renderPublications(publications) {
-  $$('[data-live-section]').forEach((feed) => {
-    const section = feed.dataset.liveSection;
-    const sectionPosts = publications.filter((post) => post.secao === section);
+  const memoryFeed = $('[data-live-section="fotos"]');
+  const memoryPosts = publications.filter((post) => post.secao === "fotos");
 
-    if (!sectionPosts.length) {
-      feed.hidden = true;
-      feed.replaceChildren();
-      return;
-    }
-
+  if (memoryPosts.length) {
     const heading = document.createElement("div");
-    heading.className = "live-posts-heading";
+    heading.className = "memory-live-heading";
 
     const eyebrow = document.createElement("span");
     eyebrow.className = "eyebrow";
-    eyebrow.textContent = "Novos capítulos";
+    eyebrow.textContent = "Álbum que continua crescendo";
 
     const title = document.createElement("h3");
-    title.textContent = `Lembranças acrescentadas em ${SECTION_LABELS[section]}`;
+    title.textContent = "Novas memórias que agora também moram aqui";
     heading.append(eyebrow, title);
 
     const grid = document.createElement("div");
-    grid.className = "live-posts-grid";
-    sectionPosts.forEach((post) => grid.append(createPublicationCard(post)));
+    grid.className = "memory-live-grid";
+    memoryPosts.forEach((post) => grid.append(createMemoryPublicationCard(post)));
 
-    feed.replaceChildren(heading, grid);
-    feed.hidden = false;
-  });
+    memoryFeed.replaceChildren(heading, grid);
+    memoryFeed.hidden = false;
+  } else {
+    memoryFeed.replaceChildren();
+    memoryFeed.hidden = true;
+  }
+
+  const timeline = $("#timeline");
+  timeline.querySelectorAll(".timeline-item.user-added").forEach((item) => item.remove());
+  publications
+    .filter((post) => post.secao === "historia")
+    .forEach((post) => timeline.append(createTimelinePublicationItem(post)));
 }
 
 async function loadPublications() {
@@ -502,6 +533,16 @@ function setPublicationStatus(message, state = "") {
   const status = $("#publicationStatus");
   status.textContent = message;
   status.dataset.state = state;
+}
+
+function updatePublicationDesign() {
+  const section = $("#publicationSection").value;
+  const creatorCard = $(".creator-card");
+  creatorCard.dataset.selectedSection = section;
+  $("#publicationPreview").dataset.selectedSection = section;
+  $("#publicationDesignHint").textContent = section === "historia"
+    ? "A lembrança entrará como uma nova etapa da linha do tempo."
+    : "A lembrança aparecerá como uma nova fotografia do álbum.";
 }
 
 function getShareUrl() {
@@ -621,6 +662,7 @@ $(".memory-album").addEventListener("keydown", (event) => {
 window.addEventListener("load", () => {
   hydrateContent();
   subscribeToPublications();
+  updatePublicationDesign();
   updateCounter();
   setInterval(updateCounter, 1000);
   setTimeout(() => loadingScreen.classList.add("hidden"), 900);
@@ -697,6 +739,8 @@ $("#publicationImage").addEventListener("change", (event) => {
   setPublicationStatus("");
 });
 
+$("#publicationSection").addEventListener("change", updatePublicationDesign);
+
 $("#publicationForm").addEventListener("submit", async (event) => {
   event.preventDefault();
 
@@ -736,10 +780,13 @@ $("#publicationForm").addEventListener("submit", async (event) => {
 
     form.reset();
     clearPublicationPreview();
+    updatePublicationDesign();
     setPublicationStatus("Lembrança publicada! Ela já está aparecendo na seção escolhida ♥", "success");
     await loadPublications();
 
-    const destination = $(`[data-live-section="${section}"]`);
+    const destination = section === "historia"
+      ? $("#timeline .timeline-item.user-added:last-child")
+      : $('[data-live-section="fotos"]');
     if (destination && !destination.hidden) {
       setTimeout(() => destination.scrollIntoView({ behavior: "smooth", block: "center" }), 250);
     }

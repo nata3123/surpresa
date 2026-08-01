@@ -36,7 +36,7 @@ O site usa apenas uma chave pública própria para páginas abertas. A chave sec
 
 ## Novas lembranças em tempo real
 
-A seção **“Acrescente um novo capítulo”** permite que Bianca escolha uma parte do site, envie uma foto e escreva um novo texto. A publicação é guardada no Supabase e aparece imediatamente na seção escolhida para todos que estiverem com a página aberta.
+A seção **“Acrescente um novo capítulo”** permite que Bianca publique somente em **“Memórias que moram em mim”** ou **“Momentos que fizeram de nós, nós”**. No álbum, a publicação ganha o visual de uma nova fotografia revelada; na história, ela entra como uma nova etapa da linha do tempo. A publicação é guardada no Supabase e aparece imediatamente para todos que estiverem com a página aberta.
 
 O envio exige o código reservado combinado pelo casal. O código não está escrito no HTML: ele é conferido por uma função protegida no Supabase. O site limita tentativas incorretas e aceita somente imagens JPG, PNG ou WEBP com até 8 MB.
 
