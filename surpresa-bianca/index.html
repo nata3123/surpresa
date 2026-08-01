@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#6f1731" />
+  <meta name="description" content="Uma surpresa de Natã para Bianca, feita com amor." />
+  <meta property="og:title" content="Bianca, esta é a nossa história ♥" />
+  <meta property="og:description" content="Uma surpresa feita com carinho por Natã." />
+  <meta property="og:image" content="assets/foto-1.webp" />
+  <link rel="icon" href="assets/foto-1.webp" />
+  <title>Bianca, esta é a nossa história ♥</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="loading-screen" id="loadingScreen" aria-live="polite">
+    <div class="loading-heart" aria-hidden="true">♥</div>
+    <p>Preparando uma surpresa para Bianca…</p>
+    <small>Feita com muito carinho por Natã</small>
+  </div>
+
+  <div class="ambient-hearts" id="ambientHearts" aria-hidden="true"></div>
+
+  <main>
+    <section class="hero" id="inicio">
+      <div class="hero-glow hero-glow-one"></div>
+      <div class="hero-glow hero-glow-two"></div>
+
+      <div class="hero-memories" aria-hidden="true">
+        <figure class="hero-memory memory-one"><img src="assets/foto-2.webp" alt="" /></figure>
+        <figure class="hero-memory memory-two"><img src="assets/foto-3.webp" alt="" /></figure>
+        <figure class="hero-memory memory-three"><img src="assets/foto-4.webp" alt="" /></figure>
+        <figure class="hero-memory memory-four"><img src="assets/foto-5.webp" alt="" /></figure>
+      </div>
+
+      <div class="hero-content reveal">
+        <span class="eyebrow">Uma surpresa só para Bianca</span>
+        <div class="envelope-wrap" aria-hidden="true">
+          <div class="envelope">
+            <div class="envelope-back"></div>
+            <div class="letter"><span>♥</span></div>
+            <div class="envelope-front"></div>
+            <div class="envelope-flap"></div>
+          </div>
+        </div>
+        <h1 id="introTitle">Bianca, fiz isso pensando em você.</h1>
+        <p id="introText">Uma pequena lembrança de tudo o que vivemos desde 21 de maio de 2026.</p>
+        <button class="primary-button pulse" id="openSurprise" type="button">
+          <span>Abrir minha surpresa</span>
+          <span aria-hidden="true">💌</span>
+        </button>
+        <small class="tap-hint">Toque para revelar</small>
+      </div>
+    </section>
+
+    <div class="surprise-content" id="surpriseContent" hidden>
+      <nav class="floating-nav" aria-label="Navegação da página">
+        <a href="#contador" title="Tempo juntos">♥</a>
+        <a href="#mensagem" title="Carta">✉</a>
+        <a href="#fotos" title="Fotos">▣</a>
+        <a href="#historia" title="Nossa história">⌛</a>
+      </nav>
+
+      <section class="section counter-section" id="contador">
+        <div class="section-heading reveal">
+          <span class="eyebrow">Desde que começamos a namorar</span>
+          <h2 id="pageTitle">Bianca, o amor da minha vida</h2>
+          <p>Juntos desde <strong id="startDateLabel"></strong></p>
+        </div>
+
+        <div class="counter-grid reveal" aria-label="Tempo juntos">
+          <article><strong id="years">0</strong><span>Anos</span></article>
+          <article><strong id="months">0</strong><span>Meses</span></article>
+          <article><strong id="days">0</strong><span>Dias</span></article>
+          <article class="clock-card"><strong id="clock">00:00:00</strong><span>Horas · Minutos · Segundos</span></article>
+        </div>
+        <p class="total-days reveal">Já são <strong id="totalDays">0</strong> dias escolhendo um ao outro.</p>
+      </section>
+
+      <section class="section music-section" id="musica">
+        <div class="music-card reveal">
+          <div class="vinyl" id="vinyl" aria-hidden="true"><div></div></div>
+          <div class="music-info">
+            <span class="eyebrow">Nossa música</span>
+            <h2 id="songTitle">Partilhar</h2>
+            <p id="songArtist">Rubel &amp; ANAVITÓRIA</p>
+            <div class="full-song-player-wrap">
+              <iframe
+                id="fullSongPlayer"
+                class="full-song-player"
+                title="Partilhar — música completa de Rubel e ANAVITÓRIA"
+                src="https://www.youtube-nocookie.com/embed/RLlWIQCl7iQ?rel=0&amp;playsinline=1&amp;modestbranding=1"
+                width="100%"
+                height="360"
+                frameborder="0"
+                allowfullscreen=""
+                allow="autoplay; encrypted-media; fullscreen; picture-in-picture"
+                loading="lazy"></iframe>
+            </div>
+            <p class="music-note"><strong>Música completa.</strong> Toque no play e continue navegando pela nossa história sem sair da página. ♥</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section message-section" id="mensagem">
+        <div class="section-heading reveal">
+          <span class="eyebrow">O que meu coração queria dizer</span>
+          <h2>Uma carta para você</h2>
+        </div>
+        <article class="love-letter reveal">
+          <span class="quote-mark">“</span>
+          <p id="loveMessage"></p>
+          <span class="signature" id="signature">Com todo o meu amor, Natã.</span>
+        </article>
+      </section>
+
+      <section class="section gallery-section" id="fotos">
+        <div class="memory-sparkle sparkle-one" aria-hidden="true">✦</div>
+        <div class="memory-sparkle sparkle-two" aria-hidden="true">♥</div>
+
+        <div class="section-heading memory-heading reveal">
+          <span class="eyebrow">Nosso pequeno álbum</span>
+          <h2>Memórias que moram em mim</h2>
+          <p>Alguns dos capítulos que eu quero guardar para sempre.</p>
+          <div class="album-meta" aria-label="Álbum com sete memórias">
+            <span>Bianca + Natã</span>
+            <span aria-hidden="true">•</span>
+            <span>7 memórias</span>
+          </div>
+        </div>
+
+        <div class="memory-album reveal" tabindex="0" role="region" aria-label="Álbum de memórias; use as setas do teclado para navegar">
+          <div class="gallery-photo-area">
+            <span class="photo-tape photo-tape-left" aria-hidden="true"></span>
+            <span class="photo-tape photo-tape-right" aria-hidden="true"></span>
+            <div class="gallery-photo-frame">
+              <img id="galleryImage" src="assets/foto-1.webp" alt="Natã e Bianca se beijando" />
+              <span class="photo-date">21 · 05 · 2026</span>
+            </div>
+          </div>
+
+          <div class="memory-story" aria-live="polite">
+            <span class="memory-kicker">Capítulo <span id="galleryIndexPadded">01</span></span>
+            <strong id="galleryCaption">Um beijo para guardar para sempre</strong>
+            <span class="memory-divider" aria-hidden="true"></span>
+            <p id="galleryText">Entre tantos momentos, esse ficou guardado de um jeito especial em mim. Foi mais do que um beijo, foi a certeza de que ao seu lado tudo ganha mais sentido.</p>
+
+            <div class="gallery-controls">
+              <button class="gallery-arrow gallery-prev" id="galleryPrev" type="button" aria-label="Foto anterior">‹</button>
+              <span id="galleryIndex">1 de 7</span>
+              <button class="gallery-arrow gallery-next" id="galleryNext" type="button" aria-label="Próxima foto">›</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="memory-film reveal">
+          <span class="film-label">Toque em uma foto para reviver</span>
+          <div class="thumbnails" id="thumbnails" aria-label="Miniaturas das fotos"></div>
+        </div>
+
+        <blockquote class="memory-closing reveal">
+          <span aria-hidden="true">“</span>
+          <p>Algumas memórias ficam guardadas em fotografias. Outras ficam guardadas no coração. As nossas moram em mim todos os dias.</p>
+          <small>Com amor, Natã <span aria-hidden="true">♥</span></small>
+        </blockquote>
+      </section>
+
+      <section class="section timeline-section" id="historia">
+        <div class="section-heading reveal">
+          <span class="eyebrow">Nossa história</span>
+          <h2>Momentos que fizeram de nós, nós</h2>
+        </div>
+        <div class="timeline" id="timeline"></div>
+      </section>
+
+      <section class="section guestbook-section" id="recados">
+        <div class="guestbook-card reveal">
+          <div>
+            <span class="eyebrow">Um cantinho só nosso</span>
+            <h2>Deixe um recado para guardar</h2>
+            <p>O recado fica salvo neste aparelho, para vocês relerem quando quiserem.</p>
+          </div>
+          <form id="guestbookForm">
+            <label for="guestName">Seu nome</label>
+            <input id="guestName" maxlength="40" placeholder="Bianca ou Natã" required />
+            <label for="guestMessage">Recado</label>
+            <textarea id="guestMessage" maxlength="240" placeholder="Escreva algo que queira guardar…" required></textarea>
+            <button class="primary-button" type="submit">Guardar recado ♥</button>
+          </form>
+          <div class="notes-list" id="notesList"></div>
+        </div>
+      </section>
+
+      <section class="section ending-section">
+        <div class="ending-card reveal">
+          <span class="big-heart" aria-hidden="true">♥</span>
+          <h2 id="endingTitle">Bianca, eu quero partilhar a vida boa com você.</h2>
+          <p id="endingText">Desde 21 de maio de 2026, cada dia ao seu lado ganhou um lugar especial na minha história.</p>
+          <div class="ending-actions">
+            <button class="primary-button" id="shareButton" type="button">Compartilhar esta surpresa</button>
+            <button class="secondary-button" id="replayButton" type="button">Ver desde o começo</button>
+          </div>
+          <small id="shareStatus" role="status"></small>
+        </div>
+      </section>
+
+      <footer>
+        <span>Bianca Leticia de França Aragão</span>
+        <span aria-hidden="true">♥</span>
+        <span>Natã Victor Lima Olegario Teixeira</span>
+      </footer>
+    </div>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
