@@ -28,7 +28,17 @@ O botão **“Compartilhar esta surpresa”** usa o compartilhamento do celular 
 
 ## Recados
 
-Os recados ficam guardados apenas no navegador e no aparelho em que foram escritos. Eles não são enviados para outra pessoa nem para um servidor. Cada recado pode ser removido pelo botão **“Apagar”**.
+Os recados são guardados no Supabase e aparecem em todos os celulares e computadores que abrirem o site. É necessário acesso à internet.
+
+Qualquer pessoa que receber o link consegue ler e enviar um recado. Por segurança, o site não permite editar ou apagar os recados de outras pessoas; a exclusão pode ser feita somente pelo painel do Supabase.
+
+O site usa apenas uma chave pública própria para páginas abertas. A chave secreta do Supabase nunca deve ser incluída nos arquivos do site.
+
+## Novas lembranças em tempo real
+
+A seção **“Acrescente um novo capítulo”** permite que Bianca escolha uma parte do site, envie uma foto e escreva um novo texto. A publicação é guardada no Supabase e aparece imediatamente na seção escolhida para todos que estiverem com a página aberta.
+
+O envio exige o código reservado combinado pelo casal. O código não está escrito no HTML: ele é conferido por uma função protegida no Supabase. O site limita tentativas incorretas e aceita somente imagens JPG, PNG ou WEBP com até 8 MB.
 
 ## Ajustar o horário inicial
 

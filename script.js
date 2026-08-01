@@ -3,7 +3,7 @@
   Feita por Natã Victor Lima Olegario Teixeira.
 */
 const CONFIG = {
-  pageTitle: "Bianca, esta é a nossa história ♥",
+  pageTitle: "surpresaparabianca",
   introTitle: "Bianca, fiz isso pensando em você.",
   introText: "Uma pequena lembrança de tudo o que vivemos desde 21 de maio de 2026.",
   startDate: "2026-05-21T00:00:00-03:00",
@@ -116,6 +116,22 @@ photos: [
   ]
 };
 
+const SUPABASE = Object.freeze({
+  url: "https://mijtdivqfjrkwchqdqvr.supabase.co",
+  publishableKey: "sb_publishable_ukedGcRlxvIYSyF8rSONig_koPKNEVh",
+  publishFunction: "publicar-lembranca"
+});
+
+const SECTION_LABELS = Object.freeze({
+  contador: "Tempo juntos",
+  musica: "Nossa música",
+  mensagem: "Carta para você",
+  fotos: "Memórias que moram em mim",
+  historia: "Nossa história",
+  recados: "Recados",
+  final: "Final da surpresa"
+});
+
 const $ = (selector) => document.querySelector(selector);
 const $$ = (selector) => [...document.querySelectorAll(selector)];
 
@@ -126,6 +142,8 @@ const vinyl = $("#vinyl");
 
 let currentPhoto = 0;
 let heartTimer;
+let publicationPreviewUrl = "";
+let publicationsFallbackTimer;
 
 function hydrateContent() {
   document.title = CONFIG.pageTitle;
@@ -148,7 +166,8 @@ function hydrateContent() {
 
   renderGallery();
   renderTimeline();
-  renderNotes();
+  void renderNotes();
+  void loadPublications();
 }
 
 function preciseDateDiff(start, end) {
@@ -297,52 +316,192 @@ function openExperience() {
   revealOnScroll();
 }
 
-function getNotes() {
+function setGuestbookStatus(message, state = "") {
+  const status = $("#guestbookStatus");
+  status.textContent = message;
+  status.dataset.state = state;
+}
+
+function createNoteCard(note) {
+  const card = document.createElement("article");
+  card.className = "note-card";
+
+  const strong = document.createElement("strong");
+  strong.textContent = note.nome;
+
+  const message = document.createElement("p");
+  message.textContent = note.mensagem;
+
+  const date = document.createElement("small");
+  const createdAt = new Date(note.criado_em);
+  date.textContent = Number.isNaN(createdAt.getTime())
+    ? "Recado guardado com carinho"
+    : new Intl.DateTimeFormat("pt-BR", {
+        dateStyle: "long",
+        timeStyle: "short"
+      }).format(createdAt);
+
+  card.append(strong, message, date);
+  return card;
+}
+
+async function renderNotes() {
+  const notesList = $("#notesList");
+  const loading = document.createElement("small");
+  loading.textContent = "Carregando os recados…";
+  notesList.replaceChildren(loading);
+
   try {
-    return JSON.parse(localStorage.getItem("biancaNataNotes") || "[]");
-  } catch {
-    return [];
+    const response = await fetch(
+      `${SUPABASE.url}/rest/v1/recados?select=id,nome,mensagem,criado_em&order=criado_em.desc&limit=50`,
+      { headers: { apikey: SUPABASE.publishableKey } }
+    );
+
+    if (!response.ok) throw new Error(`Não foi possível carregar os recados (${response.status}).`);
+
+    const notes = await response.json();
+    notesList.replaceChildren();
+
+    if (!notes.length) {
+      const empty = document.createElement("small");
+      empty.textContent = "Nenhum recado ainda. O primeiro pode ser seu ♥";
+      notesList.append(empty);
+      return;
+    }
+
+    notes.forEach((note) => notesList.append(createNoteCard(note)));
+  } catch (error) {
+    notesList.replaceChildren();
+    const warning = document.createElement("small");
+    warning.className = "notes-error";
+    warning.textContent = "Não foi possível carregar os recados agora. Tente novamente em instantes.";
+    notesList.append(warning);
+    console.error(error);
   }
 }
 
-function saveNotes(notes) {
-  localStorage.setItem("biancaNataNotes", JSON.stringify(notes.slice(-20)));
+function formatPublicationDate(value) {
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "Uma nova lembrança";
+
+  return new Intl.DateTimeFormat("pt-BR", {
+    dateStyle: "long",
+    timeStyle: "short"
+  }).format(date);
 }
 
-function renderNotes() {
-  const notes = getNotes();
-  const notesList = $("#notesList");
-  notesList.innerHTML = notes.length ? "" : "<small>Nenhum recado salvo ainda.</small>";
+function createPublicationCard(publication) {
+  const article = document.createElement("article");
+  article.className = "live-post-card";
 
-  notes.slice().reverse().forEach((note, reverseIndex) => {
-    const noteIndex = notes.length - 1 - reverseIndex;
-    const card = document.createElement("article");
-    card.className = "note-card";
+  const figure = document.createElement("figure");
+  const image = document.createElement("img");
+  image.src = publication.imagem_url;
+  image.alt = publication.titulo;
+  image.loading = "lazy";
+  figure.append(image);
 
-    const strong = document.createElement("strong");
-    strong.textContent = note.name;
+  const copy = document.createElement("div");
+  copy.className = "live-post-copy";
 
-    const message = document.createElement("p");
-    message.textContent = note.message;
+  const date = document.createElement("time");
+  date.dateTime = publication.criado_em;
+  date.textContent = formatPublicationDate(publication.criado_em);
 
-    const date = document.createElement("small");
-    date.textContent = note.date;
+  const title = document.createElement("h4");
+  title.textContent = publication.titulo;
 
-    const removeButton = document.createElement("button");
-    removeButton.className = "note-delete";
-    removeButton.type = "button";
-    removeButton.textContent = "Apagar";
-    removeButton.setAttribute("aria-label", `Apagar recado de ${note.name}`);
-    removeButton.addEventListener("click", () => {
-      const updatedNotes = getNotes();
-      updatedNotes.splice(noteIndex, 1);
-      saveNotes(updatedNotes);
-      renderNotes();
-    });
+  const text = document.createElement("p");
+  text.textContent = publication.texto;
 
-    card.append(strong, message, date, removeButton);
-    notesList.append(card);
+  copy.append(date, title, text);
+  article.append(figure, copy);
+  return article;
+}
+
+function renderPublications(publications) {
+  $$('[data-live-section]').forEach((feed) => {
+    const section = feed.dataset.liveSection;
+    const sectionPosts = publications.filter((post) => post.secao === section);
+
+    if (!sectionPosts.length) {
+      feed.hidden = true;
+      feed.replaceChildren();
+      return;
+    }
+
+    const heading = document.createElement("div");
+    heading.className = "live-posts-heading";
+
+    const eyebrow = document.createElement("span");
+    eyebrow.className = "eyebrow";
+    eyebrow.textContent = "Novos capítulos";
+
+    const title = document.createElement("h3");
+    title.textContent = `Lembranças acrescentadas em ${SECTION_LABELS[section]}`;
+    heading.append(eyebrow, title);
+
+    const grid = document.createElement("div");
+    grid.className = "live-posts-grid";
+    sectionPosts.forEach((post) => grid.append(createPublicationCard(post)));
+
+    feed.replaceChildren(heading, grid);
+    feed.hidden = false;
   });
+}
+
+async function loadPublications() {
+  try {
+    const response = await fetch(
+      `${SUPABASE.url}/rest/v1/publicacoes?select=id,secao,titulo,texto,imagem_url,criado_em&order=criado_em.asc`,
+      { headers: { apikey: SUPABASE.publishableKey } }
+    );
+
+    if (!response.ok) throw new Error(`Não foi possível carregar as publicações (${response.status}).`);
+    renderPublications(await response.json());
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+function startPublicationsFallback() {
+  if (publicationsFallbackTimer) return;
+  publicationsFallbackTimer = setInterval(loadPublications, 15000);
+}
+
+function subscribeToPublications() {
+  if (!window.supabase?.createClient) {
+    startPublicationsFallback();
+    return;
+  }
+
+  const client = window.supabase.createClient(SUPABASE.url, SUPABASE.publishableKey, {
+    auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false }
+  });
+
+  client
+    .channel("novas-lembrancas-bianca")
+    .on(
+      "postgres_changes",
+      { event: "INSERT", schema: "public", table: "publicacoes" },
+      () => void loadPublications()
+    )
+    .subscribe((status) => {
+      if (status === "CHANNEL_ERROR" || status === "TIMED_OUT") startPublicationsFallback();
+    });
+}
+
+function clearPublicationPreview() {
+  if (publicationPreviewUrl) URL.revokeObjectURL(publicationPreviewUrl);
+  publicationPreviewUrl = "";
+  $("#publicationPreviewImage").removeAttribute("src");
+  $("#publicationPreview").hidden = true;
+}
+
+function setPublicationStatus(message, state = "") {
+  const status = $("#publicationStatus");
+  status.textContent = message;
+  status.dataset.state = state;
 }
 
 function getShareUrl() {
@@ -461,6 +620,7 @@ $(".memory-album").addEventListener("keydown", (event) => {
 
 window.addEventListener("load", () => {
   hydrateContent();
+  subscribeToPublications();
   updateCounter();
   setInterval(updateCounter, 1000);
   setTimeout(() => loadingScreen.classList.add("hidden"), 900);
@@ -481,23 +641,114 @@ openSurprise.addEventListener("click", openExperience);
 $("#galleryPrev").addEventListener("click", () => showPhoto(currentPhoto - 1));
 $("#galleryNext").addEventListener("click", () => showPhoto(currentPhoto + 1));
 
-$("#guestbookForm").addEventListener("submit", (event) => {
+$("#guestbookForm").addEventListener("submit", async (event) => {
   event.preventDefault();
 
   const name = $("#guestName").value.trim();
   const message = $("#guestMessage").value.trim();
   if (!name || !message) return;
 
-  const notes = getNotes();
-  notes.push({
-    name,
-    message,
-    date: new Intl.DateTimeFormat("pt-BR", { dateStyle: "long" }).format(new Date())
-  });
+  const form = event.currentTarget;
+  const submitButton = form.querySelector('button[type="submit"]');
+  const originalLabel = submitButton.textContent;
+  submitButton.disabled = true;
+  submitButton.textContent = "Guardando…";
+  setGuestbookStatus("Enviando seu recado…");
 
-  saveNotes(notes);
-  event.currentTarget.reset();
-  renderNotes();
+  try {
+    const response = await fetch(`${SUPABASE.url}/rest/v1/recados`, {
+      method: "POST",
+      headers: {
+        apikey: SUPABASE.publishableKey,
+        "Content-Type": "application/json",
+        Prefer: "return=minimal"
+      },
+      body: JSON.stringify({ nome: name, mensagem: message })
+    });
+
+    if (!response.ok) throw new Error(`Não foi possível guardar o recado (${response.status}).`);
+
+    form.reset();
+    setGuestbookStatus("Recado guardado para aparecer em todos os aparelhos ♥", "success");
+    await renderNotes();
+  } catch (error) {
+    setGuestbookStatus("Não foi possível guardar agora. Confira a internet e tente novamente.", "error");
+    console.error(error);
+  } finally {
+    submitButton.disabled = false;
+    submitButton.textContent = originalLabel;
+  }
+});
+
+$("#publicationImage").addEventListener("change", (event) => {
+  clearPublicationPreview();
+  const [file] = event.currentTarget.files;
+  if (!file) return;
+
+  if (file.size > 8 * 1024 * 1024) {
+    event.currentTarget.value = "";
+    setPublicationStatus("A foto deve ter no máximo 8 MB.", "error");
+    return;
+  }
+
+  publicationPreviewUrl = URL.createObjectURL(file);
+  $("#publicationPreviewImage").src = publicationPreviewUrl;
+  $("#publicationPreview").hidden = false;
+  setPublicationStatus("");
+});
+
+$("#publicationForm").addEventListener("submit", async (event) => {
+  event.preventDefault();
+
+  const form = event.currentTarget;
+  const submitButton = form.querySelector('button[type="submit"]');
+  const [image] = $("#publicationImage").files;
+  const section = $("#publicationSection").value;
+  const title = $("#publicationTitle").value.trim();
+  const publicationText = $("#publicationText").value.trim();
+  const editorCode = $("#publicationCode").value;
+
+  if (!image || !title || !publicationText || !editorCode) return;
+
+  const payload = new FormData();
+  payload.append("secao", section);
+  payload.append("titulo", title);
+  payload.append("texto", publicationText);
+  payload.append("imagem", image, image.name);
+
+  const originalLabel = submitButton.textContent;
+  submitButton.disabled = true;
+  submitButton.textContent = "Publicando…";
+  setPublicationStatus("Enviando a foto e preparando a nova lembrança…");
+
+  try {
+    const response = await fetch(`${SUPABASE.url}/functions/v1/${SUPABASE.publishFunction}`, {
+      method: "POST",
+      headers: {
+        apikey: SUPABASE.publishableKey,
+        "x-editor-code": editorCode
+      },
+      body: payload
+    });
+
+    const result = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(result.error || "Não foi possível publicar agora.");
+
+    form.reset();
+    clearPublicationPreview();
+    setPublicationStatus("Lembrança publicada! Ela já está aparecendo na seção escolhida ♥", "success");
+    await loadPublications();
+
+    const destination = $(`[data-live-section="${section}"]`);
+    if (destination && !destination.hidden) {
+      setTimeout(() => destination.scrollIntoView({ behavior: "smooth", block: "center" }), 250);
+    }
+  } catch (error) {
+    setPublicationStatus(error.message || "Não foi possível publicar agora.", "error");
+  } finally {
+    submitButton.disabled = false;
+    submitButton.textContent = originalLabel;
+  }
 });
 
 $("#shareButton").addEventListener("click", sharePage);
