@@ -1164,7 +1164,7 @@ footer span:last-child { color:#f1a8ba; }
           <div class="date-random-action">
             <p>
               <strong>Feito para nós</strong>
-              <span>Escolhemos as opções e podemos sortear quantas vezes quisermos, sem cadastro e sem custo.</span>
+              <span>Temos 72 ideias diferentes. O sorteio só repete uma opção depois que todas as compatíveis com nossas escolhas aparecerem.</span>
             </p>
             <button class="secondary-button date-random-button" id="newDateIdea" type="button"><span aria-hidden="true">✦</span> Sortear nosso próximo encontro</button>
           </div>
@@ -1488,7 +1488,79 @@ const DATE_IDEAS = Object.freeze([
   { title: "Roteiro econômico pela cidade", description: "Vamos escolher três paradas baratas, como uma praça, um café e um lugar bonito para fotos, e fazer um passeio completo.", specialTouch: "Guardamos um papel ou uma foto de cada parada para lembrar do roteiro.", place: "sair", budget: "baixo", duration: "longo" },
   { title: "Um brinde fora da rotina", description: "Vamos escolher um lugar agradável para dividir uma bebida ou petisco e fazer uma pausa especial no dia.", specialTouch: "Podemos brindar a uma coisa pequena que melhorou desde que nos conhecemos.", place: "sair", budget: "especial", duration: "rapido" },
   { title: "Recriar uma parte do primeiro encontro", description: "Vamos voltar a um lugar, comida, música ou detalhe do começo e contar o que cada um lembra daquele dia.", specialTouch: "No fim, contamos o que faríamos igual e o que tornou nossa história ainda melhor.", place: "sair", budget: "especial", duration: "medio" },
-  { title: "Um dia inteiro escolhido por nós dois", description: "Cada um escolhe em segredo uma parte do dia, como uma comida, um passeio e algo para fazer à noite.", specialTouch: "Só revelamos a próxima escolha quando chegar a hora de vivê-la.", place: "sair", budget: "especial", duration: "longo" }
+  { title: "Um dia inteiro escolhido por nós dois", description: "Cada um escolhe em segredo uma parte do dia, como uma comida, um passeio e algo para fazer à noite.", specialTouch: "Só revelamos a próxima escolha quando chegar a hora de vivê-la.", place: "sair", budget: "especial", duration: "longo" },
+
+  { title: "Playlist de três lembranças", description: "Cada um escolhe três músicas ligadas a momentos nossos e conta por que colocou cada uma na playlist.", specialTouch: "No fim, escolhemos a música que melhor representa o nosso dia.", place: "casa", budget: "gratis", duration: "rapido" },
+  { title: "Desafio do olhar demorado", description: "Vamos deixar os celulares longe, sentar frente a frente e conversar sem pressa sobre uma coisa boa que enxergamos um no outro.", specialTouch: "Terminamos com um abraço de um minuto, sem dizer nada.", place: "casa", budget: "gratis", duration: "rapido" },
+  { title: "Bilhetes escondidos pela casa", description: "Cada um escreve três bilhetes carinhosos e esconde pela casa para o outro encontrar.", specialTouch: "O último bilhete revela onde está esperando o abraço final.", place: "casa", budget: "gratis", duration: "rapido" },
+
+  { title: "Caça ao tesouro do nosso amor", description: "Vamos criar pistas usando lugares e objetos da casa que lembram pequenas partes da nossa história.", specialTouch: "O tesouro final pode ser uma carta, uma foto ou um beijo demorado.", place: "casa", budget: "gratis", duration: "medio" },
+  { title: "Karaokê da nossa história", description: "Vamos montar uma sequência de músicas que já cantamos, ouvimos juntos ou gostaríamos de dedicar um ao outro.", specialTouch: "A última apresentação precisa ser em dueto.", place: "casa", budget: "gratis", duration: "medio" },
+  { title: "Receita inventada com o que já temos", description: "Vamos abrir a despensa, escolher alguns ingredientes e criar juntos uma receita que nunca fizemos.", specialTouch: "Damos um nome romântico ou engraçado para o prato inventado.", place: "casa", budget: "gratis", duration: "medio" },
+
+  { title: "Cabana e histórias na sala", description: "Vamos montar uma cabana com cobertas, separar comidas que já temos e passar o dia entre conversas, filmes e descanso.", specialTouch: "Cada um conta uma história da infância que o outro ainda não conhece.", place: "casa", budget: "gratis", duration: "longo" },
+  { title: "Olimpíadas particulares", description: "Criamos várias provas simples pela casa, como mímica, desenho, equilíbrio, memória e perguntas sobre nós.", specialTouch: "O prêmio é escolher o carinho ou a sobremesa da noite.", place: "casa", budget: "gratis", duration: "longo" },
+  { title: "Museu da nossa história", description: "Vamos reunir fotos, mensagens e objetos importantes e organizar uma exposição particular da nossa trajetória.", specialTouch: "Cada um escolhe a peça mais especial e explica o motivo.", place: "casa", budget: "gratis", duration: "longo" },
+
+  { title: "Degustação às cegas", description: "Compramos algumas bebidas ou petiscos baratos, vendamos os olhos um do outro e tentamos descobrir cada sabor.", specialTouch: "Quem acertar menos escolhe o próximo beijo.", place: "casa", budget: "baixo", duration: "rapido" },
+  { title: "Café surpresa de quinze minutos", description: "Cada um monta rapidamente uma bebida e um pequeno acompanhamento pensando no gosto do outro.", specialTouch: "Entregamos o pedido com um elogio escrito em um guardanapo.", place: "casa", budget: "baixo", duration: "rapido" },
+  { title: "Tábua de petiscos com nota", description: "Vamos comprar poucos petiscos diferentes, montar uma tábua pequena e dar notas para cada combinação.", specialTouch: "A combinação vencedora ganha o nome de um momento nosso.", place: "casa", budget: "baixo", duration: "rapido" },
+
+  { title: "Pizza feita por nós", description: "Compramos uma massa simples e cada um monta metade da pizza com sabores escolhidos para surpreender o outro.", specialTouch: "Criamos um nome para a pizza que misture nossos dois jeitos.", place: "casa", budget: "baixo", duration: "medio" },
+  { title: "Pintura em duas metades", description: "Usamos tintas ou lápis baratos para criar duas partes separadas de um desenho que só fica completo quando juntamos.", specialTouch: "Assinamos a obra com a data e guardamos na nossa história.", place: "casa", budget: "baixo", duration: "medio" },
+  { title: "Noite de cafés e perguntas", description: "Preparamos dois cafés ou bebidas quentes e respondemos perguntas leves, românticas e engraçadas sobre nós.", specialTouch: "A melhor resposta vira um bilhete para guardar.", place: "casa", budget: "baixo", duration: "medio" },
+
+  { title: "Spa caseiro para nós dois", description: "Compramos alguns itens simples de cuidado, colocamos uma música calma e montamos uma tarde inteira de descanso em casa.", specialTouch: "Cada um fica responsável por preparar uma surpresa relaxante para o outro.", place: "casa", budget: "baixo", duration: "longo" },
+  { title: "Campeonato de jogos com troféu", description: "Escolhemos vários jogos de carta, tabuleiro ou celular e criamos um campeonato com pontuação durante o dia.", specialTouch: "Fazemos um troféu de papel para ficar com o vencedor até a revanche.", place: "casa", budget: "baixo", duration: "longo" },
+  { title: "Viagem gastronômica sem sair de casa", description: "Escolhemos um país, compramos ingredientes acessíveis e passamos o dia preparando pratos e conhecendo músicas desse lugar.", specialTouch: "Tiramos uma foto como se realmente estivéssemos viajando.", place: "casa", budget: "baixo", duration: "longo" },
+
+  { title: "Presentes dos cinco sentidos", description: "Cada um entrega pequenas lembranças preparadas antes, representando visão, audição, olfato, paladar e toque.", specialTouch: "Abrimos um sentido de cada vez e contamos o carinho por trás da escolha.", place: "casa", budget: "especial", duration: "rapido" },
+  { title: "Cápsula do tempo em uma caixa bonita", description: "Vamos guardar cartas, uma foto e pequenos objetos em uma caixa escolhida especialmente para ser aberta no futuro.", specialTouch: "Definimos juntos a data exata em que nossa cápsula será aberta.", place: "casa", budget: "especial", duration: "rapido" },
+  { title: "Pedido favorito sem revelar", description: "Cada um escolhe em segredo um prato especial para o outro e fazemos a revelação quando os pedidos chegarem.", specialTouch: "Antes de abrir, tentamos adivinhar o que o outro escolheu.", place: "casa", budget: "especial", duration: "rapido" },
+
+  { title: "Jantar à luz de velas", description: "Vamos preparar ou pedir um jantar caprichado, apagar as luzes e arrumar a mesa como se fosse uma ocasião única.", specialTouch: "Cada um faz um pequeno brinde contando algo que deseja viver ao lado do outro.", place: "casa", budget: "especial", duration: "medio" },
+  { title: "Fondue e cartas de amor", description: "Montamos uma noite de fondue doce ou salgado e escrevemos pequenas cartas enquanto experimentamos as combinações.", specialTouch: "Lemos as cartas um para o outro antes da última mordida.", place: "casa", budget: "especial", duration: "medio" },
+  { title: "Aula particular de dança na sala", description: "Escolhemos uma aula guiada, preparamos espaço na sala e aprendemos juntos alguns passos de um ritmo novo.", specialTouch: "Terminamos dançando nossa música sem seguir nenhuma regra.", place: "casa", budget: "especial", duration: "medio" },
+
+  { title: "Ateliê de cerâmica em casa", description: "Compramos argila ou massa própria para modelar e passamos o dia criando peças um para o outro.", specialTouch: "Cada peça precisa esconder um pequeno símbolo da nossa história.", place: "casa", budget: "especial", duration: "longo" },
+  { title: "Festa temática só nossa", description: "Escolhemos um tema, caprichamos na decoração, na roupa, na comida e na música para criar uma festa particular.", specialTouch: "Fazemos um convite oficial um para o outro antes de começar.", place: "casa", budget: "especial", duration: "longo" },
+  { title: "Dia do sim dentro de casa", description: "Cada um prepara uma lista de pedidos carinhosos, comidas e atividades possíveis para vivermos durante um dia inteiro.", specialTouch: "Guardamos o pedido que mais surpreendeu para repetir em outro mês.", place: "casa", budget: "especial", duration: "longo" },
+
+  { title: "Banco de praça e uma pergunta", description: "Vamos escolher um banco tranquilo, sentar juntos e responder uma pergunta importante sem olhar o celular.", specialTouch: "Antes de ir embora, cada um resume a conversa em uma palavra.", place: "sair", budget: "gratis", duration: "rapido" },
+  { title: "Caça às cores da cidade", description: "Escolhemos uma cor e caminhamos procurando detalhes, paredes, flores e objetos que combinem com ela.", specialTouch: "Montamos depois uma pequena colagem com as fotos encontradas.", place: "sair", budget: "gratis", duration: "rapido" },
+  { title: "Reencontro com um lugar comum", description: "Vamos até um lugar simples do nosso cotidiano e ficamos alguns minutos lembrando o que já vivemos por perto.", specialTouch: "Tiramos uma foto nova para comparar com essa fase da nossa vida no futuro.", place: "sair", budget: "gratis", duration: "rapido" },
+
+  { title: "Biblioteca com livros escolhidos", description: "Visitamos uma biblioteca e cada um escolhe um livro, poema ou trecho que gostaria de mostrar ao outro.", specialTouch: "Lemos em voz baixa o trecho escolhido e contamos por que lembramos um do outro.", place: "sair", budget: "gratis", duration: "medio" },
+  { title: "Trilha leve com pausa para conversar", description: "Vamos fazer uma caminhada tranquila em uma trilha ou parque e parar no ponto mais bonito para conversar.", specialTouch: "Cada um escolhe uma pedra ou folha caída para representar o dia em uma foto.", place: "sair", budget: "gratis", duration: "medio" },
+  { title: "Evento cultural gratuito", description: "Procuramos uma exposição, apresentação, feira ou atividade gratuita e descobrimos juntos algo que nunca vimos.", specialTouch: "Cada um escolhe o detalhe favorito do evento para contar ao outro.", place: "sair", budget: "gratis", duration: "medio" },
+
+  { title: "Dia de praia sem pressa", description: "Levamos o que já temos em casa e passamos o dia caminhando, entrando na água e descansando juntos.", specialTouch: "Escrevemos nossas iniciais na areia e registramos antes que o mar apague.", place: "sair", budget: "gratis", duration: "longo" },
+  { title: "Rota de mirantes e paisagens", description: "Montamos um roteiro por pontos gratuitos com vistas bonitas e passamos o dia conhecendo cada um.", specialTouch: "Em cada parada, contamos uma coisa bonita que enxergamos no outro.", place: "sair", budget: "gratis", duration: "longo" },
+  { title: "Voluntariado lado a lado", description: "Escolhemos uma ação gratuita de cuidado com animais, pessoas ou natureza e dedicamos o dia a ajudar juntos.", specialTouch: "No fim, contamos o que esse dia despertou em nós.", place: "sair", budget: "gratis", duration: "longo" },
+
+  { title: "Café na padaria que nunca entramos", description: "Escolhemos uma padaria nova, pedimos algo simples para dividir e transformamos uma parada curta em encontro.", specialTouch: "Cada um escolhe uma coisa do balcão que acha que o outro vai gostar.", place: "sair", budget: "baixo", duration: "rapido" },
+  { title: "Lanche de rua dividido", description: "Vamos encontrar um lanche de rua gostoso, pedir uma porção para dividir e aproveitar alguns minutos fora da rotina.", specialTouch: "Damos uma nota para sabor, companhia e vontade de repetir.", place: "sair", budget: "baixo", duration: "rapido" },
+  { title: "Desafio da lembrancinha barata", description: "Entramos em uma loja simples e cada um escolhe, com um limite pequeno, algo que tenha a cara do outro.", specialTouch: "Entregamos as escolhas junto com uma explicação carinhosa.", place: "sair", budget: "baixo", duration: "rapido" },
+
+  { title: "Feira livre de sabores", description: "Passeamos por uma feira, escolhemos frutas ou comidas que nunca provamos e montamos nossa própria degustação.", specialTouch: "A descoberta favorita ganha um lugar na nossa próxima lista de compras.", place: "sair", budget: "baixo", duration: "medio" },
+  { title: "Brechó com looks escolhidos", description: "Visitamos um brechó e cada um monta um visual divertido para o outro respeitando um limite pequeno.", specialTouch: "Tiramos uma foto dos looks, mesmo que não compremos nada.", place: "sair", budget: "baixo", duration: "medio" },
+  { title: "Boliche ou fliperama valendo abraço", description: "Escolhemos um lugar econômico para jogar algumas partidas e criamos prendas carinhosas para cada rodada.", specialTouch: "Quem perder escolhe onde será nosso próximo encontro.", place: "sair", budget: "baixo", duration: "medio" },
+
+  { title: "Bate-volta de transporte público", description: "Escolhemos um bairro ou cidade próxima acessível de ônibus ou trem e passamos o dia explorando sem roteiro rígido.", specialTouch: "Guardamos o bilhete da viagem junto com uma foto do melhor momento.", place: "sair", budget: "baixo", duration: "longo" },
+  { title: "Parque com cesta de lanches", description: "Montamos uma cesta simples, escolhemos um parque agradável e ficamos o dia entre conversa, caminhada e descanso.", specialTouch: "Cada um leva escondido o lanche favorito do outro.", place: "sair", budget: "baixo", duration: "longo" },
+  { title: "Expedição fotográfica por um bairro", description: "Escolhemos um bairro interessante e passamos o dia procurando fachadas, cenas e detalhes para fotografar juntos.", specialTouch: "No fim, cada um elege a foto do outro que mais gostou.", place: "sair", budget: "baixo", duration: "longo" },
+
+  { title: "Cafeteria com pedido surpresa", description: "Vamos a uma cafeteria especial e cada um escolhe, sem contar, uma bebida bonita para o outro experimentar.", specialTouch: "Antes de provar, tentamos explicar por que aquele pedido combina com o outro.", place: "sair", budget: "especial", duration: "rapido" },
+  { title: "Uma taça em um lugar bonito", description: "Escolhemos um lugar elegante para dividir uma bebida e fazer uma pausa especial no meio do dia.", specialTouch: "Brindamos a uma qualidade nossa que queremos conservar para sempre.", place: "sair", budget: "especial", duration: "rapido" },
+  { title: "Roda-gigante para dois", description: "Vamos a uma roda-gigante ou atração panorâmica rápida para enxergar a cidade de outro jeito, lado a lado.", specialTouch: "No ponto mais alto, fazemos um pedido para a nossa história.", place: "sair", budget: "especial", duration: "rapido" },
+
+  { title: "Aula de culinária para nós", description: "Participamos de uma aula presencial de culinária e aprendemos juntos um prato que poderemos repetir em casa.", specialTouch: "Escolhemos uma data futura para refazer a receita só do nosso jeito.", place: "sair", budget: "especial", duration: "medio" },
+  { title: "Noite de teatro", description: "Escolhemos uma peça que desperte nossa curiosidade e transformamos a saída em uma noite completa de conversa e descoberta.", specialTouch: "Depois, cada um conta qual cena mais lembrou a nossa relação.", place: "sair", budget: "especial", duration: "medio" },
+  { title: "Passeio de barco ao entardecer", description: "Vamos fazer um passeio curto de barco e aproveitar a mudança da luz para desacelerar juntos.", specialTouch: "Tiramos apenas uma foto e passamos o restante do passeio prestando atenção um no outro.", place: "sair", budget: "especial", duration: "medio" },
+
+  { title: "Bate-volta surpresa", description: "Um de nós escolhe o destino e prepara um dia inteiro fora, revelando cada parada somente quando chegarmos.", specialTouch: "O outro leva uma pequena surpresa para entregar no meio do caminho.", place: "sair", budget: "especial", duration: "longo" },
+  { title: "Day use para descansar juntos", description: "Escolhemos um hotel, pousada ou espaço de lazer para passar o dia descansando longe das tarefas comuns.", specialTouch: "Cada um leva uma carta curta para ser lida no momento mais tranquilo do dia.", place: "sair", budget: "especial", duration: "longo" },
+  { title: "Parque temático do nosso jeito", description: "Passamos o dia em um parque de diversões, aquático, zoológico ou atração especial escolhida por nós.", specialTouch: "Compramos ou guardamos uma pequena lembrança que represente a aventura.", place: "sair", budget: "especial", duration: "longo" }
 ]);
 
 const $ = (selector) => document.querySelector(selector);
@@ -1509,6 +1581,7 @@ let publicationImageSelection = 0;
 let latestPublicationReplies = [];
 let latestFuturePlans = [];
 let currentDateIdea = null;
+const usedDateIdeasByFilter = new Map();
 let complaintPreviewUrl = "";
 let sharedContentActivated = false;
 let counterTimer;
@@ -2390,6 +2463,18 @@ function getFilteredDateIdeas() {
   return filtered.length ? filtered : DATE_IDEAS;
 }
 
+function getDateIdeaFilterKey() {
+  const { place, budget, duration } = getDateIdeaFilters();
+  return `${place}|${budget}|${duration}`;
+}
+
+function getUsedDateIdeas(filterKey) {
+  if (!usedDateIdeasByFilter.has(filterKey)) {
+    usedDateIdeasByFilter.set(filterKey, new Set());
+  }
+  return usedDateIdeasByFilter.get(filterKey);
+}
+
 function renderDateIdea(idea) {
   currentDateIdea = idea;
   const placeLabel = idea.place === "casa" ? "Em casa" : "Fora de casa";
@@ -2414,18 +2499,28 @@ function renderDateIdea(idea) {
 
 function chooseDateIdea(deterministic = false) {
   const ideas = getFilteredDateIdeas();
-  let index;
+  const filterKey = getDateIdeaFilterKey();
+  const usedIdeas = getUsedDateIdeas(filterKey);
+  let selectedIdea;
 
   if (deterministic) {
     const now = new Date();
     const seed = Number(`${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, "0")}${String(now.getDate()).padStart(2, "0")}`);
-    index = seed % ideas.length;
+    selectedIdea = ideas[seed % ideas.length];
   } else {
-    index = Math.floor(Math.random() * ideas.length);
-    if (ideas.length > 1 && ideas[index] === currentDateIdea) index = (index + 1) % ideas.length;
+    let availableIdeas = ideas.filter((idea) => !usedIdeas.has(idea.title));
+
+    if (!availableIdeas.length) {
+      usedIdeas.clear();
+      availableIdeas = ideas.filter((idea) => idea !== currentDateIdea);
+    }
+
+    if (!availableIdeas.length) availableIdeas = ideas;
+    selectedIdea = availableIdeas[Math.floor(Math.random() * availableIdeas.length)];
   }
 
-  renderDateIdea(ideas[index]);
+  usedIdeas.add(selectedIdea.title);
+  renderDateIdea(selectedIdea);
 }
 
 function setDateIdeaStatus(message, state = "") {
@@ -2436,7 +2531,7 @@ function setDateIdeaStatus(message, state = "") {
 
 function createDateIdea() {
   chooseDateIdea(false);
-  setDateIdeaStatus("Pronto! A ideia respeita nossas escolhas e não custa nada para gerar ♥", "success");
+  setDateIdeaStatus("Pronto! Sorteamos uma ideia diferente que respeita nossas escolhas ♥", "success");
 }
 
 async function requestCoupleCorner(payload, editorCode) {

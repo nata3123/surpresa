@@ -61,7 +61,7 @@ Quando um plano acontecer, basta escolher **“Marcar como vivido”**. Ele pass
 
 ## Nosso cantinho
 
-O **“Encontro para hoje”** permite escolher lugar, orçamento e duração e sortear quantas sugestões quiserem. Tudo funciona dentro da própria página, sem cadastro, inteligência artificial ou serviço pago. A coleção tem uma ideia compatível para cada combinação possível e inclui um detalhe especial para o casal. A sugestão escolhida pode ser enviada diretamente para **“Coisas que ainda vamos viver”**.
+O **“Encontro para hoje”** permite escolher lugar, orçamento e duração e sortear quantas sugestões quisermos. Tudo funciona dentro da própria página, sem cadastro, inteligência artificial ou serviço pago. A coleção tem **72 ideias diferentes**, com quatro opções para cada combinação exata de filtros e um detalhe especial para nós. O sorteio percorre todas as opções compatíveis antes de repetir alguma. A sugestão escolhida pode ser enviada diretamente para **“Coisas que ainda vamos viver”**.
 
 Em **“Três coisas de hoje”**, cada pessoa pode guardar uma lista diária de três coisas que gosta no outro, três coisas boas do dia ou três motivos de gratidão. Cada pessoa pode preencher uma vez por dia cada uma dessas modalidades.
 
