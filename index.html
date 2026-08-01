@@ -59,6 +59,7 @@
         <a href="#mensagem" title="Carta">✉</a>
         <a href="#fotos" title="Fotos">▣</a>
         <a href="#historia" title="Nossa história">⌛</a>
+        <a href="#planos" title="Coisas que ainda vamos viver">✦</a>
         <a href="#adicionar" title="Adicionar lembrança">＋</a>
       </nav>
 
@@ -175,6 +176,80 @@
           <h2>Momentos que fizeram de nós, nós</h2>
         </div>
         <div class="timeline" id="timeline"></div>
+      </section>
+
+      <section class="section future-section" id="planos">
+        <span class="future-spark future-spark-one" aria-hidden="true">✦</span>
+        <span class="future-spark future-spark-two" aria-hidden="true">♡</span>
+
+        <div class="section-heading future-heading reveal">
+          <span class="eyebrow">Nosso próximo capítulo</span>
+          <h2>Coisas que ainda vamos viver</h2>
+          <p>Uma lista de sonhos, lugares e pequenos planos que queremos transformar em lembranças — juntos.</p>
+        </div>
+
+        <div class="future-board reveal">
+          <div class="future-summary" aria-label="Resumo dos nossos planos">
+            <div>
+              <strong id="futurePendingCount">0</strong>
+              <span>Ainda vamos viver</span>
+            </div>
+            <span class="future-summary-heart" aria-hidden="true">♥</span>
+            <div>
+              <strong id="futureCompletedCount">0</strong>
+              <span>Já viraram história</span>
+            </div>
+          </div>
+
+          <div class="future-plans-list" id="futurePlansList" aria-live="polite">
+            <p class="future-empty">Carregando nossos próximos capítulos…</p>
+          </div>
+
+          <details class="future-composer" id="futurePlanComposer">
+            <summary>Adicionar algo que ainda vamos viver <span aria-hidden="true">＋</span></summary>
+            <form class="future-plan-form" id="futurePlanForm">
+              <div class="future-plan-field">
+                <label for="futurePlanAuthor">Quem está sonhando?</label>
+                <select id="futurePlanAuthor" required>
+                  <option value="Bianca">Bianca</option>
+                  <option value="Natã">Natã</option>
+                </select>
+              </div>
+
+              <div class="future-plan-field">
+                <label for="futurePlanCategory">Que tipo de plano é?</label>
+                <select id="futurePlanCategory" required>
+                  <option value="viagem">Uma viagem</option>
+                  <option value="encontro">Um encontro</option>
+                  <option value="sonho">Um sonho</option>
+                  <option value="aventura">Uma aventura</option>
+                  <option value="outro">Outro plano nosso</option>
+                </select>
+              </div>
+
+              <div class="future-plan-field future-plan-field-wide">
+                <label for="futurePlanTitle">O que vamos viver?</label>
+                <input id="futurePlanTitle" maxlength="100" placeholder="Ex.: ver o pôr do sol na praia" required />
+              </div>
+
+              <div class="future-plan-field future-plan-field-wide">
+                <label for="futurePlanDetails">Detalhes que queremos guardar</label>
+                <textarea id="futurePlanDetails" maxlength="600" placeholder="Conte como vocês imaginam esse momento…"></textarea>
+              </div>
+
+              <div class="future-plan-field future-plan-field-wide">
+                <label for="futurePlanCode">Código reservado</label>
+                <input id="futurePlanCode" type="password" autocomplete="off" placeholder="Digite o código para adicionar" required />
+                <small>O mesmo código do nosso diário. Ele não fica salvo no site ou no aparelho.</small>
+              </div>
+
+              <div class="future-plan-actions future-plan-field-wide">
+                <button class="primary-button" type="submit">Guardar este sonho ♥</button>
+                <small id="futurePlanStatus" role="status" aria-live="polite"></small>
+              </div>
+            </form>
+          </details>
+        </div>
       </section>
 
       <section class="section creator-section" id="adicionar">

@@ -120,7 +120,8 @@ const SUPABASE = Object.freeze({
   url: "https://mijtdivqfjrkwchqdqvr.supabase.co",
   publishableKey: "sb_publishable_ukedGcRlxvIYSyF8rSONig_koPKNEVh",
   publishFunction: "publicar-lembranca",
-  replyFunction: "responder-publicacao"
+  replyFunction: "responder-publicacao",
+  plansFunction: "gerenciar-planos"
 });
 
 const IMAGE_UPLOAD = Object.freeze({
@@ -130,6 +131,14 @@ const IMAGE_UPLOAD = Object.freeze({
   minimumSaving: 0.1,
   minimumPsnr: 46,
   comparisonLongEdge: 640
+});
+
+const FUTURE_PLAN_CATEGORIES = Object.freeze({
+  viagem: { label: "Viagem", symbol: "✈" },
+  encontro: { label: "Encontro", symbol: "♡" },
+  sonho: { label: "Sonho", symbol: "✦" },
+  aventura: { label: "Aventura", symbol: "⌁" },
+  outro: { label: "Nosso plano", symbol: "♥" }
 });
 
 const $ = (selector) => document.querySelector(selector);
@@ -148,6 +157,7 @@ let preparedPublicationImage = null;
 let publicationImagePromise = null;
 let publicationImageSelection = 0;
 let latestPublicationReplies = [];
+let latestFuturePlans = [];
 
 function hydrateContent() {
   document.title = CONFIG.pageTitle;
@@ -172,6 +182,7 @@ function hydrateContent() {
   renderTimeline();
   void renderNotes();
   void loadPublications();
+  void loadFuturePlans();
 }
 
 function preciseDateDiff(start, end) {
@@ -401,6 +412,228 @@ function formatPublicationDate(value) {
     dateStyle: "long",
     timeStyle: "short"
   }).format(date);
+}
+
+function formatFuturePlanDate(value) {
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "um dia especial";
+
+  return new Intl.DateTimeFormat("pt-BR", { dateStyle: "long" }).format(date);
+}
+
+function setFuturePlanStatus(message, state = "") {
+  const status = $("#futurePlanStatus");
+  status.textContent = message;
+  status.dataset.state = state;
+}
+
+async function requestFuturePlan(payload, editorCode) {
+  const response = await fetch(`${SUPABASE.url}/functions/v1/${SUPABASE.plansFunction}`, {
+    method: "POST",
+    headers: {
+      apikey: SUPABASE.publishableKey,
+      "Content-Type": "application/json",
+      "x-editor-code": editorCode
+    },
+    body: JSON.stringify(payload)
+  });
+
+  const result = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(result.error || "Não foi possível atualizar nossos planos agora.");
+  return result;
+}
+
+async function completeFuturePlan(event, plan) {
+  event.preventDefault();
+
+  const form = event.currentTarget;
+  const codeField = form.elements.namedItem("codigo");
+  const status = form.querySelector(".future-complete-status");
+  const submitButton = form.querySelector('button[type="submit"]');
+  const editorCode = codeField.value;
+  if (!editorCode) return;
+
+  const originalLabel = submitButton.textContent;
+  submitButton.disabled = true;
+  submitButton.textContent = "Guardando…";
+  status.textContent = "Transformando este plano em um capítulo vivido…";
+  status.dataset.state = "";
+
+  try {
+    await requestFuturePlan({ acao: "concluir", id: plan.id }, editorCode);
+    await loadFuturePlans();
+  } catch (error) {
+    status.textContent = error.message || "Não foi possível marcar este plano agora.";
+    status.dataset.state = "error";
+    submitButton.disabled = false;
+    submitButton.textContent = originalLabel;
+  }
+}
+
+function transformFuturePlanIntoMemory(plan) {
+  const title = String(plan.titulo || "Nosso plano virou memória");
+  $("#publicationSection").value = "historia";
+  $("#publicationTitle").value = title.length > 80 ? `${title.slice(0, 77)}…` : title;
+  $("#publicationText").value = plan.detalhes
+    ? `Nós tiramos este plano do papel: ${plan.detalhes}`
+    : "Mais um sonho saiu da nossa lista e virou uma lembrança para guardar para sempre.";
+  updatePublicationDesign();
+  setPublicationStatus("Plano preenchido! Agora escolha uma foto desse dia para transformá-lo em memória ♥", "success");
+
+  const form = $("#publicationForm");
+  form.classList.add("prefilled-from-plan");
+  $("#adicionar").scrollIntoView({ behavior: "smooth", block: "start" });
+  setTimeout(() => {
+    form.classList.remove("prefilled-from-plan");
+    $("#publicationImage").focus({ preventScroll: true });
+  }, 850);
+}
+
+function createFuturePlanCard(plan) {
+  const category = FUTURE_PLAN_CATEGORIES[plan.categoria] || FUTURE_PLAN_CATEGORIES.outro;
+  const article = document.createElement("article");
+  article.className = `future-plan-card${plan.concluido ? " is-complete" : ""}`;
+  article.dataset.futurePlanId = String(plan.id);
+
+  const meta = document.createElement("div");
+  meta.className = "future-plan-meta";
+
+  const badge = document.createElement("span");
+  badge.className = "future-plan-badge";
+  badge.textContent = `${category.symbol} ${category.label}`;
+
+  const author = document.createElement("span");
+  author.textContent = `Sonho de ${plan.autor}`;
+  meta.append(badge, author);
+
+  const title = document.createElement("h4");
+  title.textContent = plan.titulo;
+
+  article.append(meta, title);
+
+  if (plan.detalhes) {
+    const details = document.createElement("p");
+    details.textContent = plan.detalhes;
+    article.append(details);
+  }
+
+  const footer = document.createElement("div");
+  footer.className = "future-plan-footer";
+
+  if (plan.concluido) {
+    const lived = document.createElement("span");
+    lived.className = "future-lived-label";
+    lived.textContent = `✓ Vivido em ${formatFuturePlanDate(plan.concluido_em)}`;
+
+    const transformButton = document.createElement("button");
+    transformButton.className = "future-transform-button";
+    transformButton.type = "button";
+    transformButton.textContent = "Transformar em memória";
+    transformButton.addEventListener("click", () => transformFuturePlanIntoMemory(plan));
+    footer.append(lived, transformButton);
+  } else {
+    const added = document.createElement("small");
+    added.textContent = `Guardado em ${formatFuturePlanDate(plan.criado_em)}`;
+
+    const composer = document.createElement("details");
+    composer.className = "future-complete-composer";
+    const summary = document.createElement("summary");
+    summary.textContent = "Marcar como vivido ✓";
+
+    const form = document.createElement("form");
+    form.className = "future-complete-form";
+    const label = document.createElement("label");
+    label.htmlFor = `future-complete-code-${plan.id}`;
+    label.textContent = "Código reservado";
+    const code = document.createElement("input");
+    code.id = label.htmlFor;
+    code.name = "codigo";
+    code.type = "password";
+    code.autocomplete = "off";
+    code.placeholder = "Digite o código";
+    code.required = true;
+    const button = document.createElement("button");
+    button.type = "submit";
+    button.textContent = "Sim, nós vivemos isso ♥";
+    const status = document.createElement("small");
+    status.className = "future-complete-status";
+    status.setAttribute("role", "status");
+    status.setAttribute("aria-live", "polite");
+
+    form.append(label, code, button, status);
+    form.addEventListener("submit", (event) => completeFuturePlan(event, plan));
+    composer.append(summary, form);
+    footer.append(added, composer);
+  }
+
+  article.append(footer);
+  return article;
+}
+
+function createFuturePlanGroup(titleText, plans, completed) {
+  const section = document.createElement("section");
+  section.className = `future-plan-group${completed ? " completed-group" : ""}`;
+
+  const heading = document.createElement("h3");
+  heading.textContent = titleText;
+  const grid = document.createElement("div");
+  grid.className = "future-plan-grid";
+  plans.forEach((plan) => grid.append(createFuturePlanCard(plan)));
+  section.append(heading, grid);
+  return section;
+}
+
+function renderFuturePlans(plans) {
+  latestFuturePlans = plans;
+  const pending = plans.filter((plan) => !plan.concluido);
+  const completed = plans.filter((plan) => plan.concluido);
+  $("#futurePendingCount").textContent = pending.length;
+  $("#futureCompletedCount").textContent = completed.length;
+
+  const list = $("#futurePlansList");
+  list.replaceChildren();
+
+  if (!plans.length) {
+    const empty = document.createElement("div");
+    empty.className = "future-empty";
+    const heart = document.createElement("span");
+    heart.setAttribute("aria-hidden", "true");
+    heart.textContent = "♡";
+    const title = document.createElement("strong");
+    title.textContent = "Nossa lista ainda está esperando o primeiro sonho.";
+    const text = document.createElement("p");
+    text.textContent = "Pode ser uma viagem, um encontro simples ou qualquer coisa que vocês queiram viver juntos.";
+    empty.append(heart, title, text);
+    list.append(empty);
+    return;
+  }
+
+  if (pending.length) {
+    list.append(createFuturePlanGroup("Próximos capítulos", pending, false));
+  }
+  if (completed.length) {
+    list.append(createFuturePlanGroup("Sonhos que já viraram história", completed, true));
+  }
+}
+
+async function loadFuturePlans() {
+  try {
+    const response = await fetch(
+      `${SUPABASE.url}/rest/v1/planos_futuros?select=id,titulo,detalhes,categoria,autor,concluido,concluido_em,criado_em&order=concluido.asc,criado_em.desc`,
+      { headers: { apikey: SUPABASE.publishableKey } }
+    );
+
+    if (!response.ok) throw new Error(`Não foi possível carregar os planos (${response.status}).`);
+    renderFuturePlans(await response.json());
+  } catch (error) {
+    console.error(error);
+    if (!latestFuturePlans.length) {
+      const warning = document.createElement("p");
+      warning.className = "future-empty future-error";
+      warning.textContent = "Não foi possível carregar nossos próximos capítulos agora. Tente novamente em instantes.";
+      $("#futurePlansList").replaceChildren(warning);
+    }
+  }
 }
 
 function createReplyCard(reply) {
@@ -748,7 +981,10 @@ async function loadPublications() {
 
 function startPublicationsFallback() {
   if (publicationsFallbackTimer) return;
-  publicationsFallbackTimer = setInterval(loadPublications, 15000);
+  publicationsFallbackTimer = setInterval(() => {
+    void loadPublications();
+    void loadFuturePlans();
+  }, 15000);
 }
 
 function subscribeToPublications() {
@@ -772,6 +1008,11 @@ function subscribeToPublications() {
       "postgres_changes",
       { event: "INSERT", schema: "public", table: "respostas_publicacoes" },
       () => void loadPublications()
+    )
+    .on(
+      "postgres_changes",
+      { event: "*", schema: "public", table: "planos_futuros" },
+      () => void loadFuturePlans()
     )
     .subscribe((status) => {
       if (status === "CHANNEL_ERROR" || status === "TIMED_OUT") startPublicationsFallback();
@@ -1168,6 +1409,50 @@ $("#publicationForm").addEventListener("submit", async (event) => {
     }
   } catch (error) {
     setPublicationStatus(error.message || "Não foi possível publicar agora.", "error");
+  } finally {
+    submitButton.disabled = false;
+    submitButton.textContent = originalLabel;
+  }
+});
+
+$("#futurePlanForm").addEventListener("submit", async (event) => {
+  event.preventDefault();
+
+  const form = event.currentTarget;
+  const submitButton = form.querySelector('button[type="submit"]');
+  const author = $("#futurePlanAuthor").value;
+  const category = $("#futurePlanCategory").value;
+  const title = $("#futurePlanTitle").value.trim();
+  const details = $("#futurePlanDetails").value.trim();
+  const editorCode = $("#futurePlanCode").value;
+  if (!author || !category || !title || !editorCode) return;
+
+  const originalLabel = submitButton.textContent;
+  submitButton.disabled = true;
+  submitButton.textContent = "Guardando…";
+  setFuturePlanStatus("Guardando este sonho na nossa história…");
+
+  try {
+    const result = await requestFuturePlan({
+      acao: "criar",
+      autor: author,
+      categoria: category,
+      titulo: title,
+      detalhes: details
+    }, editorCode);
+
+    form.reset();
+    setFuturePlanStatus("Plano guardado! Ele já aparece para vocês dois ♥", "success");
+    await loadFuturePlans();
+
+    const newPlan = result.plano?.id
+      ? document.querySelector(`[data-future-plan-id="${result.plano.id}"]`)
+      : null;
+    if (newPlan) {
+      setTimeout(() => newPlan.scrollIntoView({ behavior: "smooth", block: "center" }), 200);
+    }
+  } catch (error) {
+    setFuturePlanStatus(error.message || "Não foi possível guardar este plano agora.", "error");
   } finally {
     submitButton.disabled = false;
     submitButton.textContent = originalLabel;
