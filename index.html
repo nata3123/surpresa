@@ -55,14 +55,43 @@
 
     <div class="surprise-content" id="surpriseContent" hidden>
       <nav class="floating-nav" aria-label="Navegação da nossa história">
-        <a href="#contador" title="Tempo juntos">♥</a>
-        <a href="#musica" title="Nossas músicas">♫</a>
-        <a href="#mensagem" title="Carta">✉</a>
-        <a href="#fotos" title="Fotos">▣</a>
-        <a href="#historia" title="Nossa história">⌛</a>
-        <a href="#planos" title="Coisas que ainda vamos viver">✦</a>
-        <a href="#encontro" title="Nosso cantinho">☼</a>
-        <a href="#adicionar" title="Adicionar lembrança">＋</a>
+        <a href="#contador" title="Nosso tempo" aria-label="Nosso tempo" data-section-link>♥</a>
+        <a href="#musica" title="Nossas músicas" aria-label="Nossas músicas" data-section-link>♫</a>
+        <a href="#mensagem" title="Uma carta para você" aria-label="Uma carta para você" data-section-link>✉</a>
+        <a href="#fotos" title="Nossas memórias" aria-label="Nossas memórias" data-section-link>▣</a>
+        <a href="#planos" title="Nossos planos" aria-label="Nossos planos" data-section-link>✦</a>
+        <a href="#encontro" title="Nosso encontro" aria-label="Nosso encontro" data-section-link>☼</a>
+        <a href="#tres-coisas" title="Três coisas do nosso dia" aria-label="Três coisas do nosso dia" data-section-link>③</a>
+        <a href="#reclamacoes" title="Nosso jogo" aria-label="Nosso jogo" data-section-link>?</a>
+        <a href="#cartas" title="Nossas cartas" aria-label="Nossas cartas" data-section-link>✎</a>
+        <a href="#adicionar" title="Adicionar memória" aria-label="Adicionar memória" data-section-link>＋</a>
+      </nav>
+
+      <button class="mobile-nav-toggle" id="mobileNavToggle" type="button" aria-expanded="false" aria-controls="mobileSectionNav">
+        <span aria-hidden="true">☰</span>
+        <span id="mobileNavLabel">Explorar nosso cantinho</span>
+      </button>
+      <div class="mobile-nav-backdrop" id="mobileNavBackdrop" hidden></div>
+      <nav class="mobile-section-nav" id="mobileSectionNav" aria-label="Navegação pelas nossas seções" hidden>
+        <div class="mobile-nav-heading">
+          <div>
+            <span>Bianca + Natã</span>
+            <strong>Onde queremos ir?</strong>
+          </div>
+          <button id="mobileNavClose" type="button" aria-label="Fechar navegador de seções">×</button>
+        </div>
+        <div class="mobile-nav-grid">
+          <a href="#contador" data-section-link><span aria-hidden="true">♥</span>Nosso tempo</a>
+          <a href="#musica" data-section-link><span aria-hidden="true">♫</span>Nossas músicas</a>
+          <a href="#mensagem" data-section-link><span aria-hidden="true">✉</span>Minha carta</a>
+          <a href="#fotos" data-section-link><span aria-hidden="true">▣</span>Nossas memórias</a>
+          <a href="#planos" data-section-link><span aria-hidden="true">✦</span>Nossos planos</a>
+          <a href="#encontro" data-section-link><span aria-hidden="true">☼</span>Nosso encontro</a>
+          <a href="#tres-coisas" data-section-link><span aria-hidden="true">③</span>Nosso dia</a>
+          <a href="#reclamacoes" data-section-link><span aria-hidden="true">?</span>Nosso jogo</a>
+          <a href="#cartas" data-section-link><span aria-hidden="true">✎</span>Nossas cartas</a>
+          <a href="#adicionar" data-section-link><span aria-hidden="true">＋</span>Nova memória</a>
+        </div>
       </nav>
 
       <section class="section counter-section" id="contador">
@@ -185,6 +214,26 @@
           </div>
         </div>
 
+        <div class="album-toolbar reveal" aria-label="Organizar nossas memórias">
+          <div class="album-filter-group" role="group" aria-label="Filtrar por quem adicionou">
+            <span>Quem adicionou?</span>
+            <div>
+              <button class="album-filter active" type="button" data-album-author="todos" aria-pressed="true">Todas</button>
+              <button class="album-filter" type="button" data-album-author="Bianca" aria-pressed="false">Bianca</button>
+              <button class="album-filter" type="button" data-album-author="Natã" aria-pressed="false">Natã</button>
+            </div>
+          </div>
+          <label class="album-sort" for="albumSort">
+            <span>Organizar por</span>
+            <select id="albumSort">
+              <option value="historia">Ordem da nossa história</option>
+              <option value="recentes">Mais recentes primeiro</option>
+              <option value="antigas">Mais antigas primeiro</option>
+            </select>
+          </label>
+        </div>
+        <p class="album-filter-status reveal" id="albumFilterStatus" aria-live="polite"></p>
+
         <div class="memory-album reveal" tabindex="0" role="region" aria-label="Nosso álbum de memórias; use as setas do teclado para navegar">
           <div class="gallery-photo-area">
             <span class="photo-tape photo-tape-left" aria-hidden="true"></span>
@@ -197,6 +246,7 @@
 
           <div class="memory-story" aria-live="polite">
             <span class="memory-kicker">Capítulo <span id="galleryIndexPadded">01</span></span>
+            <span class="memory-author" id="galleryAuthor">Adicionada por Natã</span>
             <strong id="galleryCaption">Carregando as memórias…</strong>
             <span class="memory-divider" aria-hidden="true"></span>
             <p id="galleryText">Preparando uma de nossas memórias…</p>
@@ -221,14 +271,6 @@
           <p>Algumas memórias ficam guardadas em fotografias. Outras ficam guardadas no coração. As nossas moram em mim todos os dias.</p>
           <small>Com amor, Natã <span aria-hidden="true">♥</span></small>
         </blockquote>
-      </section>
-
-      <section class="section timeline-section" id="historia">
-        <div class="section-heading reveal">
-          <span class="eyebrow">Nossa história</span>
-          <h2>Momentos que fizeram de nós, nós</h2>
-        </div>
-        <div class="timeline" id="timeline"></div>
       </section>
 
       <section class="section future-section" id="planos">
@@ -509,6 +551,7 @@
             <div class="corner-list-heading">
               <span>Correspondência de Bianca &amp; Natã</span>
               <h3>Cartas que já chegaram</h3>
+              <small class="letters-hint">Cada carta fica fechada até tocarmos nela.</small>
             </div>
             <div class="letters-list" id="lettersList" aria-live="polite">
               <p class="corner-empty">Carregando nossas cartas…</p>
@@ -522,17 +565,17 @@
           <div class="creator-intro">
             <span class="eyebrow">Um espaço para nós dois</span>
             <h2>Vamos acrescentar um novo capítulo</h2>
-            <p>Escolhemos entre nosso álbum e nossa linha do tempo. A foto e o texto aparecem no cantinho escolhido, em tempo real nos nossos aparelhos.</p>
+            <p>A foto e o texto entram em “Memórias que moram em mim” e aparecem em tempo real nos nossos aparelhos.</p>
           </div>
 
           <form id="publicationForm" class="creator-form">
             <div class="creator-field">
-              <label for="publicationSection">Em qual parte da nossa história?</label>
-              <select id="publicationSection" required>
-                <option value="fotos">Memórias que moram em mim</option>
-                <option value="historia">Momentos que fizeram de nós, nós</option>
+              <label for="publicationAuthor">Qual de nós está adicionando?</label>
+              <select id="publicationAuthor" required>
+                <option value="Bianca">Bianca</option>
+                <option value="Natã">Natã</option>
               </select>
-              <small id="publicationDesignHint">Nossa lembrança aparecerá como uma nova fotografia do álbum.</small>
+              <small>A autoria aparece na memória e também pode ser alterada depois com nosso código.</small>
             </div>
 
             <div class="creator-field">
@@ -568,26 +611,7 @@
         </div>
       </section>
 
-      <section class="section guestbook-section" id="recados">
-        <div class="guestbook-card reveal">
-          <div>
-            <span class="eyebrow">Um cantinho só nosso</span>
-            <h2>Nossos recados para guardar</h2>
-            <p>Tudo o que escrevermos aqui fica guardado e aparece sempre que abrirmos nossa página.</p>
-          </div>
-          <form id="guestbookForm">
-            <label for="guestName">Qual de nós está escrevendo?</label>
-            <input id="guestName" maxlength="40" placeholder="Bianca ou Natã" required />
-            <label for="guestMessage">Recado</label>
-            <textarea id="guestMessage" maxlength="240" placeholder="Escreva algo que queira guardar…" required></textarea>
-            <button class="primary-button" type="submit">Guardar no nosso cantinho ♥</button>
-            <small id="guestbookStatus" role="status" aria-live="polite"></small>
-          </form>
-          <div class="notes-list" id="notesList" aria-live="polite"></div>
-        </div>
-      </section>
-
-      <section class="section ending-section">
+      <section class="section ending-section" id="final">
         <div class="ending-card reveal">
           <span class="big-heart" aria-hidden="true">♥</span>
           <h2 id="endingTitle">Bianca, eu quero partilhar a vida boa com você.</h2>

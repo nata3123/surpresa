@@ -178,6 +178,9 @@ let sharedContentActivated = false;
 let counterTimer;
 let realtimeClientPromise;
 let originalAlbumPhotos = [];
+let allAlbumPhotos = [];
+let albumAuthorFilter = "todos";
+let albumSortMode = "historia";
 let latestRepliesByPublication = new Map();
 
 function hydrateContent() {
@@ -206,7 +209,6 @@ function hydrateContent() {
 function activateSharedContent() {
   if (sharedContentActivated) return;
   sharedContentActivated = true;
-  void renderNotes();
   void loadPublications();
   void loadFuturePlans();
   void loadCoupleCorner();
@@ -294,24 +296,74 @@ function updateHeroMemories(photos) {
   });
 }
 
-function renderGallery(photos = []) {
-  const activePhotoId = originalAlbumPhotos[currentPhoto]?.id;
-  originalAlbumPhotos = [...photos].sort((left, right) => {
+function normalizePublicationAuthor(photo) {
+  return photo.autor === "Bianca" ? "Bianca" : "Natã";
+}
+
+function sortAlbumPhotos(photos) {
+  const sorted = [...photos];
+  if (albumSortMode === "recentes") {
+    return sorted.sort((left, right) => new Date(right.criado_em) - new Date(left.criado_em));
+  }
+  if (albumSortMode === "antigas") {
+    return sorted.sort((left, right) => new Date(left.criado_em) - new Date(right.criado_em));
+  }
+  return sorted.sort((left, right) => {
     const leftOrder = left.ordem ?? Number.MAX_SAFE_INTEGER;
     const rightOrder = right.ordem ?? Number.MAX_SAFE_INTEGER;
     if (leftOrder !== rightOrder) return leftOrder - rightOrder;
     return new Date(left.criado_em) - new Date(right.criado_em);
   });
+}
+
+function syncAlbumControls() {
+  $$("[data-album-author]").forEach((button) => {
+    const active = button.dataset.albumAuthor === albumAuthorFilter;
+    button.classList.toggle("active", active);
+    button.setAttribute("aria-pressed", String(active));
+  });
+  if ($("#albumSort")) $("#albumSort").value = albumSortMode;
+}
+
+function updateAlbumFilterStatus(visibleCount) {
+  const status = $("#albumFilterStatus");
+  if (!status) return;
+  if (albumAuthorFilter === "todos") {
+    status.textContent = `Mostrando todas as ${allAlbumPhotos.length} ${allAlbumPhotos.length === 1 ? "memória" : "memórias"}.`;
+  } else {
+    status.textContent = `${visibleCount} ${visibleCount === 1 ? "memória adicionada" : "memórias adicionadas"} por ${albumAuthorFilter}.`;
+  }
+}
+
+function applyAlbumFilters() {
+  const activePhotoId = originalAlbumPhotos[currentPhoto]?.id;
+  const filtered = allAlbumPhotos.filter((photo) => (
+    albumAuthorFilter === "todos" || normalizePublicationAuthor(photo) === albumAuthorFilter
+  ));
+  renderFilteredGallery(sortAlbumPhotos(filtered), activePhotoId);
+  updateAlbumFilterStatus(filtered.length);
+  syncAlbumControls();
+}
+
+function renderGallery(photos = []) {
+  allAlbumPhotos = [...photos];
+  updateHeroMemories(sortAlbumPhotos(allAlbumPhotos));
+  updateAlbumMemoryCount(allAlbumPhotos.length);
+  applyAlbumFilters();
+}
+
+function renderFilteredGallery(photos = [], activePhotoId = null) {
+  originalAlbumPhotos = photos;
   const thumbnails = $("#thumbnails");
   thumbnails.replaceChildren();
-  updateHeroMemories(originalAlbumPhotos);
-  updateAlbumMemoryCount(originalAlbumPhotos.length);
 
   originalAlbumPhotos.forEach((photo, index) => {
     const button = document.createElement("button");
     button.className = `thumbnail${index === 0 ? " active" : ""}`;
     button.type = "button";
-    button.setAttribute("aria-label", `Ver memória ${index + 1}: ${photo.titulo}`);
+    const author = normalizePublicationAuthor(photo);
+    button.setAttribute("aria-label", `Ver memória ${index + 1}: ${photo.titulo}, adicionada por ${author}`);
+    button.title = `Adicionada por ${author}`;
     const image = document.createElement("img");
     image.src = photo.imagem_url;
     image.alt = "";
@@ -327,7 +379,10 @@ function renderGallery(photos = []) {
     $("#galleryImage").removeAttribute("src");
     $("#galleryImage").alt = "";
     $("#galleryCaption").textContent = "O álbum está esperando uma nova memória";
-    $("#galleryText").textContent = "Quando publicarmos uma foto nesta seção, ela aparecerá aqui.";
+    $("#galleryText").textContent = albumAuthorFilter === "todos"
+      ? "Quando publicarmos uma foto, ela aparecerá aqui."
+      : `${albumAuthorFilter} ainda não adicionou uma foto neste álbum.`;
+    $("#galleryAuthor").textContent = albumAuthorFilter === "todos" ? "Nosso álbum" : `Filtro: ${albumAuthorFilter}`;
     $("#galleryIndex").textContent = "0 de 0";
     $("#galleryIndexPadded").textContent = "00";
     $("#galleryPrev").disabled = true;
@@ -368,6 +423,7 @@ function showPhoto(index, animate = true) {
     image.style.objectPosition = photo.posicao || "center";
     $("#galleryCaption").textContent = photo.titulo;
     $("#galleryText").textContent = photo.texto;
+    $("#galleryAuthor").textContent = `Adicionada por ${normalizePublicationAuthor(photo)}`;
     $("#galleryPhotoDate").textContent = photo.rotulo_data
       || (photo.origem === "original" ? "21 · 05 · 2026" : formatPublicationDate(photo.criado_em));
     $("#galleryIndex").textContent = `${currentPhoto + 1} de ${originalAlbumPhotos.length}`;
@@ -376,64 +432,6 @@ function showPhoto(index, animate = true) {
     renderGalleryDiary();
     image.classList.remove("changing");
   }, animate ? 160 : 0);
-}
-
-function renderTimeline(items = [], repliesByPublication = latestRepliesByPublication) {
-  const timeline = $("#timeline");
-  timeline.replaceChildren();
-
-  items
-    .sort((left, right) => {
-      const leftOrder = left.ordem ?? Number.MAX_SAFE_INTEGER;
-      const rightOrder = right.ordem ?? Number.MAX_SAFE_INTEGER;
-      if (leftOrder !== rightOrder) return leftOrder - rightOrder;
-      return new Date(left.criado_em) - new Date(right.criado_em);
-    })
-    .forEach((item) => {
-    const article = document.createElement("article");
-    article.className = `timeline-item ${item.origem === "original" ? "cloud-original" : "user-added"} reveal`;
-    if (document.body.classList.contains("surprise-open")) article.classList.add("visible");
-    const dot = document.createElement("span");
-    dot.className = "timeline-dot";
-    dot.setAttribute("aria-hidden", "true");
-    const card = document.createElement("div");
-    card.className = "timeline-card";
-    const image = document.createElement("img");
-    image.src = item.imagem_url;
-    image.alt = item.alt_texto || item.titulo;
-    image.loading = "lazy";
-    image.decoding = "async";
-    image.style.objectPosition = item.posicao || "center";
-    const copy = document.createElement("div");
-    copy.className = "timeline-copy";
-    const date = document.createElement("time");
-    date.textContent = item.rotulo_data || formatPublicationDate(item.criado_em);
-    const title = document.createElement("h3");
-    title.textContent = item.titulo;
-    const text = document.createElement("p");
-    text.textContent = item.texto;
-    copy.append(date, title, text);
-    card.append(
-      image,
-      copy,
-      createPublicationReplyArea(
-        { publicationId: item.id, defaultAuthor: "Bianca" },
-        repliesByPublication.get(String(item.id)) || []
-      ),
-      createPublicationManager(item, {
-        deletePrompt: "Excluir esta foto da nuvem, da linha do tempo e todas as respostas escritas nela?"
-      })
-    );
-    article.append(dot, card);
-    timeline.append(article);
-  });
-
-  if (!items.length) {
-    const empty = document.createElement("p");
-    empty.className = "corner-empty timeline-empty";
-    empty.textContent = "Nossa linha do tempo está esperando o próximo capítulo ♥";
-    timeline.append(empty);
-  }
 }
 
 function extractYouTubeVideoId(value) {
@@ -647,12 +645,6 @@ function openExperience() {
   revealOnScroll();
 }
 
-function setGuestbookStatus(message, state = "") {
-  const status = $("#guestbookStatus");
-  status.textContent = message;
-  status.dataset.state = state;
-}
-
 const AUTHOR_OPTIONS = [
   { value: "Bianca", label: "Bianca" },
   { value: "Natã", label: "Natã" }
@@ -842,78 +834,6 @@ function createContentManager(config) {
   return details;
 }
 
-function createNoteCard(note) {
-  const card = document.createElement("article");
-  card.className = "note-card";
-
-  const strong = document.createElement("strong");
-  strong.textContent = note.nome;
-
-  const message = document.createElement("p");
-  message.textContent = note.mensagem;
-
-  const date = document.createElement("small");
-  const createdAt = new Date(note.criado_em);
-  date.textContent = Number.isNaN(createdAt.getTime())
-    ? "Recado guardado com carinho"
-    : new Intl.DateTimeFormat("pt-BR", {
-        dateStyle: "long",
-        timeStyle: "short"
-      }).format(createdAt);
-
-  card.append(
-    strong,
-    message,
-    date,
-    createContentManager({
-      type: "recado",
-      item: note,
-      fields: [
-        { name: "nome", label: "Nome", maxLength: 40 },
-        { name: "mensagem", label: "Recado", kind: "textarea", rows: 3, maxLength: 240 }
-      ],
-      reload: renderNotes,
-      deletePrompt: "Excluir este recado para sempre?"
-    })
-  );
-  return card;
-}
-
-async function renderNotes() {
-  const notesList = $("#notesList");
-  const loading = document.createElement("small");
-  loading.textContent = "Carregando os recados…";
-  notesList.replaceChildren(loading);
-
-  try {
-    const response = await fetch(
-      `${SUPABASE.url}/rest/v1/recados?select=id,nome,mensagem,criado_em&order=criado_em.desc&limit=50`,
-      { headers: { apikey: SUPABASE.publishableKey } }
-    );
-
-    if (!response.ok) throw new Error(`Não foi possível carregar os recados (${response.status}).`);
-
-    const notes = await response.json();
-    notesList.replaceChildren();
-
-    if (!notes.length) {
-      const empty = document.createElement("small");
-      empty.textContent = "Nosso primeiro recado ainda está esperando para ser escrito ♥";
-      notesList.append(empty);
-      return;
-    }
-
-    notes.forEach((note) => notesList.append(createNoteCard(note)));
-  } catch (error) {
-    notesList.replaceChildren();
-    const warning = document.createElement("small");
-    warning.className = "notes-error";
-    warning.textContent = "Não conseguimos carregar nossos recados agora. Vamos tentar novamente em instantes.";
-    notesList.append(warning);
-    console.error(error);
-  }
-}
-
 function formatPublicationDate(value) {
   const date = new Date(value);
   if (Number.isNaN(date.getTime())) return "Uma nova lembrança";
@@ -982,12 +902,10 @@ async function completeFuturePlan(event, plan) {
 
 function transformFuturePlanIntoMemory(plan) {
   const title = String(plan.titulo || "Nosso plano virou memória");
-  $("#publicationSection").value = "historia";
   $("#publicationTitle").value = title.length > 80 ? `${title.slice(0, 77)}…` : title;
   $("#publicationText").value = plan.detalhes
     ? `Nós tiramos este plano do papel: ${plan.detalhes}`
     : "Mais um sonho saiu da nossa lista e virou uma lembrança para guardar para sempre.";
-  updatePublicationDesign();
   setPublicationStatus("Plano preenchido! Agora escolha uma foto desse dia para transformá-lo em memória ♥", "success");
 
   const form = $("#publicationForm");
@@ -1398,10 +1316,9 @@ function renderLetters(letters) {
     return;
   }
 
-  letters.forEach((letter, index) => {
+  letters.forEach((letter) => {
     const card = document.createElement("details");
     card.className = "letter-card";
-    if (index === 0) card.open = true;
 
     const summary = document.createElement("summary");
     const stamp = document.createElement("span");
@@ -1877,6 +1794,7 @@ function createPublicationManager(publication, options = {}) {
     type: "publicacao",
     item: publication,
     fields: [
+      { name: "autor", label: "Qual de nós adicionou?", kind: "select", options: AUTHOR_OPTIONS },
       { name: "titulo", label: "Título", maxLength: 80 },
       { name: "texto", label: "Texto", kind: "textarea", rows: 5, maxLength: 1000 }
     ],
@@ -1892,17 +1810,15 @@ function renderPublications(publications, replies) {
   latestRepliesByPublication = repliesByPublication;
 
   const albumMemories = publications.filter((post) => post.secao === "fotos");
-  const timelineMemories = publications.filter((post) => post.secao === "historia");
 
   renderGallery(albumMemories);
-  renderTimeline(timelineMemories, repliesByPublication);
 }
 
 async function loadPublications() {
   try {
     const [publicationsResponse, repliesResponse] = await Promise.all([
       fetch(
-        `${SUPABASE.url}/rest/v1/publicacoes?select=id,secao,titulo,texto,imagem_url,origem,ordem,alt_texto,rotulo_data,posicao,criado_em&order=origem.asc,ordem.asc.nullslast,criado_em.asc`,
+        `${SUPABASE.url}/rest/v1/publicacoes?select=id,secao,autor,titulo,texto,imagem_url,origem,ordem,alt_texto,rotulo_data,posicao,criado_em&secao=eq.fotos&order=origem.asc,ordem.asc.nullslast,criado_em.asc`,
         { headers: { apikey: SUPABASE.publishableKey } }
       ),
       fetch(
@@ -1927,7 +1843,6 @@ async function loadPublications() {
 function startPublicationsFallback() {
   if (publicationsFallbackTimer) return;
   publicationsFallbackTimer = setInterval(() => {
-    void renderNotes();
     void loadPublications();
     void loadFuturePlans();
     void loadCoupleCorner();
@@ -1947,11 +1862,6 @@ function subscribeToPublications() {
 
   client
     .channel("novas-lembrancas-bianca")
-    .on(
-      "postgres_changes",
-      { event: "*", schema: "public", table: "recados" },
-      () => void renderNotes()
-    )
     .on(
       "postgres_changes",
       { event: "*", schema: "public", table: "publicacoes" },
@@ -2108,13 +2018,98 @@ function setPublicationStatus(message, state = "") {
 }
 
 function updatePublicationDesign() {
-  const section = $("#publicationSection").value;
   const creatorCard = $(".creator-card");
-  creatorCard.dataset.selectedSection = section;
-  $("#publicationPreview").dataset.selectedSection = section;
-  $("#publicationDesignHint").textContent = section === "historia"
-    ? "Nossa lembrança entrará como uma nova etapa da linha do tempo."
-    : "Nossa lembrança aparecerá como uma nova fotografia do álbum.";
+  creatorCard.dataset.selectedSection = "fotos";
+  $("#publicationPreview").dataset.selectedSection = "fotos";
+}
+
+function setupAlbumControls() {
+  try {
+    const savedAuthor = localStorage.getItem("nosso-album-autor");
+    const savedSort = localStorage.getItem("nosso-album-ordem");
+    if (["todos", "Bianca", "Natã"].includes(savedAuthor)) albumAuthorFilter = savedAuthor;
+    if (["historia", "recentes", "antigas"].includes(savedSort)) albumSortMode = savedSort;
+  } catch {
+    // O álbum continua funcionando mesmo quando o navegador bloqueia preferências locais.
+  }
+
+  syncAlbumControls();
+  $$("[data-album-author]").forEach((button) => {
+    button.addEventListener("click", () => {
+      albumAuthorFilter = button.dataset.albumAuthor;
+      try { localStorage.setItem("nosso-album-autor", albumAuthorFilter); } catch {}
+      applyAlbumFilters();
+    });
+  });
+  $("#albumSort").addEventListener("change", (event) => {
+    albumSortMode = event.currentTarget.value;
+    try { localStorage.setItem("nosso-album-ordem", albumSortMode); } catch {}
+    applyAlbumFilters();
+  });
+}
+
+function setupSectionNavigation() {
+  const toggle = $("#mobileNavToggle");
+  const drawer = $("#mobileSectionNav");
+  const backdrop = $("#mobileNavBackdrop");
+  const closeButton = $("#mobileNavClose");
+  const links = $$('[data-section-link]');
+  let returnFocus = null;
+
+  const closeNavigation = (restoreFocus = false) => {
+    drawer.hidden = true;
+    backdrop.hidden = true;
+    toggle.setAttribute("aria-expanded", "false");
+    document.body.classList.remove("mobile-nav-open");
+    if (restoreFocus) (returnFocus || toggle).focus();
+  };
+
+  const openNavigation = () => {
+    returnFocus = document.activeElement;
+    drawer.hidden = false;
+    backdrop.hidden = false;
+    toggle.setAttribute("aria-expanded", "true");
+    document.body.classList.add("mobile-nav-open");
+    closeButton.focus();
+  };
+
+  toggle.addEventListener("click", () => {
+    if (drawer.hidden) openNavigation();
+    else closeNavigation(true);
+  });
+  closeButton.addEventListener("click", () => closeNavigation(true));
+  backdrop.addEventListener("click", () => closeNavigation(true));
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && !drawer.hidden) closeNavigation(true);
+  });
+  links.forEach((link) => link.addEventListener("click", () => closeNavigation(false)));
+
+  const targets = [...new Set(links.map((link) => link.getAttribute("href")))]
+    .map((href) => document.querySelector(href))
+    .filter(Boolean);
+  const setCurrentSection = (id) => {
+    links.forEach((link) => {
+      const current = link.getAttribute("href") === `#${id}`;
+      link.classList.toggle("is-current", current);
+      if (current) link.setAttribute("aria-current", "location");
+      else link.removeAttribute("aria-current");
+    });
+    const currentLink = links.find((link) => link.getAttribute("href") === `#${id}`);
+    if (currentLink) {
+      $("#mobileNavLabel").textContent = currentLink.title || currentLink.textContent.trim();
+    }
+  };
+
+  if ("IntersectionObserver" in window) {
+    const observer = new IntersectionObserver((entries) => {
+      const visible = entries
+        .filter((entry) => entry.isIntersecting)
+        .sort((left, right) => right.intersectionRatio - left.intersectionRatio)[0];
+      if (visible) setCurrentSection(visible.target.id);
+    }, { rootMargin: "-20% 0px -60% 0px", threshold: [0, 0.1, 0.3] });
+    targets.forEach((target) => observer.observe(target));
+  }
+  setCurrentSection("contador");
 }
 
 function getShareUrl() {
@@ -2232,6 +2227,8 @@ $(".memory-album").addEventListener("keydown", (event) => {
 });
 
 document.addEventListener("DOMContentLoaded", () => {
+  setupAlbumControls();
+  setupSectionNavigation();
   hydrateContent();
   updatePublicationDesign();
   updateCounter();
@@ -2266,45 +2263,6 @@ document.addEventListener("visibilitychange", () => {
 openSurprise.addEventListener("click", openExperience);
 $("#galleryPrev").addEventListener("click", () => showPhoto(currentPhoto - 1));
 $("#galleryNext").addEventListener("click", () => showPhoto(currentPhoto + 1));
-
-$("#guestbookForm").addEventListener("submit", async (event) => {
-  event.preventDefault();
-
-  const name = $("#guestName").value.trim();
-  const message = $("#guestMessage").value.trim();
-  if (!name || !message) return;
-
-  const form = event.currentTarget;
-  const submitButton = form.querySelector('button[type="submit"]');
-  const originalLabel = submitButton.textContent;
-  submitButton.disabled = true;
-  submitButton.textContent = "Guardando…";
-  setGuestbookStatus("Enviando seu recado…");
-
-  try {
-    const response = await fetch(`${SUPABASE.url}/rest/v1/recados`, {
-      method: "POST",
-      headers: {
-        apikey: SUPABASE.publishableKey,
-        "Content-Type": "application/json",
-        Prefer: "return=minimal"
-      },
-      body: JSON.stringify({ nome: name, mensagem: message })
-    });
-
-    if (!response.ok) throw new Error(`Não foi possível guardar o recado (${response.status}).`);
-
-    form.reset();
-    setGuestbookStatus("Nosso recado foi guardado no nosso cantinho ♥", "success");
-    await renderNotes();
-  } catch (error) {
-    setGuestbookStatus("Não foi possível guardar agora. Confira a internet e tente novamente.", "error");
-    console.error(error);
-  } finally {
-    submitButton.disabled = false;
-    submitButton.textContent = originalLabel;
-  }
-});
 
 $("#publicationImage").addEventListener("change", (event) => {
   clearPublicationPreview();
@@ -2343,20 +2301,19 @@ $("#publicationImage").addEventListener("change", (event) => {
     });
 });
 
-$("#publicationSection").addEventListener("change", updatePublicationDesign);
-
 $("#publicationForm").addEventListener("submit", async (event) => {
   event.preventDefault();
 
   const form = event.currentTarget;
   const submitButton = form.querySelector('button[type="submit"]');
   const [selectedImage] = $("#publicationImage").files;
-  const section = $("#publicationSection").value;
+  const section = "fotos";
+  const author = $("#publicationAuthor").value;
   const title = $("#publicationTitle").value.trim();
   const publicationText = $("#publicationText").value.trim();
   const editorCode = $("#publicationCode").value;
 
-  if (!selectedImage || !title || !publicationText || !editorCode) return;
+  if (!selectedImage || !author || !title || !publicationText || !editorCode) return;
 
   const originalLabel = submitButton.textContent;
   submitButton.disabled = true;
@@ -2368,6 +2325,7 @@ $("#publicationForm").addEventListener("submit", async (event) => {
     const image = preparedPublicationImage || selectedImage;
     const payload = new FormData();
     payload.append("secao", section);
+    payload.append("autor", author);
     payload.append("titulo", title);
     payload.append("texto", publicationText);
     payload.append("imagem", image, image.name);
@@ -2387,20 +2345,22 @@ $("#publicationForm").addEventListener("submit", async (event) => {
 
     form.reset();
     clearPublicationPreview();
+    albumAuthorFilter = author;
+    albumSortMode = "recentes";
+    try {
+      localStorage.setItem("nosso-album-autor", albumAuthorFilter);
+      localStorage.setItem("nosso-album-ordem", albumSortMode);
+    } catch {}
     updatePublicationDesign();
-    setPublicationStatus("Lembrança publicada! Ela já está aparecendo na seção escolhida ♥", "success");
+    setPublicationStatus("Lembrança publicada! Ela já está aparecendo no nosso álbum ♥", "success");
     await loadPublications();
 
-    if (section === "fotos") {
-      const publishedIndex = originalAlbumPhotos.findIndex(
-        (photo) => String(photo.id) === String(result.publicacao?.id)
-      );
-      if (publishedIndex >= 0) showPhoto(publishedIndex, false);
-    }
+    const publishedIndex = originalAlbumPhotos.findIndex(
+      (photo) => String(photo.id) === String(result.publicacao?.id)
+    );
+    if (publishedIndex >= 0) showPhoto(publishedIndex, false);
 
-    const destination = section === "historia"
-      ? $("#timeline .timeline-item.user-added:last-child")
-      : $("#fotos .memory-album");
+    const destination = $("#fotos .memory-album");
     if (destination) {
       setTimeout(() => destination.scrollIntoView({ behavior: "smooth", block: "center" }), 250);
     }

@@ -146,16 +146,18 @@ h1 { margin: 20px 0 14px; font-size: clamp(2.6rem, 8vw, 5.8rem); line-height: .9
   right: 18px;
   transform: translateY(-50%);
   display: grid;
-  gap: 10px;
-  padding: 10px;
+  gap: 6px;
+  padding: 8px;
   border: 1px solid rgba(111,23,49,.1);
   border-radius: 999px;
   background: rgba(255,253,249,.8);
   box-shadow: 0 14px 40px rgba(64,18,31,.12);
   backdrop-filter: blur(14px);
 }
-.floating-nav a { width: 38px; height: 38px; display: grid; place-items: center; border-radius: 50%; text-decoration: none; color: var(--wine); }
+.floating-nav a { width: 36px; height: 36px; display: grid; place-items: center; border-radius: 50%; text-decoration: none; color: var(--wine); transition:color .2s ease, background .2s ease, transform .2s ease; }
 .floating-nav a:hover { background: var(--rose-light); }
+.floating-nav a.is-current { color:#fff; background:var(--wine); box-shadow:0 7px 18px rgba(111,23,49,.24); transform:scale(1.06); }
+.mobile-nav-toggle, .mobile-section-nav, .mobile-nav-backdrop { display:none; }
 
 .counter-section { background: linear-gradient(180deg, #fffaf7, #fff); }
 .counter-grid { max-width: 940px; margin: 0 auto; display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; }
@@ -271,6 +273,28 @@ h1 { margin: 20px 0 14px; font-size: clamp(2.6rem, 8vw, 5.8rem); line-height: .9
 .memory-sparkle { position:absolute; z-index:-1; color:rgba(153,48,79,.14); font-family:Georgia,serif; }
 .sparkle-one { top:120px; left:8vw; font-size:4rem; transform:rotate(-12deg); }
 .sparkle-two { top:240px; right:7vw; font-size:5rem; transform:rotate(11deg); }
+.album-toolbar {
+  width:min(900px,100%);
+  margin:-28px auto 18px;
+  padding:16px 18px;
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:18px;
+  border:1px solid rgba(111,23,49,.10);
+  border-radius:22px;
+  background:rgba(255,253,249,.88);
+  box-shadow:0 14px 42px rgba(111,23,49,.07);
+  backdrop-filter:blur(10px);
+}
+.album-filter-group, .album-sort { display:grid; gap:8px; }
+.album-filter-group > span, .album-sort > span { color:var(--wine); font-size:.67rem; font-weight:900; letter-spacing:.09em; text-transform:uppercase; }
+.album-filter-group > div { display:flex; flex-wrap:wrap; gap:7px; }
+.album-filter { min-height:38px; padding:0 14px; border:1px solid rgba(111,23,49,.12); border-radius:999px; color:var(--wine); background:#fff; font-size:.75rem; font-weight:850; cursor:pointer; transition:color .2s ease, background .2s ease, transform .2s ease; }
+.album-filter:hover { transform:translateY(-1px); background:var(--rose-light); }
+.album-filter.active { border-color:var(--wine); color:#fff; background:var(--wine); box-shadow:0 8px 18px rgba(111,23,49,.17); }
+.album-sort select { min-height:40px; border:1px solid rgba(111,23,49,.12); border-radius:13px; padding:0 34px 0 12px; color:var(--ink); background:#fff; font-weight:700; }
+.album-filter-status { min-height:1.35em; margin:0 auto 24px; color:var(--muted); font-size:.76rem; font-weight:700; text-align:center; }
 .memory-album {
   width: min(1080px, 100%);
   min-height: 650px;
@@ -367,6 +391,7 @@ h1 { margin: 20px 0 14px; font-size: clamp(2.6rem, 8vw, 5.8rem); line-height: .9
   letter-spacing:.18em;
   text-transform:uppercase;
 }
+.memory-author { display:inline-flex; width:fit-content; margin:-10px 0 14px; padding:7px 10px; border-radius:999px; color:var(--wine); background:var(--rose-light); font-size:.66rem; font-weight:850; letter-spacing:.03em; }
 .memory-story > strong {
   position:relative;
   display:block;
@@ -525,6 +550,7 @@ h1 { margin: 20px 0 14px; font-size: clamp(2.6rem, 8vw, 5.8rem); line-height: .9
 .corner-list-heading { margin-bottom:22px; }
 .corner-list-heading > span { color:var(--gold); font-size:.7rem; font-weight:900; letter-spacing:.13em; text-transform:uppercase; }
 .corner-list-heading h3 { margin:7px 0 0; color:var(--wine-dark); font-family:Georgia,serif; font-size:clamp(1.45rem,3vw,2rem); line-height:1.15; }
+.letters-hint { display:block; margin-top:8px; color:var(--muted); font-size:.75rem; line-height:1.5; }
 
 .date-idea-section { overflow:hidden; background:linear-gradient(150deg,#fff9f0,#fce4e8 52%,#fff7ef); }
 .date-orbit { position:absolute; color:rgba(111,23,49,.08); font-family:Georgia,serif; line-height:1; }
@@ -655,8 +681,11 @@ h1 { margin: 20px 0 14px; font-size: clamp(2.6rem, 8vw, 5.8rem); line-height: .9
 .letter-form-mark { position:absolute; top:-28px; right:20px; color:rgba(111,23,49,.06); font-family:Georgia,serif; font-size:9rem; line-height:1; }
 .letters-form textarea { min-height:260px; resize:vertical; line-height:1.7; }
 .letter-card { overflow:hidden; border:1px solid rgba(111,23,49,.10); border-radius:8px 24px 24px 24px; background:#fff; box-shadow:0 14px 36px rgba(77,14,34,.07); }
-.letter-card summary { display:flex; align-items:center; gap:13px; padding:20px; cursor:pointer; list-style:none; }
+.letter-card summary { display:grid; grid-template-columns:auto minmax(0,1fr) auto; align-items:center; gap:13px; padding:20px; cursor:pointer; list-style:none; transition:background .2s ease; }
 .letter-card summary::-webkit-details-marker { display:none; }
+.letter-card summary::after { content:"⌄"; display:grid; place-items:center; width:30px; height:30px; border-radius:50%; color:var(--wine); background:var(--rose-light); font-size:1rem; transition:transform .2s ease; }
+.letter-card[open] summary { background:#fff7f7; }
+.letter-card[open] summary::after { transform:rotate(180deg); }
 .letter-card summary > span { display:grid; place-items:center; width:42px; height:42px; flex:none; border-radius:50%; color:#fff; background:var(--wine); font-family:Georgia,serif; font-size:1.15rem; }
 .letter-card summary strong { display:block; color:var(--wine-dark); font-family:Georgia,serif; font-size:1.14rem; }
 .letter-card summary small { display:block; margin-top:4px; color:var(--muted); font-size:.67rem; }
@@ -808,6 +837,56 @@ footer span:last-child { color:#f1a8ba; }
   .hero-memories { display:none; }
   .hero-content { padding:26px 18px 30px; background:rgba(47,7,20,.18); }
   .floating-nav { display:none; }
+  body.surprise-open { padding-bottom:78px; }
+  body.mobile-nav-open { overflow:hidden; }
+  .mobile-nav-toggle {
+    position:fixed;
+    z-index:80;
+    right:14px;
+    bottom:max(14px, env(safe-area-inset-bottom));
+    display:flex;
+    align-items:center;
+    gap:9px;
+    max-width:calc(100vw - 28px);
+    min-height:50px;
+    padding:0 17px;
+    border:1px solid rgba(255,255,255,.25);
+    border-radius:999px;
+    color:#fff;
+    background:rgba(83,13,35,.94);
+    box-shadow:0 15px 38px rgba(47,7,20,.3);
+    backdrop-filter:blur(14px);
+    font-weight:850;
+  }
+  .mobile-nav-toggle > span:first-child { font-size:1.15rem; }
+  .mobile-nav-toggle > span:last-child { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .mobile-nav-backdrop:not([hidden]) { position:fixed; z-index:88; inset:0; display:block; background:rgba(35,4,14,.55); backdrop-filter:blur(3px); }
+  .mobile-section-nav:not([hidden]) {
+    position:fixed;
+    z-index:90;
+    left:10px;
+    right:10px;
+    bottom:max(10px, env(safe-area-inset-bottom));
+    display:block;
+    max-height:min(78vh,680px);
+    overflow:auto;
+    padding:22px 18px 20px;
+    border:1px solid rgba(111,23,49,.12);
+    border-radius:30px 10px 30px 10px;
+    color:var(--ink);
+    background:rgba(255,252,248,.98);
+    box-shadow:0 28px 80px rgba(35,4,14,.36);
+  }
+  .mobile-nav-heading { display:flex; align-items:center; justify-content:space-between; gap:18px; margin-bottom:17px; }
+  .mobile-nav-heading > div { display:grid; gap:4px; }
+  .mobile-nav-heading span { color:var(--gold); font-size:.62rem; font-weight:900; letter-spacing:.13em; text-transform:uppercase; }
+  .mobile-nav-heading strong { color:var(--wine-dark); font-family:Georgia,serif; font-size:1.35rem; }
+  .mobile-nav-heading button { width:40px; height:40px; flex:none; border:0; border-radius:50%; color:var(--wine); background:var(--rose-light); font-size:1.7rem; line-height:1; }
+  .mobile-nav-grid { display:grid; grid-template-columns:1fr 1fr; gap:9px; }
+  .mobile-nav-grid a { display:flex; align-items:center; gap:10px; min-height:52px; padding:10px 12px; border:1px solid rgba(111,23,49,.09); border-radius:16px; color:var(--wine); background:#fff; font-size:.77rem; font-weight:800; text-decoration:none; }
+  .mobile-nav-grid a > span { display:grid; place-items:center; width:28px; height:28px; flex:none; border-radius:50%; color:var(--wine); background:var(--rose-light); }
+  .mobile-nav-grid a.is-current { border-color:var(--wine); color:#fff; background:var(--wine); box-shadow:0 9px 22px rgba(111,23,49,.16); }
+  .mobile-nav-grid a.is-current > span { color:var(--wine); background:#fff; }
   .section { padding:86px 18px; }
   .counter-grid { grid-template-columns: repeat(3,1fr); }
   .counter-grid .clock-card { grid-column:1/-1; }
@@ -817,12 +896,15 @@ footer span:last-child { color:#f1a8ba; }
   .full-song-player { min-height:0; }
   .music-list { grid-template-columns:1fr; }
   .love-letter { padding:54px 32px; }
+  .album-toolbar { align-items:stretch; flex-direction:column; margin-top:-18px; }
+  .album-sort select { width:100%; }
   .memory-album { min-height:0; grid-template-columns:1fr; gap:22px; padding:28px 24px 34px; border-radius:30px 8px 30px 8px; }
   .gallery-photo-area { width:min(100%,520px); }
   .gallery-photo-frame img { height:min(118vw,590px); }
   .memory-story { padding:22px 4px 0; text-align:center; }
   .memory-story::before { top:-22px; right:2%; font-size:6.5rem; }
   .memory-divider { margin:24px auto; }
+  .memory-author { margin-inline:auto; }
   .gallery-controls { justify-content:center; }
   .memory-film { margin-top:20px; }
   .thumbnails { justify-content:flex-start; }
@@ -854,6 +936,11 @@ footer span:last-child { color:#f1a8ba; }
   .gallery-section { padding-inline:14px; }
   .memory-heading { padding-inline:8px; margin-bottom:36px; }
   .album-meta { font-size:.62rem; letter-spacing:.08em; }
+  .album-toolbar { padding:14px; border-radius:18px; }
+  .album-filter-group > div { display:grid; grid-template-columns:repeat(3,1fr); }
+  .album-filter { padding-inline:10px; }
+  .mobile-nav-grid { grid-template-columns:1fr; }
+  .mobile-section-nav:not([hidden]) { max-height:84vh; }
   .memory-album { padding:22px 16px 28px; }
   .gallery-photo-frame { padding:9px 9px 50px; }
   .gallery-photo-frame img { height:min(120vw,500px); }
@@ -957,14 +1044,43 @@ footer span:last-child { color:#f1a8ba; }
 
     <div class="surprise-content" id="surpriseContent" hidden>
       <nav class="floating-nav" aria-label="Navegação da nossa história">
-        <a href="#contador" title="Tempo juntos">♥</a>
-        <a href="#musica" title="Nossas músicas">♫</a>
-        <a href="#mensagem" title="Carta">✉</a>
-        <a href="#fotos" title="Fotos">▣</a>
-        <a href="#historia" title="Nossa história">⌛</a>
-        <a href="#planos" title="Coisas que ainda vamos viver">✦</a>
-        <a href="#encontro" title="Nosso cantinho">☼</a>
-        <a href="#adicionar" title="Adicionar lembrança">＋</a>
+        <a href="#contador" title="Nosso tempo" aria-label="Nosso tempo" data-section-link>♥</a>
+        <a href="#musica" title="Nossas músicas" aria-label="Nossas músicas" data-section-link>♫</a>
+        <a href="#mensagem" title="Uma carta para você" aria-label="Uma carta para você" data-section-link>✉</a>
+        <a href="#fotos" title="Nossas memórias" aria-label="Nossas memórias" data-section-link>▣</a>
+        <a href="#planos" title="Nossos planos" aria-label="Nossos planos" data-section-link>✦</a>
+        <a href="#encontro" title="Nosso encontro" aria-label="Nosso encontro" data-section-link>☼</a>
+        <a href="#tres-coisas" title="Três coisas do nosso dia" aria-label="Três coisas do nosso dia" data-section-link>③</a>
+        <a href="#reclamacoes" title="Nosso jogo" aria-label="Nosso jogo" data-section-link>?</a>
+        <a href="#cartas" title="Nossas cartas" aria-label="Nossas cartas" data-section-link>✎</a>
+        <a href="#adicionar" title="Adicionar memória" aria-label="Adicionar memória" data-section-link>＋</a>
+      </nav>
+
+      <button class="mobile-nav-toggle" id="mobileNavToggle" type="button" aria-expanded="false" aria-controls="mobileSectionNav">
+        <span aria-hidden="true">☰</span>
+        <span id="mobileNavLabel">Explorar nosso cantinho</span>
+      </button>
+      <div class="mobile-nav-backdrop" id="mobileNavBackdrop" hidden></div>
+      <nav class="mobile-section-nav" id="mobileSectionNav" aria-label="Navegação pelas nossas seções" hidden>
+        <div class="mobile-nav-heading">
+          <div>
+            <span>Bianca + Natã</span>
+            <strong>Onde queremos ir?</strong>
+          </div>
+          <button id="mobileNavClose" type="button" aria-label="Fechar navegador de seções">×</button>
+        </div>
+        <div class="mobile-nav-grid">
+          <a href="#contador" data-section-link><span aria-hidden="true">♥</span>Nosso tempo</a>
+          <a href="#musica" data-section-link><span aria-hidden="true">♫</span>Nossas músicas</a>
+          <a href="#mensagem" data-section-link><span aria-hidden="true">✉</span>Minha carta</a>
+          <a href="#fotos" data-section-link><span aria-hidden="true">▣</span>Nossas memórias</a>
+          <a href="#planos" data-section-link><span aria-hidden="true">✦</span>Nossos planos</a>
+          <a href="#encontro" data-section-link><span aria-hidden="true">☼</span>Nosso encontro</a>
+          <a href="#tres-coisas" data-section-link><span aria-hidden="true">③</span>Nosso dia</a>
+          <a href="#reclamacoes" data-section-link><span aria-hidden="true">?</span>Nosso jogo</a>
+          <a href="#cartas" data-section-link><span aria-hidden="true">✎</span>Nossas cartas</a>
+          <a href="#adicionar" data-section-link><span aria-hidden="true">＋</span>Nova memória</a>
+        </div>
       </nav>
 
       <section class="section counter-section" id="contador">
@@ -1087,6 +1203,26 @@ footer span:last-child { color:#f1a8ba; }
           </div>
         </div>
 
+        <div class="album-toolbar reveal" aria-label="Organizar nossas memórias">
+          <div class="album-filter-group" role="group" aria-label="Filtrar por quem adicionou">
+            <span>Quem adicionou?</span>
+            <div>
+              <button class="album-filter active" type="button" data-album-author="todos" aria-pressed="true">Todas</button>
+              <button class="album-filter" type="button" data-album-author="Bianca" aria-pressed="false">Bianca</button>
+              <button class="album-filter" type="button" data-album-author="Natã" aria-pressed="false">Natã</button>
+            </div>
+          </div>
+          <label class="album-sort" for="albumSort">
+            <span>Organizar por</span>
+            <select id="albumSort">
+              <option value="historia">Ordem da nossa história</option>
+              <option value="recentes">Mais recentes primeiro</option>
+              <option value="antigas">Mais antigas primeiro</option>
+            </select>
+          </label>
+        </div>
+        <p class="album-filter-status reveal" id="albumFilterStatus" aria-live="polite"></p>
+
         <div class="memory-album reveal" tabindex="0" role="region" aria-label="Nosso álbum de memórias; use as setas do teclado para navegar">
           <div class="gallery-photo-area">
             <span class="photo-tape photo-tape-left" aria-hidden="true"></span>
@@ -1099,6 +1235,7 @@ footer span:last-child { color:#f1a8ba; }
 
           <div class="memory-story" aria-live="polite">
             <span class="memory-kicker">Capítulo <span id="galleryIndexPadded">01</span></span>
+            <span class="memory-author" id="galleryAuthor">Adicionada por Natã</span>
             <strong id="galleryCaption">Carregando as memórias…</strong>
             <span class="memory-divider" aria-hidden="true"></span>
             <p id="galleryText">Preparando uma de nossas memórias…</p>
@@ -1123,14 +1260,6 @@ footer span:last-child { color:#f1a8ba; }
           <p>Algumas memórias ficam guardadas em fotografias. Outras ficam guardadas no coração. As nossas moram em mim todos os dias.</p>
           <small>Com amor, Natã <span aria-hidden="true">♥</span></small>
         </blockquote>
-      </section>
-
-      <section class="section timeline-section" id="historia">
-        <div class="section-heading reveal">
-          <span class="eyebrow">Nossa história</span>
-          <h2>Momentos que fizeram de nós, nós</h2>
-        </div>
-        <div class="timeline" id="timeline"></div>
       </section>
 
       <section class="section future-section" id="planos">
@@ -1411,6 +1540,7 @@ footer span:last-child { color:#f1a8ba; }
             <div class="corner-list-heading">
               <span>Correspondência de Bianca &amp; Natã</span>
               <h3>Cartas que já chegaram</h3>
+              <small class="letters-hint">Cada carta fica fechada até tocarmos nela.</small>
             </div>
             <div class="letters-list" id="lettersList" aria-live="polite">
               <p class="corner-empty">Carregando nossas cartas…</p>
@@ -1424,17 +1554,17 @@ footer span:last-child { color:#f1a8ba; }
           <div class="creator-intro">
             <span class="eyebrow">Um espaço para nós dois</span>
             <h2>Vamos acrescentar um novo capítulo</h2>
-            <p>Escolhemos entre nosso álbum e nossa linha do tempo. A foto e o texto aparecem no cantinho escolhido, em tempo real nos nossos aparelhos.</p>
+            <p>A foto e o texto entram em “Memórias que moram em mim” e aparecem em tempo real nos nossos aparelhos.</p>
           </div>
 
           <form id="publicationForm" class="creator-form">
             <div class="creator-field">
-              <label for="publicationSection">Em qual parte da nossa história?</label>
-              <select id="publicationSection" required>
-                <option value="fotos">Memórias que moram em mim</option>
-                <option value="historia">Momentos que fizeram de nós, nós</option>
+              <label for="publicationAuthor">Qual de nós está adicionando?</label>
+              <select id="publicationAuthor" required>
+                <option value="Bianca">Bianca</option>
+                <option value="Natã">Natã</option>
               </select>
-              <small id="publicationDesignHint">Nossa lembrança aparecerá como uma nova fotografia do álbum.</small>
+              <small>A autoria aparece na memória e também pode ser alterada depois com nosso código.</small>
             </div>
 
             <div class="creator-field">
@@ -1470,26 +1600,7 @@ footer span:last-child { color:#f1a8ba; }
         </div>
       </section>
 
-      <section class="section guestbook-section" id="recados">
-        <div class="guestbook-card reveal">
-          <div>
-            <span class="eyebrow">Um cantinho só nosso</span>
-            <h2>Nossos recados para guardar</h2>
-            <p>Tudo o que escrevermos aqui fica guardado e aparece sempre que abrirmos nossa página.</p>
-          </div>
-          <form id="guestbookForm">
-            <label for="guestName">Qual de nós está escrevendo?</label>
-            <input id="guestName" maxlength="40" placeholder="Bianca ou Natã" required />
-            <label for="guestMessage">Recado</label>
-            <textarea id="guestMessage" maxlength="240" placeholder="Escreva algo que queira guardar…" required></textarea>
-            <button class="primary-button" type="submit">Guardar no nosso cantinho ♥</button>
-            <small id="guestbookStatus" role="status" aria-live="polite"></small>
-          </form>
-          <div class="notes-list" id="notesList" aria-live="polite"></div>
-        </div>
-      </section>
-
-      <section class="section ending-section">
+      <section class="section ending-section" id="final">
         <div class="ending-card reveal">
           <span class="big-heart" aria-hidden="true">♥</span>
           <h2 id="endingTitle">Bianca, eu quero partilhar a vida boa com você.</h2>
@@ -1691,6 +1802,9 @@ let sharedContentActivated = false;
 let counterTimer;
 let realtimeClientPromise;
 let originalAlbumPhotos = [];
+let allAlbumPhotos = [];
+let albumAuthorFilter = "todos";
+let albumSortMode = "historia";
 let latestRepliesByPublication = new Map();
 
 function hydrateContent() {
@@ -1719,7 +1833,6 @@ function hydrateContent() {
 function activateSharedContent() {
   if (sharedContentActivated) return;
   sharedContentActivated = true;
-  void renderNotes();
   void loadPublications();
   void loadFuturePlans();
   void loadCoupleCorner();
@@ -1807,24 +1920,74 @@ function updateHeroMemories(photos) {
   });
 }
 
-function renderGallery(photos = []) {
-  const activePhotoId = originalAlbumPhotos[currentPhoto]?.id;
-  originalAlbumPhotos = [...photos].sort((left, right) => {
+function normalizePublicationAuthor(photo) {
+  return photo.autor === "Bianca" ? "Bianca" : "Natã";
+}
+
+function sortAlbumPhotos(photos) {
+  const sorted = [...photos];
+  if (albumSortMode === "recentes") {
+    return sorted.sort((left, right) => new Date(right.criado_em) - new Date(left.criado_em));
+  }
+  if (albumSortMode === "antigas") {
+    return sorted.sort((left, right) => new Date(left.criado_em) - new Date(right.criado_em));
+  }
+  return sorted.sort((left, right) => {
     const leftOrder = left.ordem ?? Number.MAX_SAFE_INTEGER;
     const rightOrder = right.ordem ?? Number.MAX_SAFE_INTEGER;
     if (leftOrder !== rightOrder) return leftOrder - rightOrder;
     return new Date(left.criado_em) - new Date(right.criado_em);
   });
+}
+
+function syncAlbumControls() {
+  $$("[data-album-author]").forEach((button) => {
+    const active = button.dataset.albumAuthor === albumAuthorFilter;
+    button.classList.toggle("active", active);
+    button.setAttribute("aria-pressed", String(active));
+  });
+  if ($("#albumSort")) $("#albumSort").value = albumSortMode;
+}
+
+function updateAlbumFilterStatus(visibleCount) {
+  const status = $("#albumFilterStatus");
+  if (!status) return;
+  if (albumAuthorFilter === "todos") {
+    status.textContent = `Mostrando todas as ${allAlbumPhotos.length} ${allAlbumPhotos.length === 1 ? "memória" : "memórias"}.`;
+  } else {
+    status.textContent = `${visibleCount} ${visibleCount === 1 ? "memória adicionada" : "memórias adicionadas"} por ${albumAuthorFilter}.`;
+  }
+}
+
+function applyAlbumFilters() {
+  const activePhotoId = originalAlbumPhotos[currentPhoto]?.id;
+  const filtered = allAlbumPhotos.filter((photo) => (
+    albumAuthorFilter === "todos" || normalizePublicationAuthor(photo) === albumAuthorFilter
+  ));
+  renderFilteredGallery(sortAlbumPhotos(filtered), activePhotoId);
+  updateAlbumFilterStatus(filtered.length);
+  syncAlbumControls();
+}
+
+function renderGallery(photos = []) {
+  allAlbumPhotos = [...photos];
+  updateHeroMemories(sortAlbumPhotos(allAlbumPhotos));
+  updateAlbumMemoryCount(allAlbumPhotos.length);
+  applyAlbumFilters();
+}
+
+function renderFilteredGallery(photos = [], activePhotoId = null) {
+  originalAlbumPhotos = photos;
   const thumbnails = $("#thumbnails");
   thumbnails.replaceChildren();
-  updateHeroMemories(originalAlbumPhotos);
-  updateAlbumMemoryCount(originalAlbumPhotos.length);
 
   originalAlbumPhotos.forEach((photo, index) => {
     const button = document.createElement("button");
     button.className = `thumbnail${index === 0 ? " active" : ""}`;
     button.type = "button";
-    button.setAttribute("aria-label", `Ver memória ${index + 1}: ${photo.titulo}`);
+    const author = normalizePublicationAuthor(photo);
+    button.setAttribute("aria-label", `Ver memória ${index + 1}: ${photo.titulo}, adicionada por ${author}`);
+    button.title = `Adicionada por ${author}`;
     const image = document.createElement("img");
     image.src = photo.imagem_url;
     image.alt = "";
@@ -1840,7 +2003,10 @@ function renderGallery(photos = []) {
     $("#galleryImage").removeAttribute("src");
     $("#galleryImage").alt = "";
     $("#galleryCaption").textContent = "O álbum está esperando uma nova memória";
-    $("#galleryText").textContent = "Quando publicarmos uma foto nesta seção, ela aparecerá aqui.";
+    $("#galleryText").textContent = albumAuthorFilter === "todos"
+      ? "Quando publicarmos uma foto, ela aparecerá aqui."
+      : `${albumAuthorFilter} ainda não adicionou uma foto neste álbum.`;
+    $("#galleryAuthor").textContent = albumAuthorFilter === "todos" ? "Nosso álbum" : `Filtro: ${albumAuthorFilter}`;
     $("#galleryIndex").textContent = "0 de 0";
     $("#galleryIndexPadded").textContent = "00";
     $("#galleryPrev").disabled = true;
@@ -1881,6 +2047,7 @@ function showPhoto(index, animate = true) {
     image.style.objectPosition = photo.posicao || "center";
     $("#galleryCaption").textContent = photo.titulo;
     $("#galleryText").textContent = photo.texto;
+    $("#galleryAuthor").textContent = `Adicionada por ${normalizePublicationAuthor(photo)}`;
     $("#galleryPhotoDate").textContent = photo.rotulo_data
       || (photo.origem === "original" ? "21 · 05 · 2026" : formatPublicationDate(photo.criado_em));
     $("#galleryIndex").textContent = `${currentPhoto + 1} de ${originalAlbumPhotos.length}`;
@@ -1889,64 +2056,6 @@ function showPhoto(index, animate = true) {
     renderGalleryDiary();
     image.classList.remove("changing");
   }, animate ? 160 : 0);
-}
-
-function renderTimeline(items = [], repliesByPublication = latestRepliesByPublication) {
-  const timeline = $("#timeline");
-  timeline.replaceChildren();
-
-  items
-    .sort((left, right) => {
-      const leftOrder = left.ordem ?? Number.MAX_SAFE_INTEGER;
-      const rightOrder = right.ordem ?? Number.MAX_SAFE_INTEGER;
-      if (leftOrder !== rightOrder) return leftOrder - rightOrder;
-      return new Date(left.criado_em) - new Date(right.criado_em);
-    })
-    .forEach((item) => {
-    const article = document.createElement("article");
-    article.className = `timeline-item ${item.origem === "original" ? "cloud-original" : "user-added"} reveal`;
-    if (document.body.classList.contains("surprise-open")) article.classList.add("visible");
-    const dot = document.createElement("span");
-    dot.className = "timeline-dot";
-    dot.setAttribute("aria-hidden", "true");
-    const card = document.createElement("div");
-    card.className = "timeline-card";
-    const image = document.createElement("img");
-    image.src = item.imagem_url;
-    image.alt = item.alt_texto || item.titulo;
-    image.loading = "lazy";
-    image.decoding = "async";
-    image.style.objectPosition = item.posicao || "center";
-    const copy = document.createElement("div");
-    copy.className = "timeline-copy";
-    const date = document.createElement("time");
-    date.textContent = item.rotulo_data || formatPublicationDate(item.criado_em);
-    const title = document.createElement("h3");
-    title.textContent = item.titulo;
-    const text = document.createElement("p");
-    text.textContent = item.texto;
-    copy.append(date, title, text);
-    card.append(
-      image,
-      copy,
-      createPublicationReplyArea(
-        { publicationId: item.id, defaultAuthor: "Bianca" },
-        repliesByPublication.get(String(item.id)) || []
-      ),
-      createPublicationManager(item, {
-        deletePrompt: "Excluir esta foto da nuvem, da linha do tempo e todas as respostas escritas nela?"
-      })
-    );
-    article.append(dot, card);
-    timeline.append(article);
-  });
-
-  if (!items.length) {
-    const empty = document.createElement("p");
-    empty.className = "corner-empty timeline-empty";
-    empty.textContent = "Nossa linha do tempo está esperando o próximo capítulo ♥";
-    timeline.append(empty);
-  }
 }
 
 function extractYouTubeVideoId(value) {
@@ -2160,12 +2269,6 @@ function openExperience() {
   revealOnScroll();
 }
 
-function setGuestbookStatus(message, state = "") {
-  const status = $("#guestbookStatus");
-  status.textContent = message;
-  status.dataset.state = state;
-}
-
 const AUTHOR_OPTIONS = [
   { value: "Bianca", label: "Bianca" },
   { value: "Natã", label: "Natã" }
@@ -2355,78 +2458,6 @@ function createContentManager(config) {
   return details;
 }
 
-function createNoteCard(note) {
-  const card = document.createElement("article");
-  card.className = "note-card";
-
-  const strong = document.createElement("strong");
-  strong.textContent = note.nome;
-
-  const message = document.createElement("p");
-  message.textContent = note.mensagem;
-
-  const date = document.createElement("small");
-  const createdAt = new Date(note.criado_em);
-  date.textContent = Number.isNaN(createdAt.getTime())
-    ? "Recado guardado com carinho"
-    : new Intl.DateTimeFormat("pt-BR", {
-        dateStyle: "long",
-        timeStyle: "short"
-      }).format(createdAt);
-
-  card.append(
-    strong,
-    message,
-    date,
-    createContentManager({
-      type: "recado",
-      item: note,
-      fields: [
-        { name: "nome", label: "Nome", maxLength: 40 },
-        { name: "mensagem", label: "Recado", kind: "textarea", rows: 3, maxLength: 240 }
-      ],
-      reload: renderNotes,
-      deletePrompt: "Excluir este recado para sempre?"
-    })
-  );
-  return card;
-}
-
-async function renderNotes() {
-  const notesList = $("#notesList");
-  const loading = document.createElement("small");
-  loading.textContent = "Carregando os recados…";
-  notesList.replaceChildren(loading);
-
-  try {
-    const response = await fetch(
-      `${SUPABASE.url}/rest/v1/recados?select=id,nome,mensagem,criado_em&order=criado_em.desc&limit=50`,
-      { headers: { apikey: SUPABASE.publishableKey } }
-    );
-
-    if (!response.ok) throw new Error(`Não foi possível carregar os recados (${response.status}).`);
-
-    const notes = await response.json();
-    notesList.replaceChildren();
-
-    if (!notes.length) {
-      const empty = document.createElement("small");
-      empty.textContent = "Nosso primeiro recado ainda está esperando para ser escrito ♥";
-      notesList.append(empty);
-      return;
-    }
-
-    notes.forEach((note) => notesList.append(createNoteCard(note)));
-  } catch (error) {
-    notesList.replaceChildren();
-    const warning = document.createElement("small");
-    warning.className = "notes-error";
-    warning.textContent = "Não conseguimos carregar nossos recados agora. Vamos tentar novamente em instantes.";
-    notesList.append(warning);
-    console.error(error);
-  }
-}
-
 function formatPublicationDate(value) {
   const date = new Date(value);
   if (Number.isNaN(date.getTime())) return "Uma nova lembrança";
@@ -2495,12 +2526,10 @@ async function completeFuturePlan(event, plan) {
 
 function transformFuturePlanIntoMemory(plan) {
   const title = String(plan.titulo || "Nosso plano virou memória");
-  $("#publicationSection").value = "historia";
   $("#publicationTitle").value = title.length > 80 ? `${title.slice(0, 77)}…` : title;
   $("#publicationText").value = plan.detalhes
     ? `Nós tiramos este plano do papel: ${plan.detalhes}`
     : "Mais um sonho saiu da nossa lista e virou uma lembrança para guardar para sempre.";
-  updatePublicationDesign();
   setPublicationStatus("Plano preenchido! Agora escolha uma foto desse dia para transformá-lo em memória ♥", "success");
 
   const form = $("#publicationForm");
@@ -2911,10 +2940,9 @@ function renderLetters(letters) {
     return;
   }
 
-  letters.forEach((letter, index) => {
+  letters.forEach((letter) => {
     const card = document.createElement("details");
     card.className = "letter-card";
-    if (index === 0) card.open = true;
 
     const summary = document.createElement("summary");
     const stamp = document.createElement("span");
@@ -3390,6 +3418,7 @@ function createPublicationManager(publication, options = {}) {
     type: "publicacao",
     item: publication,
     fields: [
+      { name: "autor", label: "Qual de nós adicionou?", kind: "select", options: AUTHOR_OPTIONS },
       { name: "titulo", label: "Título", maxLength: 80 },
       { name: "texto", label: "Texto", kind: "textarea", rows: 5, maxLength: 1000 }
     ],
@@ -3405,17 +3434,15 @@ function renderPublications(publications, replies) {
   latestRepliesByPublication = repliesByPublication;
 
   const albumMemories = publications.filter((post) => post.secao === "fotos");
-  const timelineMemories = publications.filter((post) => post.secao === "historia");
 
   renderGallery(albumMemories);
-  renderTimeline(timelineMemories, repliesByPublication);
 }
 
 async function loadPublications() {
   try {
     const [publicationsResponse, repliesResponse] = await Promise.all([
       fetch(
-        `${SUPABASE.url}/rest/v1/publicacoes?select=id,secao,titulo,texto,imagem_url,origem,ordem,alt_texto,rotulo_data,posicao,criado_em&order=origem.asc,ordem.asc.nullslast,criado_em.asc`,
+        `${SUPABASE.url}/rest/v1/publicacoes?select=id,secao,autor,titulo,texto,imagem_url,origem,ordem,alt_texto,rotulo_data,posicao,criado_em&secao=eq.fotos&order=origem.asc,ordem.asc.nullslast,criado_em.asc`,
         { headers: { apikey: SUPABASE.publishableKey } }
       ),
       fetch(
@@ -3440,7 +3467,6 @@ async function loadPublications() {
 function startPublicationsFallback() {
   if (publicationsFallbackTimer) return;
   publicationsFallbackTimer = setInterval(() => {
-    void renderNotes();
     void loadPublications();
     void loadFuturePlans();
     void loadCoupleCorner();
@@ -3460,11 +3486,6 @@ function subscribeToPublications() {
 
   client
     .channel("novas-lembrancas-bianca")
-    .on(
-      "postgres_changes",
-      { event: "*", schema: "public", table: "recados" },
-      () => void renderNotes()
-    )
     .on(
       "postgres_changes",
       { event: "*", schema: "public", table: "publicacoes" },
@@ -3621,13 +3642,98 @@ function setPublicationStatus(message, state = "") {
 }
 
 function updatePublicationDesign() {
-  const section = $("#publicationSection").value;
   const creatorCard = $(".creator-card");
-  creatorCard.dataset.selectedSection = section;
-  $("#publicationPreview").dataset.selectedSection = section;
-  $("#publicationDesignHint").textContent = section === "historia"
-    ? "Nossa lembrança entrará como uma nova etapa da linha do tempo."
-    : "Nossa lembrança aparecerá como uma nova fotografia do álbum.";
+  creatorCard.dataset.selectedSection = "fotos";
+  $("#publicationPreview").dataset.selectedSection = "fotos";
+}
+
+function setupAlbumControls() {
+  try {
+    const savedAuthor = localStorage.getItem("nosso-album-autor");
+    const savedSort = localStorage.getItem("nosso-album-ordem");
+    if (["todos", "Bianca", "Natã"].includes(savedAuthor)) albumAuthorFilter = savedAuthor;
+    if (["historia", "recentes", "antigas"].includes(savedSort)) albumSortMode = savedSort;
+  } catch {
+    // O álbum continua funcionando mesmo quando o navegador bloqueia preferências locais.
+  }
+
+  syncAlbumControls();
+  $$("[data-album-author]").forEach((button) => {
+    button.addEventListener("click", () => {
+      albumAuthorFilter = button.dataset.albumAuthor;
+      try { localStorage.setItem("nosso-album-autor", albumAuthorFilter); } catch {}
+      applyAlbumFilters();
+    });
+  });
+  $("#albumSort").addEventListener("change", (event) => {
+    albumSortMode = event.currentTarget.value;
+    try { localStorage.setItem("nosso-album-ordem", albumSortMode); } catch {}
+    applyAlbumFilters();
+  });
+}
+
+function setupSectionNavigation() {
+  const toggle = $("#mobileNavToggle");
+  const drawer = $("#mobileSectionNav");
+  const backdrop = $("#mobileNavBackdrop");
+  const closeButton = $("#mobileNavClose");
+  const links = $$('[data-section-link]');
+  let returnFocus = null;
+
+  const closeNavigation = (restoreFocus = false) => {
+    drawer.hidden = true;
+    backdrop.hidden = true;
+    toggle.setAttribute("aria-expanded", "false");
+    document.body.classList.remove("mobile-nav-open");
+    if (restoreFocus) (returnFocus || toggle).focus();
+  };
+
+  const openNavigation = () => {
+    returnFocus = document.activeElement;
+    drawer.hidden = false;
+    backdrop.hidden = false;
+    toggle.setAttribute("aria-expanded", "true");
+    document.body.classList.add("mobile-nav-open");
+    closeButton.focus();
+  };
+
+  toggle.addEventListener("click", () => {
+    if (drawer.hidden) openNavigation();
+    else closeNavigation(true);
+  });
+  closeButton.addEventListener("click", () => closeNavigation(true));
+  backdrop.addEventListener("click", () => closeNavigation(true));
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && !drawer.hidden) closeNavigation(true);
+  });
+  links.forEach((link) => link.addEventListener("click", () => closeNavigation(false)));
+
+  const targets = [...new Set(links.map((link) => link.getAttribute("href")))]
+    .map((href) => document.querySelector(href))
+    .filter(Boolean);
+  const setCurrentSection = (id) => {
+    links.forEach((link) => {
+      const current = link.getAttribute("href") === `#${id}`;
+      link.classList.toggle("is-current", current);
+      if (current) link.setAttribute("aria-current", "location");
+      else link.removeAttribute("aria-current");
+    });
+    const currentLink = links.find((link) => link.getAttribute("href") === `#${id}`);
+    if (currentLink) {
+      $("#mobileNavLabel").textContent = currentLink.title || currentLink.textContent.trim();
+    }
+  };
+
+  if ("IntersectionObserver" in window) {
+    const observer = new IntersectionObserver((entries) => {
+      const visible = entries
+        .filter((entry) => entry.isIntersecting)
+        .sort((left, right) => right.intersectionRatio - left.intersectionRatio)[0];
+      if (visible) setCurrentSection(visible.target.id);
+    }, { rootMargin: "-20% 0px -60% 0px", threshold: [0, 0.1, 0.3] });
+    targets.forEach((target) => observer.observe(target));
+  }
+  setCurrentSection("contador");
 }
 
 function getShareUrl() {
@@ -3745,6 +3851,8 @@ $(".memory-album").addEventListener("keydown", (event) => {
 });
 
 document.addEventListener("DOMContentLoaded", () => {
+  setupAlbumControls();
+  setupSectionNavigation();
   hydrateContent();
   updatePublicationDesign();
   updateCounter();
@@ -3779,45 +3887,6 @@ document.addEventListener("visibilitychange", () => {
 openSurprise.addEventListener("click", openExperience);
 $("#galleryPrev").addEventListener("click", () => showPhoto(currentPhoto - 1));
 $("#galleryNext").addEventListener("click", () => showPhoto(currentPhoto + 1));
-
-$("#guestbookForm").addEventListener("submit", async (event) => {
-  event.preventDefault();
-
-  const name = $("#guestName").value.trim();
-  const message = $("#guestMessage").value.trim();
-  if (!name || !message) return;
-
-  const form = event.currentTarget;
-  const submitButton = form.querySelector('button[type="submit"]');
-  const originalLabel = submitButton.textContent;
-  submitButton.disabled = true;
-  submitButton.textContent = "Guardando…";
-  setGuestbookStatus("Enviando seu recado…");
-
-  try {
-    const response = await fetch(`${SUPABASE.url}/rest/v1/recados`, {
-      method: "POST",
-      headers: {
-        apikey: SUPABASE.publishableKey,
-        "Content-Type": "application/json",
-        Prefer: "return=minimal"
-      },
-      body: JSON.stringify({ nome: name, mensagem: message })
-    });
-
-    if (!response.ok) throw new Error(`Não foi possível guardar o recado (${response.status}).`);
-
-    form.reset();
-    setGuestbookStatus("Nosso recado foi guardado no nosso cantinho ♥", "success");
-    await renderNotes();
-  } catch (error) {
-    setGuestbookStatus("Não foi possível guardar agora. Confira a internet e tente novamente.", "error");
-    console.error(error);
-  } finally {
-    submitButton.disabled = false;
-    submitButton.textContent = originalLabel;
-  }
-});
 
 $("#publicationImage").addEventListener("change", (event) => {
   clearPublicationPreview();
@@ -3856,20 +3925,19 @@ $("#publicationImage").addEventListener("change", (event) => {
     });
 });
 
-$("#publicationSection").addEventListener("change", updatePublicationDesign);
-
 $("#publicationForm").addEventListener("submit", async (event) => {
   event.preventDefault();
 
   const form = event.currentTarget;
   const submitButton = form.querySelector('button[type="submit"]');
   const [selectedImage] = $("#publicationImage").files;
-  const section = $("#publicationSection").value;
+  const section = "fotos";
+  const author = $("#publicationAuthor").value;
   const title = $("#publicationTitle").value.trim();
   const publicationText = $("#publicationText").value.trim();
   const editorCode = $("#publicationCode").value;
 
-  if (!selectedImage || !title || !publicationText || !editorCode) return;
+  if (!selectedImage || !author || !title || !publicationText || !editorCode) return;
 
   const originalLabel = submitButton.textContent;
   submitButton.disabled = true;
@@ -3881,6 +3949,7 @@ $("#publicationForm").addEventListener("submit", async (event) => {
     const image = preparedPublicationImage || selectedImage;
     const payload = new FormData();
     payload.append("secao", section);
+    payload.append("autor", author);
     payload.append("titulo", title);
     payload.append("texto", publicationText);
     payload.append("imagem", image, image.name);
@@ -3900,20 +3969,22 @@ $("#publicationForm").addEventListener("submit", async (event) => {
 
     form.reset();
     clearPublicationPreview();
+    albumAuthorFilter = author;
+    albumSortMode = "recentes";
+    try {
+      localStorage.setItem("nosso-album-autor", albumAuthorFilter);
+      localStorage.setItem("nosso-album-ordem", albumSortMode);
+    } catch {}
     updatePublicationDesign();
-    setPublicationStatus("Lembrança publicada! Ela já está aparecendo na seção escolhida ♥", "success");
+    setPublicationStatus("Lembrança publicada! Ela já está aparecendo no nosso álbum ♥", "success");
     await loadPublications();
 
-    if (section === "fotos") {
-      const publishedIndex = originalAlbumPhotos.findIndex(
-        (photo) => String(photo.id) === String(result.publicacao?.id)
-      );
-      if (publishedIndex >= 0) showPhoto(publishedIndex, false);
-    }
+    const publishedIndex = originalAlbumPhotos.findIndex(
+      (photo) => String(photo.id) === String(result.publicacao?.id)
+    );
+    if (publishedIndex >= 0) showPhoto(publishedIndex, false);
 
-    const destination = section === "historia"
-      ? $("#timeline .timeline-item.user-added:last-child")
-      : $("#fotos .memory-album");
+    const destination = $("#fotos .memory-album");
     if (destination) {
       setTimeout(() => destination.scrollIntoView({ behavior: "smooth", block: "center" }), 250);
     }

@@ -6,14 +6,15 @@ Esta página foi personalizada com:
 - **Natã Victor Lima Olegario Teixeira**
 - início do namoro em **21 de maio de 2026**
 - a declaração enviada por Natã
-- as sete fotos e lembranças do casal
-- um álbum interativo na seção **“Memórias que moram em mim”**, com textos, miniaturas, botões, teclado e gesto de deslizar
+- as fotos e lembranças que já foram publicadas pelo casal
+- um álbum interativo na seção **“Memórias que moram em mim”**, com filtros por Bianca ou Natã, ordenação, textos, miniaturas, botões, teclado e gesto de deslizar
 - uma lista compartilhada **“Coisas que ainda vamos viver”**, para guardar sonhos e transformar os que foram realizados em novas memórias
 - um **criador gratuito de encontros**, que combina lugar, orçamento e duração e permite guardar a sugestão na lista de planos
 - a área diária **“Três coisas de hoje”**, incluindo carinho, coisas boas do dia e gratidão
 - o jogo **“Decifra essa reclamação”**, no qual a reclamação é publicada somente por foto
-- a área **“Cartas entre nós”**, reservada para textos maiores
+- a área **“Cartas entre nós”**, com envelopes fechados que se abrem ao toque para revelar textos maiores
 - a playlist compartilhada **“Nossas músicas”**, com músicas completas do YouTube incorporadas diretamente na página
+- um navegador de seções no celular e navegação lateral com indicação da seção atual no computador
 
 ## Como abrir
 
@@ -33,17 +34,9 @@ Publique todos os arquivos desta pasta em qualquer hospedagem de sites estático
 
 O botão **“Compartilhar esta surpresa”** usa o compartilhamento do celular quando disponível. Se o navegador não permitir, o endereço é copiado automaticamente para a área de transferência.
 
-## Recados
-
-Os recados são guardados no Supabase e aparecem em todos os celulares e computadores que abrirem o site. É necessário acesso à internet.
-
-Qualquer pessoa que receber o link consegue ler e enviar um recado. Cada recado enviado pelo site possui a opção discreta **“Editar ou excluir”**; para salvar qualquer alteração ou confirmar a exclusão, é obrigatório informar o código reservado do casal.
-
-O site usa apenas uma chave pública própria para páginas abertas. A chave secreta do Supabase nunca deve ser incluída nos arquivos do site.
-
 ## Novas lembranças em tempo real
 
-A seção **“Acrescente um novo capítulo”** permite que Bianca ou Natã publiquem somente em **“Memórias que moram em mim”** ou **“Momentos que fizeram de nós, nós”**. No álbum, a publicação entra diretamente na galeria principal e pode ser acessada pelas setas e miniaturas; na história, ela entra como uma nova etapa da linha do tempo. Não existe uma terceira área separada. A publicação é guardada no Supabase e aparece imediatamente para todos que estiverem com a página aberta.
+A seção **“Acrescente um novo capítulo”** permite que Bianca ou Natã publiquem diretamente em **“Memórias que moram em mim”**. Cada memória registra quem a adicionou, pode ser filtrada por autoria e entra na galeria principal, acessível pelas setas e miniaturas. A publicação é guardada no Supabase e aparece imediatamente para todos que estiverem com a página aberta.
 
 Todas as memórias — tanto as criadas originalmente por Natã quanto as publicadas depois pela Bianca — têm uma área **“Nosso diário”**. Bianca e Natã podem escolher quem está escrevendo e continuar a conversa diretamente embaixo da lembrança usando o mesmo código reservado. As respostas ficam ligadas à memória correta, são guardadas no Supabase e aparecem em tempo real em todos os aparelhos.
 
@@ -51,7 +44,9 @@ O envio exige o código reservado combinado pelo casal. O código não está esc
 
 Antes do envio, o navegador testa versões WEBP de alta qualidade, sem reduzir as dimensões da fotografia. Uma versão otimizada só é utilizada quando fica pelo menos 10% menor e passa por uma comparação visual conservadora; caso contrário, o arquivo original é enviado. Assim, a economia de espaço nunca tem prioridade sobre a qualidade da lembrança.
 
-As sete lembranças originais ficam em **“Memórias que moram em mim”**. A linha do tempo **“Momentos que fizeram de nós, nós”** reaproveita algumas dessas mesmas fotografias da nuvem com títulos e descrições próprios, sem armazenar cópias adicionais dos arquivos. Todas as fotografias existentes e futuras possuem a opção **“Editar ou excluir”**. É possível corrigir o título e o texto ou substituir a fotografia; um arquivo só é retirado do armazenamento quando não está sendo usado por nenhuma outra lembrança. Essas operações sempre pedem o código reservado.
+As lembranças ficam reunidas em **“Memórias que moram em mim”**, sem uma segunda seção repetida. Todas as fotografias existentes e futuras possuem a opção **“Editar ou excluir”**. É possível corrigir quem adicionou, o título e o texto ou substituir a fotografia; um arquivo só é retirado do armazenamento quando não está sendo usado por nenhuma outra lembrança. Essas operações sempre pedem o código reservado.
+
+O site usa apenas uma chave pública própria para páginas abertas. A chave secreta do Supabase nunca deve ser incluída nos arquivos do site.
 
 ## Coisas que ainda vamos viver
 
@@ -69,7 +64,7 @@ Em **“Três coisas de hoje”**, cada pessoa pode guardar uma lista diária de
 
 Em **“Decifra essa reclamação”**, a publicação aceita somente a autoria e uma foto. As interpretações são escritas depois, embaixo da fotografia, mantendo o formato de brincadeira sugerido por Bianca.
 
-Em **“Cartas entre nós”**, Bianca e Natã podem escrever textos maiores com título, autor e data. Todas essas áreas usam o código reservado, ficam salvas no Supabase e são atualizadas em tempo real em todos os aparelhos.
+Em **“Cartas entre nós”**, Bianca e Natã podem escrever textos maiores com título, autor e data. As cartas aparecem fechadas e só revelam o conteúdo quando tocamos nelas. Todas essas áreas usam o código reservado, ficam salvas no Supabase e são atualizadas em tempo real em todos os aparelhos.
 
 Os registros diários, cartas, reclamações, interpretações e respostas do **“Nosso diário”** também podem ser editados ou excluídos. A opção aparece apenas no conteúdo que foi enviado pelo site e exige o código reservado em cada ação.
 
