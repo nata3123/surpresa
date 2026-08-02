@@ -169,6 +169,10 @@ let publicationImagePromise = null;
 let publicationImageSelection = 0;
 let latestPublicationReplies = [];
 let latestFuturePlans = [];
+let latestDailyEntries = [];
+let latestLetters = [];
+let latestComplaints = [];
+let latestComplaintInterpretations = [];
 let currentDateIdea = null;
 const usedDateIdeasByFilter = new Map();
 let currentSongId = null;
@@ -553,13 +557,18 @@ function createMusicCard(song, index) {
   return card;
 }
 
-function renderMusicLibrary(songs) {
-  latestSongs = songs;
+function renderMusicLibrary(songs, remember = true) {
+  if (remember) latestSongs = songs;
+  const authorFilter = $("#musicAuthorFilter")?.value || "todos";
+  const visibleSongs = latestSongs.filter((song) => authorFilter === "todos" || song.autor === authorFilter);
   const list = $("#musicList");
   list.replaceChildren();
-  $("#musicCount").textContent = songs.length === 1 ? "1 música" : `${songs.length} músicas`;
+  $("#musicCount").textContent = latestSongs.length === 1 ? "1 música" : `${latestSongs.length} músicas`;
+  $("#musicFilterStatus").textContent = authorFilter === "todos"
+    ? `Mostrando nossas ${latestSongs.length} músicas.`
+    : `${visibleSongs.length} ${visibleSongs.length === 1 ? "música escolhida" : "músicas escolhidas"} por ${authorFilter}.`;
 
-  if (!songs.length) {
+  if (!latestSongs.length) {
     currentSongId = null;
     $("#songTitle").textContent = "Nossa playlist está esperando";
     $("#songArtist").textContent = "Podemos adicionar aqui a primeira música de uma nova lembrança.";
@@ -573,8 +582,16 @@ function renderMusicLibrary(songs) {
     return;
   }
 
-  songs.forEach((song, index) => list.append(createMusicCard(song, index)));
-  const selectedSong = songs.find((song) => String(song.id) === String(currentSongId)) || songs[0];
+  if (!visibleSongs.length) {
+    const empty = document.createElement("p");
+    empty.className = "music-empty";
+    empty.textContent = `${authorFilter} ainda não adicionou uma música à nossa playlist.`;
+    list.append(empty);
+    return;
+  }
+
+  visibleSongs.forEach((song, index) => list.append(createMusicCard(song, index)));
+  const selectedSong = visibleSongs.find((song) => String(song.id) === String(currentSongId)) || visibleSongs[0];
   playMusic(selectedSong);
 }
 
@@ -906,6 +923,8 @@ function transformFuturePlanIntoMemory(plan) {
   $("#publicationText").value = plan.detalhes
     ? `Nós tiramos este plano do papel: ${plan.detalhes}`
     : "Mais um sonho saiu da nossa lista e virou uma lembrança para guardar para sempre.";
+  $("#publicationTitle").dispatchEvent(new Event("input", { bubbles: true }));
+  $("#publicationText").dispatchEvent(new Event("input", { bubbles: true }));
   setPublicationStatus("Plano preenchido! Agora escolha uma foto desse dia para transformá-lo em memória ♥", "success");
 
   const form = $("#publicationForm");
@@ -1033,17 +1052,31 @@ function createFuturePlanGroup(titleText, plans, completed) {
   return section;
 }
 
-function renderFuturePlans(plans) {
-  latestFuturePlans = plans;
-  const pending = plans.filter((plan) => !plan.concluido);
-  const completed = plans.filter((plan) => plan.concluido);
-  $("#futurePendingCount").textContent = pending.length;
-  $("#futureCompletedCount").textContent = completed.length;
+function renderFuturePlans(plans, remember = true) {
+  if (remember) latestFuturePlans = plans;
+  const allPending = latestFuturePlans.filter((plan) => !plan.concluido);
+  const allCompleted = latestFuturePlans.filter((plan) => plan.concluido);
+  $("#futurePendingCount").textContent = allPending.length;
+  $("#futureCompletedCount").textContent = allCompleted.length;
+
+  const authorFilter = $("#futureAuthorFilter")?.value || "todos";
+  const statusFilter = $("#futureStatusFilter")?.value || "todos";
+  const categoryFilter = $("#futureCategoryFilter")?.value || "todos";
+  const visiblePlans = latestFuturePlans.filter((plan) => (
+    (authorFilter === "todos" || plan.autor === authorFilter)
+    && (categoryFilter === "todos" || plan.categoria === categoryFilter)
+    && (statusFilter === "todos"
+      || (statusFilter === "pendentes" && !plan.concluido)
+      || (statusFilter === "concluidos" && plan.concluido))
+  ));
+  const pending = visiblePlans.filter((plan) => !plan.concluido);
+  const completed = visiblePlans.filter((plan) => plan.concluido);
+  $("#futureFilterStatus").textContent = `${visiblePlans.length} de ${latestFuturePlans.length} ${latestFuturePlans.length === 1 ? "plano" : "planos"}.`;
 
   const list = $("#futurePlansList");
   list.replaceChildren();
 
-  if (!plans.length) {
+  if (!latestFuturePlans.length) {
     const empty = document.createElement("div");
     empty.className = "future-empty";
     const heart = document.createElement("span");
@@ -1055,6 +1088,11 @@ function renderFuturePlans(plans) {
     text.textContent = "Pode ser uma viagem, um encontro simples ou qualquer coisa que queiramos viver juntos.";
     empty.append(heart, title, text);
     list.append(empty);
+    return;
+  }
+
+  if (!visiblePlans.length) {
+    list.append(createCornerEmpty("Nenhum plano combina com esses filtros. Podemos mudar uma escolha acima."));
     return;
   }
 
@@ -1232,15 +1270,27 @@ function createCornerEmpty(message) {
   return empty;
 }
 
-function renderDailyEntries(entries) {
+function renderDailyEntries(entries, remember = true) {
+  if (remember) latestDailyEntries = entries;
+  const authorFilter = $("#dailyAuthorFilter")?.value || "todos";
+  const typeFilter = $("#dailyTypeFilter")?.value || "todos";
+  const visibleEntries = latestDailyEntries.filter((entry) => (
+    (authorFilter === "todos" || entry.autor === authorFilter)
+    && (typeFilter === "todos" || entry.tipo === typeFilter)
+  ));
+  $("#dailyFilterStatus").textContent = `${visibleEntries.length} de ${latestDailyEntries.length} ${latestDailyEntries.length === 1 ? "registro" : "registros"}.`;
   const list = $("#dailyEntriesList");
   list.replaceChildren();
-  if (!entries.length) {
+  if (!latestDailyEntries.length) {
     list.append(createCornerEmpty("Nosso primeiro registro ainda está esperando para ser escrito ♥"));
     return;
   }
+  if (!visibleEntries.length) {
+    list.append(createCornerEmpty("Nenhum registro combina com esses filtros."));
+    return;
+  }
 
-  entries.forEach((entry) => {
+  visibleEntries.forEach((entry) => {
     const type = DAILY_ENTRY_TYPES[entry.tipo] || DAILY_ENTRY_TYPES.coisas_boas;
     const card = document.createElement("article");
     card.className = "daily-entry-card";
@@ -1308,15 +1358,34 @@ async function loadDailyEntries() {
   }
 }
 
-function renderLetters(letters) {
+function normalizeSearchText(value) {
+  return String(value || "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLocaleLowerCase("pt-BR");
+}
+
+function renderLetters(letters, remember = true) {
+  if (remember) latestLetters = letters;
+  const authorFilter = $("#letterAuthorFilter")?.value || "todos";
+  const searchFilter = normalizeSearchText($("#letterSearchFilter")?.value);
+  const visibleLetters = latestLetters.filter((letter) => (
+    (authorFilter === "todos" || letter.autor === authorFilter)
+    && (!searchFilter || normalizeSearchText(`${letter.titulo} ${letter.texto}`).includes(searchFilter))
+  ));
+  $("#letterFilterStatus").textContent = `${visibleLetters.length} de ${latestLetters.length} ${latestLetters.length === 1 ? "carta" : "cartas"}.`;
   const list = $("#lettersList");
   list.replaceChildren();
-  if (!letters.length) {
+  if (!latestLetters.length) {
     list.append(createCornerEmpty("Nossa primeira carta ainda pode ser escrita hoje ♥"));
     return;
   }
+  if (!visibleLetters.length) {
+    list.append(createCornerEmpty("Nenhuma carta combina com essa busca."));
+    return;
+  }
 
-  letters.forEach((letter) => {
+  visibleLetters.forEach((letter) => {
     const card = document.createElement("details");
     card.className = "letter-card";
 
@@ -1430,8 +1499,10 @@ function createComplaintCard(complaint, interpretations) {
   const replies = document.createElement("div");
   replies.className = "complaint-interpretations";
   if (interpretations.length) {
+    const interpretationCards = [];
     interpretations.forEach((interpretation) => {
       const reply = document.createElement("div");
+      reply.dataset.author = interpretation.autor;
       const author = document.createElement("strong");
       author.textContent = interpretation.autor;
       const text = document.createElement("p");
@@ -1453,8 +1524,16 @@ function createComplaintCard(complaint, interpretations) {
           deletePrompt: "Excluir esta interpretação?"
         })
       );
-      replies.append(reply);
+      interpretationCards.push(reply);
     });
+    if (interpretationCards.length > 1) {
+      replies.append(createInlineAuthorFilter("Interpretações de", (authorFilter) => {
+        interpretationCards.forEach((card) => {
+          card.hidden = authorFilter !== "todos" && card.dataset.author !== authorFilter;
+        });
+      }));
+    }
+    interpretationCards.forEach((card) => replies.append(card));
   } else {
     replies.append(createCornerEmpty("Nós ainda não deciframos esta reclamação."));
   }
@@ -1525,21 +1604,34 @@ function createComplaintCard(complaint, interpretations) {
   return card;
 }
 
-function renderComplaints(complaints, interpretations) {
+function renderComplaints(complaints, interpretations, remember = true) {
+  if (remember) {
+    latestComplaints = complaints;
+    latestComplaintInterpretations = interpretations;
+  }
+  const authorFilter = $("#complaintAuthorFilter")?.value || "todos";
+  const visibleComplaints = latestComplaints.filter((complaint) => (
+    authorFilter === "todos" || complaint.autor === authorFilter
+  ));
+  $("#complaintFilterStatus").textContent = `${visibleComplaints.length} de ${latestComplaints.length} ${latestComplaints.length === 1 ? "reclamação" : "reclamações"}.`;
   const list = $("#complaintsList");
   list.replaceChildren();
-  if (!complaints.length) {
+  if (!latestComplaints.length) {
     list.append(createCornerEmpty("Nenhuma reclamação misteriosa ainda. Isso parece suspeito…"));
+    return;
+  }
+  if (!visibleComplaints.length) {
+    list.append(createCornerEmpty(`${authorFilter} ainda não deixou uma reclamação misteriosa.`));
     return;
   }
 
   const grouped = new Map();
-  interpretations.forEach((interpretation) => {
+  latestComplaintInterpretations.forEach((interpretation) => {
     const key = String(interpretation.reclamacao_id);
     if (!grouped.has(key)) grouped.set(key, []);
     grouped.get(key).push(interpretation);
   });
-  complaints.forEach((complaint) => {
+  visibleComplaints.forEach((complaint) => {
     list.append(createComplaintCard(complaint, grouped.get(String(complaint.id)) || []));
   });
 }
@@ -1570,9 +1662,31 @@ async function loadCoupleCorner() {
   await Promise.all([loadDailyEntries(), loadLetters(), loadComplaints()]);
 }
 
+function createInlineAuthorFilter(labelText, onChange) {
+  const label = document.createElement("label");
+  label.className = "inline-author-filter";
+  const text = document.createElement("span");
+  text.textContent = labelText;
+  const select = document.createElement("select");
+  [
+    { value: "todos", label: "Nós dois" },
+    { value: "Bianca", label: "Bianca" },
+    { value: "Natã", label: "Natã" }
+  ].forEach((optionData) => {
+    const option = document.createElement("option");
+    option.value = optionData.value;
+    option.textContent = optionData.label;
+    select.append(option);
+  });
+  select.addEventListener("change", () => onChange(select.value));
+  label.append(text, select);
+  return label;
+}
+
 function createReplyCard(reply) {
   const article = document.createElement("article");
   article.className = "publication-reply";
+  article.dataset.author = reply.autor;
 
   const header = document.createElement("div");
   const author = document.createElement("strong");
@@ -1714,7 +1828,15 @@ function createPublicationReplyArea(target, replies) {
   if (replies.length) {
     const list = document.createElement("div");
     list.className = "publication-replies-list";
-    replies.forEach((reply) => list.append(createReplyCard(reply)));
+    const cards = replies.map((reply) => createReplyCard(reply));
+    if (replies.length > 1) {
+      section.append(createInlineAuthorFilter("Respostas de", (authorFilter) => {
+        cards.forEach((card) => {
+          card.hidden = authorFilter !== "todos" && card.dataset.author !== authorFilter;
+        });
+      }));
+    }
+    cards.forEach((card) => list.append(card));
     section.append(list);
   } else {
     const empty = document.createElement("p");
@@ -1915,7 +2037,9 @@ function clearPublicationPreview() {
   publicationImageSelection += 1;
   $("#publicationPreviewImage").removeAttribute("src");
   $("#publicationPreview").hidden = true;
+  $("#publicationDropZone")?.classList.remove("has-image", "is-error");
   $("#publicationImageHint").textContent = "JPG, PNG ou WEBP, com até 8 MB. A foto será otimizada sem reduzir suas dimensões; se a qualidade não puder ser preservada, o arquivo original será usado.";
+  updateCreatorSteps();
 }
 
 function formatImageSize(bytes) {
@@ -2046,6 +2170,178 @@ function setupAlbumControls() {
     try { localStorage.setItem("nosso-album-ordem", albumSortMode); } catch {}
     applyAlbumFilters();
   });
+}
+
+function setupContentFilters() {
+  const filters = [
+    ["musicAuthorFilter", () => renderMusicLibrary(latestSongs, false)],
+    ["futureAuthorFilter", () => renderFuturePlans(latestFuturePlans, false)],
+    ["futureStatusFilter", () => renderFuturePlans(latestFuturePlans, false)],
+    ["futureCategoryFilter", () => renderFuturePlans(latestFuturePlans, false)],
+    ["dailyAuthorFilter", () => renderDailyEntries(latestDailyEntries, false)],
+    ["dailyTypeFilter", () => renderDailyEntries(latestDailyEntries, false)],
+    ["complaintAuthorFilter", () => renderComplaints(latestComplaints, latestComplaintInterpretations, false)],
+    ["letterAuthorFilter", () => renderLetters(latestLetters, false)]
+  ];
+
+  filters.forEach(([id, render]) => {
+    const field = document.getElementById(id);
+    if (!field) return;
+    try {
+      const saved = localStorage.getItem(`nosso-filtro-${id}`);
+      if ([...field.options].some((option) => option.value === saved)) field.value = saved;
+    } catch {}
+    field.addEventListener("change", () => {
+      try { localStorage.setItem(`nosso-filtro-${id}`, field.value); } catch {}
+      render();
+    });
+  });
+
+  const letterSearch = $("#letterSearchFilter");
+  letterSearch.addEventListener("input", () => renderLetters(latestLetters, false));
+}
+
+function updateCharacterCounter(field, counter) {
+  counter.textContent = `${field.value.length}/${field.maxLength}`;
+}
+
+function updateCreatorSteps() {
+  const storyReady = Boolean($("#publicationAuthor").value
+    && $("#publicationTitle").value.trim()
+    && $("#publicationText").value.trim());
+  const imageReady = Boolean($("#publicationImage").files.length);
+  const steps = $$('[data-creator-step]');
+  steps.forEach((step) => step.classList.remove("active", "done"));
+  if (!storyReady) {
+    steps[0]?.classList.add("active");
+  } else {
+    steps[0]?.classList.add("done");
+    if (!imageReady) steps[1]?.classList.add("active");
+    else {
+      steps[1]?.classList.add("done");
+      steps[2]?.classList.add("active");
+    }
+  }
+}
+
+function saveComposerDraft(storageKey, fields, statusElement) {
+  const draft = Object.fromEntries(fields.map((field) => [field.id, field.value]));
+  try {
+    localStorage.setItem(storageKey, JSON.stringify(draft));
+    const time = new Intl.DateTimeFormat("pt-BR", { hour: "2-digit", minute: "2-digit" }).format(new Date());
+    statusElement.textContent = `Rascunho salvo neste aparelho às ${time}.`;
+  } catch {
+    statusElement.textContent = "O rascunho continua nesta tela enquanto ela permanecer aberta.";
+  }
+}
+
+function restoreComposerDraft(storageKey, fields, statusElement) {
+  try {
+    const draft = JSON.parse(localStorage.getItem(storageKey) || "null");
+    if (!draft || typeof draft !== "object") return;
+    fields.forEach((field) => {
+      if (typeof draft[field.id] === "string") field.value = draft[field.id];
+    });
+    statusElement.textContent = "Seu rascunho anterior foi recuperado neste aparelho.";
+  } catch {}
+}
+
+function clearStoredDraft(storageKey) {
+  try { localStorage.removeItem(storageKey); } catch {}
+}
+
+function setupComposerExperience() {
+  const letterFields = [$("#letterAuthor"), $("#letterTitle"), $("#letterText")];
+  const letterDraftStatus = $("#letterDraftStatus");
+  restoreComposerDraft("nosso-rascunho-carta", letterFields, letterDraftStatus);
+
+  const refreshLetterExperience = () => {
+    const recipient = $("#letterAuthor").value === "Bianca" ? "Natã" : "Bianca";
+    $("#letterRecipientPreview").textContent = `De ${$("#letterAuthor").value} para ${recipient}`;
+    updateCharacterCounter($("#letterTitle"), $("#letterTitleCount"));
+    updateCharacterCounter($("#letterText"), $("#letterTextCount"));
+  };
+  letterFields.forEach((field) => field.addEventListener("input", () => {
+    refreshLetterExperience();
+    saveComposerDraft("nosso-rascunho-carta", letterFields, letterDraftStatus);
+  }));
+  $("#letterAuthor").addEventListener("change", () => {
+    refreshLetterExperience();
+    saveComposerDraft("nosso-rascunho-carta", letterFields, letterDraftStatus);
+  });
+  $("#letterClearDraft").addEventListener("click", () => {
+    if (($("#letterTitle").value || $("#letterText").value)
+        && !window.confirm("Limpar o rascunho desta carta?")) return;
+    $("#letterForm").reset();
+    clearStoredDraft("nosso-rascunho-carta");
+    letterDraftStatus.textContent = "Rascunho limpo. Podemos começar uma carta nova.";
+    refreshLetterExperience();
+    $("#letterTitle").focus();
+  });
+  refreshLetterExperience();
+
+  const publicationFields = [$("#publicationAuthor"), $("#publicationTitle"), $("#publicationText")];
+  const publicationDraftStatus = $("#publicationDraftStatus");
+  restoreComposerDraft("nosso-rascunho-memoria", publicationFields, publicationDraftStatus);
+
+  const refreshPublicationExperience = () => {
+    updateCharacterCounter($("#publicationTitle"), $("#publicationTitleCount"));
+    updateCharacterCounter($("#publicationText"), $("#publicationTextCount"));
+    updateCreatorSteps();
+  };
+  publicationFields.forEach((field) => field.addEventListener("input", () => {
+    refreshPublicationExperience();
+    saveComposerDraft("nosso-rascunho-memoria", publicationFields, publicationDraftStatus);
+  }));
+  $("#publicationAuthor").addEventListener("change", () => {
+    refreshPublicationExperience();
+    saveComposerDraft("nosso-rascunho-memoria", publicationFields, publicationDraftStatus);
+  });
+
+  const dropZone = $("#publicationDropZone");
+  dropZone.addEventListener("keydown", (event) => {
+    if (event.key !== "Enter" && event.key !== " ") return;
+    event.preventDefault();
+    $("#publicationImage").click();
+  });
+  ["dragenter", "dragover"].forEach((eventName) => dropZone.addEventListener(eventName, (event) => {
+    event.preventDefault();
+    dropZone.classList.add("is-dragging");
+  }));
+  ["dragleave", "drop"].forEach((eventName) => dropZone.addEventListener(eventName, (event) => {
+    event.preventDefault();
+    dropZone.classList.remove("is-dragging");
+  }));
+  dropZone.addEventListener("drop", (event) => {
+    const file = [...event.dataTransfer.files].find((candidate) => candidate.type.startsWith("image/"));
+    if (!file || typeof DataTransfer === "undefined") {
+      setPublicationStatus("Arraste uma foto JPG, PNG ou WEBP.", "error");
+      return;
+    }
+    const transfer = new DataTransfer();
+    transfer.items.add(file);
+    $("#publicationImage").files = transfer.files;
+    $("#publicationImage").dispatchEvent(new Event("change", { bubbles: true }));
+  });
+
+  $("#publicationRemoveImage").addEventListener("click", () => {
+    $("#publicationImage").value = "";
+    clearPublicationPreview();
+    setPublicationStatus("Foto removida. Escolha outra quando quiser.");
+    refreshPublicationExperience();
+    $("#publicationImage").click();
+  });
+  $("#publicationClearDraft").addEventListener("click", () => {
+    const hasDraft = $("#publicationTitle").value || $("#publicationText").value || $("#publicationImage").files.length;
+    if (hasDraft && !window.confirm("Limpar este rascunho de memória?")) return;
+    $("#publicationForm").reset();
+    clearPublicationPreview();
+    clearStoredDraft("nosso-rascunho-memoria");
+    publicationDraftStatus.textContent = "Rascunho limpo. Podemos começar uma memória nova.";
+    refreshPublicationExperience();
+    $("#publicationTitle").focus();
+  });
+  refreshPublicationExperience();
 }
 
 function setupSectionNavigation() {
@@ -2228,6 +2524,8 @@ $(".memory-album").addEventListener("keydown", (event) => {
 
 document.addEventListener("DOMContentLoaded", () => {
   setupAlbumControls();
+  setupContentFilters();
+  setupComposerExperience();
   setupSectionNavigation();
   hydrateContent();
   updatePublicationDesign();
@@ -2277,6 +2575,9 @@ $("#publicationImage").addEventListener("change", (event) => {
 
   const selection = ++publicationImageSelection;
   preparedPublicationImage = file;
+  $("#publicationDropZone").classList.remove("is-error");
+  $("#publicationDropZone").classList.add("has-image");
+  updateCreatorSteps();
   $("#publicationImageHint").textContent = "Analisando a foto e preservando a melhor qualidade…";
   setPublicationStatus("Preparando a foto…");
 
@@ -2313,7 +2614,14 @@ $("#publicationForm").addEventListener("submit", async (event) => {
   const publicationText = $("#publicationText").value.trim();
   const editorCode = $("#publicationCode").value;
 
-  if (!selectedImage || !author || !title || !publicationText || !editorCode) return;
+  if (!selectedImage) {
+    $("#publicationDropZone").classList.add("is-error");
+    setPublicationStatus("Escolha a foto que vai acompanhar esta memória.", "error");
+    $("#publicationDropZone").scrollIntoView({ behavior: "smooth", block: "center" });
+    $("#publicationDropZone").focus({ preventScroll: true });
+    return;
+  }
+  if (!author || !title || !publicationText || !editorCode) return;
 
   const originalLabel = submitButton.textContent;
   submitButton.disabled = true;
@@ -2345,6 +2653,11 @@ $("#publicationForm").addEventListener("submit", async (event) => {
 
     form.reset();
     clearPublicationPreview();
+    clearStoredDraft("nosso-rascunho-memoria");
+    $("#publicationDraftStatus").textContent = "Memória publicada. O rascunho deste aparelho foi limpo.";
+    updateCharacterCounter($("#publicationTitle"), $("#publicationTitleCount"));
+    updateCharacterCounter($("#publicationText"), $("#publicationTextCount"));
+    updateCreatorSteps();
     albumAuthorFilter = author;
     albumSortMode = "recentes";
     try {
@@ -2399,6 +2712,14 @@ $("#futurePlanForm").addEventListener("submit", async (event) => {
     }, editorCode);
 
     form.reset();
+    $("#futureAuthorFilter").value = author;
+    $("#futureStatusFilter").value = "pendentes";
+    $("#futureCategoryFilter").value = category;
+    try {
+      localStorage.setItem("nosso-filtro-futureAuthorFilter", author);
+      localStorage.setItem("nosso-filtro-futureStatusFilter", "pendentes");
+      localStorage.setItem("nosso-filtro-futureCategoryFilter", category);
+    } catch {}
     setFuturePlanStatus("Plano guardado! Ele já aparece no nosso cantinho ♥", "success");
     await loadFuturePlans();
 
@@ -2460,6 +2781,8 @@ $("#musicForm").addEventListener("submit", async (event) => {
     }, editorCode);
 
     form.reset();
+    $("#musicAuthorFilter").value = author;
+    try { localStorage.setItem("nosso-filtro-musicAuthorFilter", author); } catch {}
     status.textContent = "Nossa nova música já está na playlist ♥";
     status.dataset.state = "success";
     await loadMusicLibrary();
@@ -2503,6 +2826,9 @@ $("#dateSaveForm").addEventListener("submit", async (event) => {
         : currentDateIdea.description
     }, editorCode);
     $("#dateSaveCode").value = "";
+    $("#futureAuthorFilter").value = author;
+    $("#futureStatusFilter").value = "pendentes";
+    $("#futureCategoryFilter").value = "encontro";
     setCornerStatus("#dateSaveStatus", "Encontro guardado em “Coisas que ainda vamos viver” ♥", "success");
     await loadFuturePlans();
   } catch (error) {
@@ -2540,6 +2866,12 @@ $("#dailyEntryForm").addEventListener("submit", async (event) => {
       itens: items
     }, editorCode);
     form.reset();
+    $("#dailyAuthorFilter").value = author;
+    $("#dailyTypeFilter").value = type;
+    try {
+      localStorage.setItem("nosso-filtro-dailyAuthorFilter", author);
+      localStorage.setItem("nosso-filtro-dailyTypeFilter", type);
+    } catch {}
     setCornerStatus("#dailyStatus", "As três coisas de hoje foram guardadas ♥", "success");
     await loadDailyEntries();
   } catch (error) {
@@ -2573,8 +2905,17 @@ $("#letterForm").addEventListener("submit", async (event) => {
       texto: text
     }, editorCode);
     form.reset();
+    clearStoredDraft("nosso-rascunho-carta");
+    $("#letterDraftStatus").textContent = "Carta entregue. O rascunho deste aparelho foi limpo.";
+    $("#letterRecipientPreview").textContent = "De Bianca para Natã";
+    updateCharacterCounter($("#letterTitle"), $("#letterTitleCount"));
+    updateCharacterCounter($("#letterText"), $("#letterTextCount"));
+    $("#letterAuthorFilter").value = author;
+    $("#letterSearchFilter").value = "";
+    try { localStorage.setItem("nosso-filtro-letterAuthorFilter", author); } catch {}
     setCornerStatus("#letterStatus", "Carta guardada e entregue no nosso cantinho ♥", "success");
     await loadLetters();
+    setTimeout(() => $(".letters-archive").scrollIntoView({ behavior: "smooth", block: "start" }), 180);
   } catch (error) {
     setCornerStatus("#letterStatus", error.message || "Não foi possível guardar a carta.", "error");
   } finally {
@@ -2634,8 +2975,11 @@ $("#complaintForm").addEventListener("submit", async (event) => {
     await requestCoupleCorner(payload, editorCode);
     form.reset();
     clearComplaintPreview();
+    $("#complaintAuthorFilter").value = author;
+    try { localStorage.setItem("nosso-filtro-complaintAuthorFilter", author); } catch {}
     setCornerStatus("#complaintStatus", "Nossa reclamação foi publicada. Agora falta o outro decifrar 💃🏻", "success");
     await loadComplaints();
+    setTimeout(() => $("#complaintsList").scrollIntoView({ behavior: "smooth", block: "start" }), 180);
   } catch (error) {
     setCornerStatus("#complaintStatus", error.message || "Não foi possível publicar a reclamação.", "error");
   } finally {
