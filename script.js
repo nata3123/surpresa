@@ -27,7 +27,8 @@ const SUPABASE = Object.freeze({
   replyFunction: "responder-publicacao",
   plansFunction: "gerenciar-planos",
   cornerFunction: "gerenciar-cantinho",
-  manageFunction: "gerenciar-conteudo"
+  manageFunction: "gerenciar-conteudo",
+  accountFunction: "conta-casal"
 });
 
 const IMAGE_UPLOAD = Object.freeze({
@@ -186,6 +187,359 @@ let allAlbumPhotos = [];
 let albumAuthorFilter = "todos";
 let albumSortMode = "historia";
 let latestRepliesByPublication = new Map();
+const ACCOUNT_SESSION_KEY = "nosso-login-sessao-v1";
+let accountSessionToken = "";
+let currentAccount = null;
+let notificationRefreshTimer;
+let sectionSeenTimer;
+let pendingSeenSection = "";
+
+function setLoginStatus(message = "", state = "") {
+  const status = $("#loginStatus");
+  status.textContent = message;
+  status.dataset.state = state;
+}
+
+async function accountRequest(action, payload = {}, token = accountSessionToken) {
+  const headers = {
+    apikey: SUPABASE.publishableKey,
+    "Content-Type": "application/json"
+  };
+  if (token) headers["x-couple-session"] = token;
+  const response = await fetch(`${SUPABASE.url}/functions/v1/${SUPABASE.accountFunction}`, {
+    method: "POST",
+    headers,
+    body: JSON.stringify({ action, ...payload })
+  });
+  const result = await response.json().catch(() => ({}));
+  if (!response.ok) {
+    const error = new Error(result.error || "Não foi possível acessar nossa conta agora.");
+    error.status = response.status;
+    throw error;
+  }
+  return result;
+}
+
+function saveAccountSession(token) {
+  accountSessionToken = token || "";
+  try {
+    if (accountSessionToken) localStorage.setItem(ACCOUNT_SESSION_KEY, accountSessionToken);
+    else localStorage.removeItem(ACCOUNT_SESSION_KEY);
+  } catch {
+    // Se o navegador bloquear o armazenamento, a sessão ainda funciona até a aba ser fechada.
+  }
+}
+
+function rememberedAccountSession() {
+  try {
+    return localStorage.getItem(ACCOUNT_SESSION_KEY) || "";
+  } catch {
+    return "";
+  }
+}
+
+function applyIdentityToForms() {
+  if (!currentAccount) return;
+  const author = currentAccount.display_name;
+  [
+    "publicationAuthor",
+    "musicAuthor",
+    "futurePlanAuthor",
+    "dateSaveAuthor",
+    "dailyAuthor",
+    "letterAuthor",
+    "complaintAuthor"
+  ].forEach((id) => {
+    const field = document.getElementById(id);
+    if (field && [...field.options].some((option) => option.value === author)) {
+      field.value = author;
+      field.dispatchEvent(new Event("change", { bubbles: true }));
+    }
+  });
+  $$('.publication-reply-form select[name="autor"], .complaint-interpretation-composer select[name="autor"]').forEach((field) => {
+    if ([...field.options].some((option) => option.value === author)) field.value = author;
+  });
+}
+
+function updateAccountUI() {
+  const signedIn = Boolean(currentAccount && accountSessionToken);
+  $("#accountDock").classList.toggle("has-session", signedIn);
+  $("#notificationButton").hidden = !signedIn;
+  $("#accountEyebrow").textContent = signedIn ? "Conta lembrada" : "Nosso cantinho";
+  $("#accountName").textContent = signedIn ? currentAccount.display_name : "Entrar";
+  $("#accountAvatar").textContent = signedIn ? currentAccount.display_name.charAt(0) : "♡";
+  $("#heroLoginButton").querySelector("span:last-child").textContent = signedIn
+    ? `Continuar como ${currentAccount.display_name}`
+    : "Entrar no nosso cantinho";
+  $("#notificationsAccountName").textContent = signedIn ? currentAccount.display_name : "—";
+  $("#notificationsAvatar").textContent = signedIn ? currentAccount.display_name.charAt(0) : "♡";
+  $("#notificationsGreeting").textContent = signedIn
+    ? `${currentAccount.display_name}, aqui ficam as novidades que chegaram desde a sua última visita.`
+    : "Tudo o que apareceu desde a sua última visita.";
+  if (signedIn) applyIdentityToForms();
+}
+
+function resetNotificationBadge() {
+  const badge = $("#notificationBadge");
+  badge.hidden = true;
+  badge.textContent = "0";
+  badge.setAttribute("aria-label", "0 novidades");
+}
+
+function clearAccountState() {
+  currentAccount = null;
+  saveAccountSession("");
+  clearInterval(notificationRefreshTimer);
+  resetNotificationBadge();
+  updateAccountUI();
+}
+
+function openLoginDialog() {
+  setLoginStatus("");
+  if (!$("#loginDialog").open) $("#loginDialog").showModal();
+  requestAnimationFrame(() => $("#loginUsername").focus());
+}
+
+function openNotificationsDialog() {
+  if (!currentAccount) {
+    openLoginDialog();
+    return;
+  }
+  if (!$("#notificationsDialog").open) $("#notificationsDialog").showModal();
+  void refreshNotifications();
+}
+
+function formatNotificationTime(value) {
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "";
+  const now = new Date();
+  const sameDay = date.toDateString() === now.toDateString();
+  return new Intl.DateTimeFormat("pt-BR", sameDay
+    ? { hour: "2-digit", minute: "2-digit" }
+    : { day: "2-digit", month: "short" }).format(date);
+}
+
+function renderNotifications(result) {
+  const list = $("#notificationsList");
+  list.replaceChildren();
+  const items = Array.isArray(result.items) ? result.items : [];
+  const unreadCount = Number(result.unread_count) || 0;
+  const badge = $("#notificationBadge");
+  badge.hidden = unreadCount === 0;
+  badge.textContent = unreadCount > 99 ? "99+" : String(unreadCount);
+  badge.setAttribute("aria-label", `${unreadCount} ${unreadCount === 1 ? "novidade" : "novidades"}`);
+  $("#notificationButton").setAttribute(
+    "aria-label",
+    unreadCount ? `Abrir ${unreadCount} ${unreadCount === 1 ? "novidade" : "novidades"}` : "Abrir novidades"
+  );
+  $("#markAllNotificationsButton").disabled = unreadCount === 0;
+
+  if (!items.length) {
+    const empty = document.createElement("p");
+    empty.className = "notifications-empty";
+    empty.textContent = "Tudo visto por aqui. Quando um de nós acrescentar algo novo, ele aparecerá neste espaço.";
+    list.append(empty);
+    return;
+  }
+
+  items.forEach((item) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "notification-item";
+    const symbol = document.createElement("span");
+    symbol.className = "notification-item-symbol";
+    symbol.setAttribute("aria-hidden", "true");
+    symbol.textContent = item.symbol || "♥";
+    const copy = document.createElement("span");
+    copy.className = "notification-item-copy";
+    const kind = document.createElement("small");
+    kind.textContent = item.kind || "Novidade";
+    const title = document.createElement("strong");
+    title.textContent = item.title || "Algo novo chegou";
+    const preview = document.createElement("span");
+    preview.textContent = item.preview
+      ? `${item.author ? item.author + ": " : ""}${item.preview}`
+      : (item.author ? `Adicionado por ${item.author}` : "Toque para ver");
+    copy.append(kind, title, preview);
+    const time = document.createElement("time");
+    time.dateTime = item.created_at || "";
+    time.textContent = formatNotificationTime(item.created_at);
+    button.append(symbol, copy, time);
+    button.addEventListener("click", async () => {
+      button.disabled = true;
+      try {
+        await markNotificationChannels([item.channel], false);
+      } finally {
+        $("#notificationsDialog").close();
+        openExperience();
+        const target = document.querySelector(item.target || "");
+        if (target) setTimeout(() => target.scrollIntoView({ behavior: "smooth", block: "start" }), 220);
+      }
+    });
+    list.append(button);
+  });
+}
+
+async function refreshNotifications() {
+  if (!currentAccount || !accountSessionToken) return;
+  const list = $("#notificationsList");
+  if (!list.children.length) {
+    const loading = document.createElement("p");
+    loading.className = "notifications-empty";
+    loading.textContent = "Procurando nossas novidades…";
+    list.append(loading);
+  }
+  try {
+    const result = await accountRequest("notifications");
+    renderNotifications(result);
+  } catch (error) {
+    if (error.status === 401) {
+      clearAccountState();
+      if ($("#notificationsDialog").open) $("#notificationsDialog").close();
+      return;
+    }
+    if ($("#notificationsDialog").open) {
+      list.replaceChildren();
+      const message = document.createElement("p");
+      message.className = "notifications-empty";
+      message.textContent = "Não conseguimos buscar as novidades agora. Tente novamente em instantes.";
+      list.append(message);
+    }
+  }
+}
+
+async function markNotificationChannels(channels, refresh = true) {
+  if (!currentAccount || !accountSessionToken) return;
+  const uniqueChannels = [...new Set(channels.filter(Boolean))];
+  if (!uniqueChannels.length) return;
+  try {
+    await Promise.all(uniqueChannels.map((channel) => accountRequest("mark_seen", { channel })));
+    if (refresh) await refreshNotifications();
+  } catch (error) {
+    if (error.status === 401) clearAccountState();
+  }
+}
+
+function scheduleSectionSeen(sectionId) {
+  const channelMap = {
+    musica: ["musicas"],
+    fotos: ["memorias", "diario"],
+    planos: ["planos"],
+    "tres-coisas": ["registros"],
+    cartas: ["cartas"],
+    reclamacoes: ["reclamacoes", "interpretacoes"]
+  };
+  const channels = channelMap[sectionId];
+  if (!channels || !currentAccount || pendingSeenSection === sectionId) return;
+  clearTimeout(sectionSeenTimer);
+  pendingSeenSection = sectionId;
+  sectionSeenTimer = setTimeout(() => {
+    pendingSeenSection = "";
+    void markNotificationChannels(channels);
+  }, 1400);
+}
+
+function startNotificationPolling() {
+  clearInterval(notificationRefreshTimer);
+  if (!currentAccount) return;
+  notificationRefreshTimer = setInterval(() => {
+    if (!document.hidden) void refreshNotifications();
+  }, 45000);
+}
+
+async function restoreAccountSession() {
+  const rememberedToken = rememberedAccountSession();
+  if (!rememberedToken) {
+    updateAccountUI();
+    return;
+  }
+  accountSessionToken = rememberedToken;
+  try {
+    const result = await accountRequest("session");
+    currentAccount = result.account;
+    updateAccountUI();
+    startNotificationPolling();
+    await refreshNotifications();
+  } catch {
+    clearAccountState();
+  }
+}
+
+function setupAccountExperience() {
+  $("#heroLoginButton").addEventListener("click", () => {
+    if (currentAccount) {
+      openExperience();
+      openNotificationsDialog();
+    } else {
+      openLoginDialog();
+    }
+  });
+  $("#accountButton").addEventListener("click", () => {
+    if (currentAccount) openNotificationsDialog();
+    else openLoginDialog();
+  });
+  $("#notificationButton").addEventListener("click", openNotificationsDialog);
+  $("#loginDialogClose").addEventListener("click", () => $("#loginDialog").close());
+  $("#notificationsDialogClose").addEventListener("click", () => $("#notificationsDialog").close());
+  $("#toggleLoginPassword").addEventListener("click", (event) => {
+    const password = $("#loginPassword");
+    const visible = password.type === "text";
+    password.type = visible ? "password" : "text";
+    event.currentTarget.textContent = visible ? "Ver" : "Ocultar";
+    event.currentTarget.setAttribute("aria-label", visible ? "Mostrar senha" : "Ocultar senha");
+  });
+  $("#refreshNotificationsButton").addEventListener("click", () => void refreshNotifications());
+  $("#markAllNotificationsButton").addEventListener("click", async (event) => {
+    event.currentTarget.disabled = true;
+    try {
+      await accountRequest("mark_seen", { channel: "all" });
+      await refreshNotifications();
+    } finally {
+      event.currentTarget.disabled = false;
+    }
+  });
+  $("#logoutButton").addEventListener("click", async () => {
+    try {
+      await accountRequest("logout");
+    } catch {
+      // A sessão local é encerrada mesmo se a conexão falhar.
+    }
+    clearAccountState();
+    $("#notificationsDialog").close();
+    openLoginDialog();
+    setLoginStatus("Você saiu desta conta neste aparelho.", "success");
+  });
+  $("#loginForm").addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const submitButton = form.querySelector('button[type="submit"]');
+    submitButton.disabled = true;
+    setLoginStatus("Entrando no nosso cantinho…");
+    try {
+      const result = await accountRequest("login", {
+        username: $("#loginUsername").value.trim(),
+        password: $("#loginPassword").value
+      }, "");
+      saveAccountSession(result.session_token);
+      currentAccount = result.account;
+      $("#loginPassword").value = "";
+      updateAccountUI();
+      startNotificationPolling();
+      setLoginStatus(`Pronto, ${currentAccount.display_name}. Este aparelho vai lembrar de você.`, "success");
+      await refreshNotifications();
+      setTimeout(() => {
+        if ($("#loginDialog").open) $("#loginDialog").close();
+        openExperience();
+      }, 550);
+    } catch (error) {
+      setLoginStatus(error.message || "Não foi possível entrar agora.", "error");
+      $("#loginPassword").select();
+    } finally {
+      submitButton.disabled = false;
+    }
+  });
+  void restoreAccountSession();
+}
 
 function hydrateContent() {
   document.title = CONFIG.pageTitle;
@@ -1553,7 +1907,7 @@ function createComplaintCard(complaint, interpretations) {
     const option = document.createElement("option");
     option.value = name;
     option.textContent = name;
-    option.selected = name !== complaint.autor;
+    option.selected = name === (currentAccount?.display_name || (complaint.autor === "Bianca" ? "Natã" : "Bianca"));
     author.append(option);
   });
   const messageLabel = document.createElement("label");
@@ -1867,7 +2221,7 @@ function createPublicationReplyArea(target, replies) {
     const option = document.createElement("option");
     option.value = name;
     option.textContent = name;
-    option.selected = name === target.defaultAuthor;
+    option.selected = name === (currentAccount?.display_name || target.defaultAuthor);
     author.append(option);
   });
 
@@ -2394,6 +2748,7 @@ function setupSectionNavigation() {
     if (currentLink) {
       $("#mobileNavLabel").textContent = currentLink.title || currentLink.textContent.trim();
     }
+    scheduleSectionSeen(id);
   };
 
   if ("IntersectionObserver" in window) {
@@ -2523,6 +2878,7 @@ $(".memory-album").addEventListener("keydown", (event) => {
 });
 
 document.addEventListener("DOMContentLoaded", () => {
+  setupAccountExperience();
   setupAlbumControls();
   setupContentFilters();
   setupComposerExperience();
@@ -2551,6 +2907,7 @@ document.addEventListener("visibilitychange", () => {
   if (document.hidden) return;
 
   updateCounter();
+  if (currentAccount) void refreshNotifications();
   counterTimer = setInterval(updateCounter, 1000);
   if (document.body.classList.contains("surprise-open")
       && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {

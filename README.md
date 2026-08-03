@@ -17,6 +17,19 @@ Esta página foi personalizada com:
 - um navegador de seções no celular e navegação lateral com indicação da seção atual no computador
 - filtros por autoria em todas as áreas compartilhadas, além de filtros próprios para planos, registros e cartas
 - rascunhos locais automáticos, contadores e etapas guiadas ao escrever cartas ou adicionar novas memórias
+- duas contas sem e-mail, com sessão lembrada no aparelho e uma central individual de novidades
+
+## Nossas contas e novidades
+
+Bianca e Natã têm contas separadas, sem necessidade de e-mail. Depois da primeira entrada, o aparelho guarda somente um identificador aleatório de sessão; a senha não é armazenada no HTML nem no navegador. As senhas são verificadas por uma função protegida e ficam no banco apenas como hashes lentos e irreversíveis.
+
+A conta reconhecida também preenche automaticamente a autoria ao adicionarmos uma memória, música, plano, registro diário, carta, reclamação ou resposta. Ainda é possível trocar a autoria manualmente quando necessário.
+
+A central **“Novidades para você”** é individual. Ela mostra músicas, memórias, respostas do diário, planos, registros, cartas, reclamações e interpretações que a outra pessoa adicionou depois da última visita. O estado do que já foi visto fica salvo na nuvem por conta e funciona em mais de um aparelho. Conteúdos escritos pela própria conta não viram notificação para ela.
+
+Ao entrar pela primeira vez, o conteúdo que já existia é considerado visto. Depois disso, tocar em uma novidade abre a seção correspondente e a marca como lida. Entrar em uma seção e permanecer nela por alguns instantes também atualiza seu estado. A página verifica novas atividades periodicamente e sempre que voltamos para a aba.
+
+O login não substitui o código reservado usado para publicar, editar ou excluir conteúdo. O código continua protegendo alterações, enquanto a conta identifica quem está usando o site e mantém as notificações separadas.
 
 ## Como abrir
 

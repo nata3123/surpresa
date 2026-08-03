@@ -45,10 +45,16 @@
         </div>
         <h1 id="introTitle">Bianca &amp; Natã, a nossa história mora aqui.</h1>
         <p id="introText">Nosso cantinho para guardar tudo o que vivemos desde 21 de maio de 2026.</p>
-        <button class="primary-button pulse" id="openSurprise" type="button">
-          <span>Abrir nossa história</span>
-          <span aria-hidden="true">💌</span>
-        </button>
+        <div class="hero-actions">
+          <button class="primary-button pulse" id="openSurprise" type="button">
+            <span>Abrir nossa história</span>
+            <span aria-hidden="true">💌</span>
+          </button>
+          <button class="hero-login-button" id="heroLoginButton" type="button">
+            <span aria-hidden="true">♡</span>
+            <span>Entrar no nosso cantinho</span>
+          </button>
+        </div>
         <small class="tap-hint">Nosso cantinho começa aqui</small>
       </div>
     </section>
@@ -740,6 +746,67 @@
       </footer>
     </div>
   </main>
+
+  <aside class="account-dock" id="accountDock" aria-label="Nossa conta">
+    <button class="account-profile-button" id="accountButton" type="button" aria-haspopup="dialog">
+      <span class="account-avatar" id="accountAvatar" aria-hidden="true">♡</span>
+      <span class="account-profile-copy">
+        <small id="accountEyebrow">Nosso cantinho</small>
+        <strong id="accountName">Entrar</strong>
+      </span>
+    </button>
+    <button class="notification-button" id="notificationButton" type="button" aria-label="Abrir novidades" aria-haspopup="dialog" hidden>
+      <span aria-hidden="true">♢</span>
+      <strong class="notification-badge" id="notificationBadge" aria-label="0 novidades" hidden>0</strong>
+    </button>
+  </aside>
+
+  <dialog class="couple-dialog login-dialog" id="loginDialog" aria-labelledby="loginDialogTitle">
+    <div class="dialog-card">
+      <button class="dialog-close" id="loginDialogClose" type="button" aria-label="Fechar">×</button>
+      <div class="dialog-symbol" aria-hidden="true">♥</div>
+      <span class="eyebrow">Só nós dois</span>
+      <h2 id="loginDialogTitle">Entre no nosso cantinho</h2>
+      <p>Assim o site lembra quem somos, o que já vimos e avisa quando houver uma novidade.</p>
+      <form class="login-form" id="loginForm">
+        <label for="loginUsername">Usuário</label>
+        <input id="loginUsername" name="username" type="text" autocomplete="username" autocapitalize="none" spellcheck="false" placeholder="Seu usuário" required />
+        <label for="loginPassword">Senha</label>
+        <div class="password-field">
+          <input id="loginPassword" name="password" type="password" autocomplete="current-password" placeholder="Sua senha" required />
+          <button id="toggleLoginPassword" type="button" aria-label="Mostrar senha">Ver</button>
+        </div>
+        <button class="primary-button" type="submit">Entrar e ver nossas novidades</button>
+        <small class="device-session-note">O login fica lembrado apenas neste aparelho. A senha nunca fica salva na página.</small>
+        <small class="login-status" id="loginStatus" role="status" aria-live="polite"></small>
+      </form>
+    </div>
+  </dialog>
+
+  <dialog class="couple-dialog notifications-dialog" id="notificationsDialog" aria-labelledby="notificationsDialogTitle">
+    <div class="dialog-card notifications-card">
+      <button class="dialog-close" id="notificationsDialogClose" type="button" aria-label="Fechar">×</button>
+      <div class="notifications-heading">
+        <div>
+          <span class="eyebrow">Nosso cantinho</span>
+          <h2 id="notificationsDialogTitle">Novidades para você</h2>
+          <p id="notificationsGreeting">Tudo o que apareceu desde a sua última visita.</p>
+        </div>
+        <span class="notifications-avatar" id="notificationsAvatar" aria-hidden="true">♡</span>
+      </div>
+      <div class="notifications-actions">
+        <button id="refreshNotificationsButton" type="button">Atualizar</button>
+        <button id="markAllNotificationsButton" type="button">Marcar tudo como visto</button>
+      </div>
+      <div class="notifications-list" id="notificationsList" aria-live="polite">
+        <p class="notifications-empty">Procurando nossas novidades…</p>
+      </div>
+      <footer class="account-dialog-footer">
+        <small>Conectado como <strong id="notificationsAccountName">—</strong> neste aparelho.</small>
+        <button id="logoutButton" type="button">Sair da conta</button>
+      </footer>
+    </div>
+  </dialog>
 
   <script src="script.js" defer></script>
 </body>
