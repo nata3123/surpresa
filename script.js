@@ -193,6 +193,75 @@ let currentAccount = null;
 let notificationRefreshTimer;
 let sectionSeenTimer;
 let pendingSeenSection = "";
+const COLLECTION_PAGE_SIZES = Object.freeze({
+  music: 6,
+  plans: 6,
+  daily: 4,
+  letters: 5,
+  complaints: 3
+});
+const collectionPages = {
+  music: 1,
+  plans: 1,
+  daily: 1,
+  letters: 1,
+  complaints: 1
+};
+
+function resetCollectionPage(key) {
+  collectionPages[key] = 1;
+}
+
+function getCollectionPage(items, key) {
+  const pageSize = COLLECTION_PAGE_SIZES[key];
+  const pageCount = Math.max(1, Math.ceil(items.length / pageSize));
+  const page = Math.min(Math.max(1, collectionPages[key] || 1), pageCount);
+  collectionPages[key] = page;
+  const start = (page - 1) * pageSize;
+  return {
+    items: items.slice(start, start + pageSize),
+    page,
+    pageCount,
+    pageSize,
+    start
+  };
+}
+
+function createCollectionPager({ key, total, page, pageCount, pageSize, onChange, label }) {
+  const nav = document.createElement("nav");
+  nav.className = "collection-pager";
+  nav.setAttribute("aria-label", `Navegar por ${label}`);
+
+  const previous = document.createElement("button");
+  previous.type = "button";
+  previous.textContent = "‹ Anteriores";
+  previous.disabled = page <= 1;
+
+  const status = document.createElement("span");
+  status.setAttribute("aria-live", "polite");
+  const firstVisible = total ? (page - 1) * pageSize + 1 : 0;
+  const lastVisible = Math.min(page * pageSize, total);
+  status.textContent = `${firstVisible}–${lastVisible} de ${total}`;
+
+  const next = document.createElement("button");
+  next.type = "button";
+  next.textContent = "Próximas ›";
+  next.disabled = page >= pageCount;
+
+  const changePage = (targetPage) => {
+    collectionPages[key] = targetPage;
+    onChange();
+    requestAnimationFrame(() => {
+      const refreshedPager = document.querySelector(`.collection-pager[data-collection="${key}"]`);
+      refreshedPager?.parentElement?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    });
+  };
+  previous.addEventListener("click", () => changePage(page - 1));
+  next.addEventListener("click", () => changePage(page + 1));
+  nav.dataset.collection = key;
+  nav.append(previous, status, next);
+  return nav;
+}
 
 function setLoginStatus(message = "", state = "") {
   const status = $("#loginStatus");
@@ -912,14 +981,18 @@ function createMusicCard(song, index) {
 }
 
 function renderMusicLibrary(songs, remember = true) {
-  if (remember) latestSongs = songs;
+  if (remember) {
+    latestSongs = songs;
+    resetCollectionPage("music");
+  }
   const authorFilter = $("#musicAuthorFilter")?.value || "todos";
   const visibleSongs = latestSongs.filter((song) => authorFilter === "todos" || song.autor === authorFilter);
+  const pagedSongs = getCollectionPage(visibleSongs, "music");
   const list = $("#musicList");
   list.replaceChildren();
   $("#musicCount").textContent = latestSongs.length === 1 ? "1 música" : `${latestSongs.length} músicas`;
   $("#musicFilterStatus").textContent = authorFilter === "todos"
-    ? `Mostrando nossas ${latestSongs.length} músicas.`
+    ? `${visibleSongs.length} ${visibleSongs.length === 1 ? "música em nossa playlist" : "músicas em nossa playlist"}.`
     : `${visibleSongs.length} ${visibleSongs.length === 1 ? "música escolhida" : "músicas escolhidas"} por ${authorFilter}.`;
 
   if (!latestSongs.length) {
@@ -944,9 +1017,19 @@ function renderMusicLibrary(songs, remember = true) {
     return;
   }
 
-  visibleSongs.forEach((song, index) => list.append(createMusicCard(song, index)));
-  const selectedSong = visibleSongs.find((song) => String(song.id) === String(currentSongId)) || visibleSongs[0];
-  playMusic(selectedSong);
+  pagedSongs.items.forEach((song, index) => list.append(createMusicCard(song, pagedSongs.start + index)));
+  if (pagedSongs.pageCount > 1) {
+    list.append(createCollectionPager({
+      key: "music",
+      total: visibleSongs.length,
+      ...pagedSongs,
+      onChange: () => renderMusicLibrary(latestSongs, false),
+      label: "nossas músicas"
+    }));
+  }
+  const currentStillVisible = visibleSongs.some((song) => String(song.id) === String(currentSongId));
+  if (!currentStillVisible) playMusic(visibleSongs[0]);
+  else updateActiveMusicCard();
 }
 
 async function loadMusicLibrary() {
@@ -1407,7 +1490,10 @@ function createFuturePlanGroup(titleText, plans, completed) {
 }
 
 function renderFuturePlans(plans, remember = true) {
-  if (remember) latestFuturePlans = plans;
+  if (remember) {
+    latestFuturePlans = plans;
+    resetCollectionPage("plans");
+  }
   const allPending = latestFuturePlans.filter((plan) => !plan.concluido);
   const allCompleted = latestFuturePlans.filter((plan) => plan.concluido);
   $("#futurePendingCount").textContent = allPending.length;
@@ -1423,8 +1509,9 @@ function renderFuturePlans(plans, remember = true) {
       || (statusFilter === "pendentes" && !plan.concluido)
       || (statusFilter === "concluidos" && plan.concluido))
   ));
-  const pending = visiblePlans.filter((plan) => !plan.concluido);
-  const completed = visiblePlans.filter((plan) => plan.concluido);
+  const pagedPlans = getCollectionPage(visiblePlans, "plans");
+  const pending = pagedPlans.items.filter((plan) => !plan.concluido);
+  const completed = pagedPlans.items.filter((plan) => plan.concluido);
   $("#futureFilterStatus").textContent = `${visiblePlans.length} de ${latestFuturePlans.length} ${latestFuturePlans.length === 1 ? "plano" : "planos"}.`;
 
   const list = $("#futurePlansList");
@@ -1455,6 +1542,15 @@ function renderFuturePlans(plans, remember = true) {
   }
   if (completed.length) {
     list.append(createFuturePlanGroup("Sonhos que já viraram história", completed, true));
+  }
+  if (pagedPlans.pageCount > 1) {
+    list.append(createCollectionPager({
+      key: "plans",
+      total: visiblePlans.length,
+      ...pagedPlans,
+      onChange: () => renderFuturePlans(latestFuturePlans, false),
+      label: "nossos planos"
+    }));
   }
 }
 
@@ -1625,13 +1721,17 @@ function createCornerEmpty(message) {
 }
 
 function renderDailyEntries(entries, remember = true) {
-  if (remember) latestDailyEntries = entries;
+  if (remember) {
+    latestDailyEntries = entries;
+    resetCollectionPage("daily");
+  }
   const authorFilter = $("#dailyAuthorFilter")?.value || "todos";
   const typeFilter = $("#dailyTypeFilter")?.value || "todos";
   const visibleEntries = latestDailyEntries.filter((entry) => (
     (authorFilter === "todos" || entry.autor === authorFilter)
     && (typeFilter === "todos" || entry.tipo === typeFilter)
   ));
+  const pagedEntries = getCollectionPage(visibleEntries, "daily");
   $("#dailyFilterStatus").textContent = `${visibleEntries.length} de ${latestDailyEntries.length} ${latestDailyEntries.length === 1 ? "registro" : "registros"}.`;
   const list = $("#dailyEntriesList");
   list.replaceChildren();
@@ -1644,7 +1744,7 @@ function renderDailyEntries(entries, remember = true) {
     return;
   }
 
-  visibleEntries.forEach((entry) => {
+  pagedEntries.items.forEach((entry) => {
     const type = DAILY_ENTRY_TYPES[entry.tipo] || DAILY_ENTRY_TYPES.coisas_boas;
     const card = document.createElement("article");
     card.className = "daily-entry-card";
@@ -1696,6 +1796,15 @@ function renderDailyEntries(entries, remember = true) {
     );
     list.append(card);
   });
+  if (pagedEntries.pageCount > 1) {
+    list.append(createCollectionPager({
+      key: "daily",
+      total: visibleEntries.length,
+      ...pagedEntries,
+      onChange: () => renderDailyEntries(latestDailyEntries, false),
+      label: "nossos registros"
+    }));
+  }
 }
 
 async function loadDailyEntries() {
@@ -1720,13 +1829,17 @@ function normalizeSearchText(value) {
 }
 
 function renderLetters(letters, remember = true) {
-  if (remember) latestLetters = letters;
+  if (remember) {
+    latestLetters = letters;
+    resetCollectionPage("letters");
+  }
   const authorFilter = $("#letterAuthorFilter")?.value || "todos";
   const searchFilter = normalizeSearchText($("#letterSearchFilter")?.value);
   const visibleLetters = latestLetters.filter((letter) => (
     (authorFilter === "todos" || letter.autor === authorFilter)
     && (!searchFilter || normalizeSearchText(`${letter.titulo} ${letter.texto}`).includes(searchFilter))
   ));
+  const pagedLetters = getCollectionPage(visibleLetters, "letters");
   $("#letterFilterStatus").textContent = `${visibleLetters.length} de ${latestLetters.length} ${latestLetters.length === 1 ? "carta" : "cartas"}.`;
   const list = $("#lettersList");
   list.replaceChildren();
@@ -1739,7 +1852,7 @@ function renderLetters(letters, remember = true) {
     return;
   }
 
-  visibleLetters.forEach((letter) => {
+  pagedLetters.items.forEach((letter) => {
     const card = document.createElement("details");
     card.className = "letter-card";
 
@@ -1779,6 +1892,15 @@ function renderLetters(letters, remember = true) {
     card.append(summary, body);
     list.append(card);
   });
+  if (pagedLetters.pageCount > 1) {
+    list.append(createCollectionPager({
+      key: "letters",
+      total: visibleLetters.length,
+      ...pagedLetters,
+      onChange: () => renderLetters(latestLetters, false),
+      label: "nossas cartas"
+    }));
+  }
 }
 
 async function loadLetters() {
@@ -1962,11 +2084,13 @@ function renderComplaints(complaints, interpretations, remember = true) {
   if (remember) {
     latestComplaints = complaints;
     latestComplaintInterpretations = interpretations;
+    resetCollectionPage("complaints");
   }
   const authorFilter = $("#complaintAuthorFilter")?.value || "todos";
   const visibleComplaints = latestComplaints.filter((complaint) => (
     authorFilter === "todos" || complaint.autor === authorFilter
   ));
+  const pagedComplaints = getCollectionPage(visibleComplaints, "complaints");
   $("#complaintFilterStatus").textContent = `${visibleComplaints.length} de ${latestComplaints.length} ${latestComplaints.length === 1 ? "reclamação" : "reclamações"}.`;
   const list = $("#complaintsList");
   list.replaceChildren();
@@ -1985,9 +2109,18 @@ function renderComplaints(complaints, interpretations, remember = true) {
     if (!grouped.has(key)) grouped.set(key, []);
     grouped.get(key).push(interpretation);
   });
-  visibleComplaints.forEach((complaint) => {
+  pagedComplaints.items.forEach((complaint) => {
     list.append(createComplaintCard(complaint, grouped.get(String(complaint.id)) || []));
   });
+  if (pagedComplaints.pageCount > 1) {
+    list.append(createCollectionPager({
+      key: "complaints",
+      total: visibleComplaints.length,
+      ...pagedComplaints,
+      onChange: () => renderComplaints(latestComplaints, latestComplaintInterpretations, false),
+      label: "nossas reclamações"
+    }));
+  }
 }
 
 async function loadComplaints() {
@@ -2528,17 +2661,17 @@ function setupAlbumControls() {
 
 function setupContentFilters() {
   const filters = [
-    ["musicAuthorFilter", () => renderMusicLibrary(latestSongs, false)],
-    ["futureAuthorFilter", () => renderFuturePlans(latestFuturePlans, false)],
-    ["futureStatusFilter", () => renderFuturePlans(latestFuturePlans, false)],
-    ["futureCategoryFilter", () => renderFuturePlans(latestFuturePlans, false)],
-    ["dailyAuthorFilter", () => renderDailyEntries(latestDailyEntries, false)],
-    ["dailyTypeFilter", () => renderDailyEntries(latestDailyEntries, false)],
-    ["complaintAuthorFilter", () => renderComplaints(latestComplaints, latestComplaintInterpretations, false)],
-    ["letterAuthorFilter", () => renderLetters(latestLetters, false)]
+    ["musicAuthorFilter", "music", () => renderMusicLibrary(latestSongs, false)],
+    ["futureAuthorFilter", "plans", () => renderFuturePlans(latestFuturePlans, false)],
+    ["futureStatusFilter", "plans", () => renderFuturePlans(latestFuturePlans, false)],
+    ["futureCategoryFilter", "plans", () => renderFuturePlans(latestFuturePlans, false)],
+    ["dailyAuthorFilter", "daily", () => renderDailyEntries(latestDailyEntries, false)],
+    ["dailyTypeFilter", "daily", () => renderDailyEntries(latestDailyEntries, false)],
+    ["complaintAuthorFilter", "complaints", () => renderComplaints(latestComplaints, latestComplaintInterpretations, false)],
+    ["letterAuthorFilter", "letters", () => renderLetters(latestLetters, false)]
   ];
 
-  filters.forEach(([id, render]) => {
+  filters.forEach(([id, collectionKey, render]) => {
     const field = document.getElementById(id);
     if (!field) return;
     try {
@@ -2547,12 +2680,16 @@ function setupContentFilters() {
     } catch {}
     field.addEventListener("change", () => {
       try { localStorage.setItem(`nosso-filtro-${id}`, field.value); } catch {}
+      resetCollectionPage(collectionKey);
       render();
     });
   });
 
   const letterSearch = $("#letterSearchFilter");
-  letterSearch.addEventListener("input", () => renderLetters(latestLetters, false));
+  letterSearch.addEventListener("input", () => {
+    resetCollectionPage("letters");
+    renderLetters(latestLetters, false);
+  });
 }
 
 function updateCharacterCounter(field, counter) {
