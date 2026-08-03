@@ -42,7 +42,7 @@ Também há uma versão em arquivo único chamada `surpresa-bianca.html`, que é
 
 As músicas tocam inteiras dentro da própria página pelo player incorporado do YouTube, sem abrir outra aba. É necessário acesso à internet e cada música precisa permitir reprodução incorporada no YouTube. A pessoa deve tocar no botão de reprodução; navegadores normalmente bloqueiam música automática sem interação.
 
-A playlist usa cartões compactos e mostra no máximo seis músicas por página. Os botões **“Anteriores”** e **“Próximas”** permitem percorrer a coleção sem transformar a página em uma lista enorme. Somente os cartões da página atual são montados no navegador.
+A playlist usa cartões compactos e mostra três músicas por página, sempre começando pelas mais recentes. É possível pesquisar pelo título ou pelo artista. Os botões **“Anteriores”** e **“Próximas”** permitem percorrer a coleção sem transformar a página em uma lista enorme. Somente os cartões da página atual são montados no navegador.
 
 Bianca e Natã podem adicionar novas músicas usando um link comum, curto, incorporado, de Short ou de live do YouTube. A playlist fica guardada no Supabase e é atualizada em tempo real em todos os aparelhos com o site aberto. Cada música pode ser corrigida ou excluída diretamente em seu cartão. Adicionar, editar ou excluir sempre exige o mesmo código reservado, que nunca fica escrito no site.
 
@@ -90,7 +90,7 @@ O texto de uma carta também é preservado como rascunho somente no aparelho enq
 
 Os registros diários, cartas, reclamações, interpretações e respostas do **“Nosso diário”** também podem ser editados ou excluídos. A opção aparece apenas no conteúdo que foi enviado pelo site e exige o código reservado em cada ação.
 
-Para o site continuar confortável mesmo depois de muitos anos de conteúdo, planos, registros diários, cartas e reclamações também são divididos em páginas. Respostas do diário e interpretações muito longas permanecem dentro de uma área com rolagem própria, evitando que uma única lembrança aumente demais o tamanho da página.
+Para o site continuar confortável mesmo depois de muitos anos de conteúdo, músicas, planos, registros diários, cartas e reclamações mostram três itens por página, sempre do mais recente para o mais antigo. Respostas do diário e interpretações muito longas permanecem dentro de uma área com rolagem própria, evitando que uma única lembrança aumente demais o tamanho da página.
 
 ## Ajustar o horário inicial
 

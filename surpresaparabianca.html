@@ -1290,6 +1290,10 @@ footer span:last-child { color:#f1a8ba; }
                   <option value="Natã">Natã</option>
                 </select>
               </label>
+              <label class="filter-search" for="musicSearchFilter">
+                <span>Buscar música</span>
+                <input id="musicSearchFilter" type="search" placeholder="Título ou artista…" />
+              </label>
               <small id="musicFilterStatus" aria-live="polite"></small>
             </div>
             <div class="music-list" id="musicList" aria-live="polite"></div>
@@ -2131,10 +2135,10 @@ let notificationRefreshTimer;
 let sectionSeenTimer;
 let pendingSeenSection = "";
 const COLLECTION_PAGE_SIZES = Object.freeze({
-  music: 6,
-  plans: 6,
-  daily: 4,
-  letters: 5,
+  music: 3,
+  plans: 3,
+  daily: 3,
+  letters: 3,
   complaints: 3
 });
 const collectionPages = {
@@ -2923,7 +2927,14 @@ function renderMusicLibrary(songs, remember = true) {
     resetCollectionPage("music");
   }
   const authorFilter = $("#musicAuthorFilter")?.value || "todos";
-  const visibleSongs = latestSongs.filter((song) => authorFilter === "todos" || song.autor === authorFilter);
+  const searchFilter = normalizeSearchText($("#musicSearchFilter")?.value);
+  const orderedSongs = [...latestSongs].sort((left, right) => (
+    new Date(right.criado_em).getTime() - new Date(left.criado_em).getTime()
+  ));
+  const visibleSongs = orderedSongs.filter((song) => (
+    (authorFilter === "todos" || song.autor === authorFilter)
+    && (!searchFilter || normalizeSearchText(`${song.titulo} ${song.artista}`).includes(searchFilter))
+  ));
   const pagedSongs = getCollectionPage(visibleSongs, "music");
   const list = $("#musicList");
   list.replaceChildren();
@@ -2949,7 +2960,9 @@ function renderMusicLibrary(songs, remember = true) {
   if (!visibleSongs.length) {
     const empty = document.createElement("p");
     empty.className = "music-empty";
-    empty.textContent = `${authorFilter} ainda não adicionou uma música à nossa playlist.`;
+    empty.textContent = searchFilter
+      ? "Nenhuma música combina com essa busca."
+      : `${authorFilter} ainda não adicionou uma música à nossa playlist.`;
     list.append(empty);
     return;
   }
@@ -2972,7 +2985,7 @@ function renderMusicLibrary(songs, remember = true) {
 async function loadMusicLibrary() {
   try {
     const response = await fetch(
-      `${SUPABASE.url}/rest/v1/musicas?select=id,titulo,artista,youtube_video_id,autor,criado_em&order=criado_em.asc`,
+      `${SUPABASE.url}/rest/v1/musicas?select=id,titulo,artista,youtube_video_id,autor,criado_em&order=criado_em.desc`,
       { headers: { apikey: SUPABASE.publishableKey } }
     );
     if (!response.ok) throw new Error(`Não foi possível carregar nossas músicas (${response.status}).`);
@@ -3439,13 +3452,17 @@ function renderFuturePlans(plans, remember = true) {
   const authorFilter = $("#futureAuthorFilter")?.value || "todos";
   const statusFilter = $("#futureStatusFilter")?.value || "todos";
   const categoryFilter = $("#futureCategoryFilter")?.value || "todos";
-  const visiblePlans = latestFuturePlans.filter((plan) => (
-    (authorFilter === "todos" || plan.autor === authorFilter)
-    && (categoryFilter === "todos" || plan.categoria === categoryFilter)
-    && (statusFilter === "todos"
-      || (statusFilter === "pendentes" && !plan.concluido)
-      || (statusFilter === "concluidos" && plan.concluido))
-  ));
+  const visiblePlans = latestFuturePlans
+    .filter((plan) => (
+      (authorFilter === "todos" || plan.autor === authorFilter)
+      && (categoryFilter === "todos" || plan.categoria === categoryFilter)
+      && (statusFilter === "todos"
+        || (statusFilter === "pendentes" && !plan.concluido)
+        || (statusFilter === "concluidos" && plan.concluido))
+    ))
+    .sort((left, right) => (
+      new Date(right.criado_em).getTime() - new Date(left.criado_em).getTime()
+    ));
   const pagedPlans = getCollectionPage(visiblePlans, "plans");
   const pending = pagedPlans.items.filter((plan) => !plan.concluido);
   const completed = pagedPlans.items.filter((plan) => plan.concluido);
@@ -3474,10 +3491,11 @@ function renderFuturePlans(plans, remember = true) {
     return;
   }
 
-  if (pending.length) {
+  if (statusFilter === "todos") {
+    list.append(createFuturePlanGroup("Nossos planos mais recentes", pagedPlans.items, false));
+  } else if (pending.length) {
     list.append(createFuturePlanGroup("Próximos capítulos", pending, false));
-  }
-  if (completed.length) {
+  } else if (completed.length) {
     list.append(createFuturePlanGroup("Sonhos que já viraram história", completed, true));
   }
   if (pagedPlans.pageCount > 1) {
@@ -3494,7 +3512,7 @@ function renderFuturePlans(plans, remember = true) {
 async function loadFuturePlans() {
   try {
     const response = await fetch(
-      `${SUPABASE.url}/rest/v1/planos_futuros?select=id,titulo,detalhes,categoria,autor,concluido,concluido_em,criado_em&order=concluido.asc,criado_em.desc`,
+      `${SUPABASE.url}/rest/v1/planos_futuros?select=id,titulo,detalhes,categoria,autor,concluido,concluido_em,criado_em&order=criado_em.desc`,
       { headers: { apikey: SUPABASE.publishableKey } }
     );
 
@@ -4622,6 +4640,12 @@ function setupContentFilters() {
     });
   });
 
+  const musicSearch = $("#musicSearchFilter");
+  musicSearch.addEventListener("input", () => {
+    resetCollectionPage("music");
+    renderMusicLibrary(latestSongs, false);
+  });
+
   const letterSearch = $("#letterSearchFilter");
   letterSearch.addEventListener("input", () => {
     resetCollectionPage("letters");
@@ -5213,6 +5237,7 @@ $("#musicForm").addEventListener("submit", async (event) => {
 
     form.reset();
     $("#musicAuthorFilter").value = author;
+    $("#musicSearchFilter").value = "";
     try { localStorage.setItem("nosso-filtro-musicAuthorFilter", author); } catch {}
     status.textContent = "Nossa nova música já está na playlist ♥";
     status.dataset.state = "success";
